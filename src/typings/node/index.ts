@@ -82,3 +82,50 @@ export interface NodeStats {
         nulled: number
     };
 };
+
+export enum NodeType {
+    LavaLinkV4 = "lavalinkv4",
+    LavaLinkV3 = "lavalinkv3",
+    NodeLink = "nodelink",
+    FrequenC = "frequenc"
+};
+
+export interface NodeGroup {
+    /**
+     * The name of the node group
+     */
+    name: string;
+
+    /**
+     * The URL or IP address of the node to connect to
+     */
+    host: string;
+
+    /**
+     * The password for authenticating with the node.
+     *
+     * @default "youshallnotpass"
+     */
+    password?: string;
+
+    /**
+     * The port number of the node.
+     *
+     * @default 2333
+     */
+    port?: number;
+
+    /**
+     * Indicates whether the node uses a secure connection (HTTPS).
+     *
+     * @default false
+     */
+    secure?: boolean;
+
+    /**
+     * The type of the node
+     * 
+     * @default NodeType.LavaLinkV4
+     */
+    type?: NodeType;
+};
