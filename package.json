@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/Joniii11/HarmonyLink/issues"
   },
-  "homepage": "https://github.com/Joniii11/HarmonyLink#readme"
+  "homepage": "https://github.com/Joniii11/HarmonyLink#readme",
+  "dependencies": {
+    "@types/node": "^20.12.12"
+  }
 }
