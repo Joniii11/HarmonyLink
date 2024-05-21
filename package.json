@@ -1,0 +1,25 @@
+{
+  "name": "harmonylink",
+  "version": "1.0.0",
+  "description": "HarmonyLink: Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Joniii11/HarmonyLink.git"
+  },
+  "keywords": [
+    "LavaLink",
+    "NodeLink",
+    "FrequenC",
+    "connect"
+  ],
+  "author": "Joniii11",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Joniii11/HarmonyLink/issues"
+  },
+  "homepage": "https://github.com/Joniii11/HarmonyLink#readme"
+}
