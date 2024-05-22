@@ -1,5 +1,6 @@
 import AbstractLibraryClass from "./AbstractLibraryClass";
 
+import type { NodeGroup } from "@t/node";
 import type { AnyOtherPacket } from "@t/librarys";
 
 export class ErisJS extends AbstractLibraryClass {
@@ -11,7 +12,9 @@ export class ErisJS extends AbstractLibraryClass {
         return this.client.shards.get(shardId)?.sendWS(payload.op, payload.d, important);
     };
 
-    public listen(): void {
+    public listen(nodes: NodeGroup[]): void {
+        this.client.once("ready", () => this.ready(nodes));
+
         this.client.on("rawWS", this.raw.bind(this));
     };
 }

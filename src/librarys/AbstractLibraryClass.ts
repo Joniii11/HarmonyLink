@@ -1,5 +1,6 @@
 import { HarmonyLink } from "@/HarmonyLink";
 
+import type { NodeGroup } from "@t/node";
 import type { Packet, AnyOtherPacket } from "@t/librarys";
 
 /**
@@ -39,7 +40,7 @@ export default abstract class AbstractLibraryClass {
      * 
      * @abstract method to listen for events from the discord gateway that are arriving on the library
      */
-    abstract listen(): void;
+    abstract listen(nodes: NodeGroup[]): void;
 
     /**
      * Initialize the library class
@@ -73,4 +74,13 @@ export default abstract class AbstractLibraryClass {
             default: break;
         };
     };
+
+    protected ready(nodes: NodeGroup[]) {
+        if (!this.manager) return new Error("The Manager is not initialized yet!");
+
+        this.manager.botID = this.userID;
+        this.manager.emit("debug", "[HarmonyLink] Finished initializing the library! | Connecting to the specified nodes...")
+
+        
+    }
 };

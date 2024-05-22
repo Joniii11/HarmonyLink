@@ -1,5 +1,6 @@
 import AbstractLibraryClass from './AbstractLibraryClass';
 
+import type { NodeGroup } from "@t/node";
 import type { AnyOtherPacket } from '@t/librarys';
 
 export class OceanicJS extends AbstractLibraryClass {
@@ -11,7 +12,9 @@ export class OceanicJS extends AbstractLibraryClass {
         return this.client.shards.get(shardId)?.send(payload.op, payload.d, important);
     };
 
-    public listen(): void {
-        this.client.on('packet', this.raw.bind(this));
+    public listen(nodes: NodeGroup[]): void {
+        this.client.once("ready", () => this.ready(nodes))
+        
+        this.client.on("packet", this.raw.bind(this));
     };
 }
