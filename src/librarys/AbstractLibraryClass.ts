@@ -1,4 +1,6 @@
-import type { Packet } from "@t/librarys";
+import { HarmonyLink } from "@/HarmonyLink";
+
+import type { Packet, AnyOtherPacket } from "@t/librarys";
 
 /**
  * Abstract class for library classes
@@ -9,6 +11,7 @@ import type { Packet } from "@t/librarys";
  */
 export default abstract class AbstractLibraryClass {
     protected readonly client: any;
+    protected manager: HarmonyLink | null = null;
 
     constructor(client: any) {
         this.client = client;
@@ -21,8 +24,40 @@ export default abstract class AbstractLibraryClass {
      */
     abstract get userID(): string;
 
+    /**
+     * Send raw packets to the gateway to communicate with the Discord API
+     * @param {number} shardId The shard ID to send the packet with
+     * @param {AnyOtherPacket} payload The payload to send
+     * @param {boolean} important Whether the packet is important or not (default: false)
+     * 
+     * @abstract method to send packets to the gateway
+     */
+    abstract sendPacket(shardId: number, payload: AnyOtherPacket, important: boolean): void;
+
+    /**
+     * Listen for events from the discord gateway that are arriving on the library
+     * 
+     * @abstract method to listen for events from the discord gateway that are arriving on the library
+     */
     abstract listen(): void;
 
+    /**
+     * Initialize the library class
+     * @param {HarmonyLink} manager The HarmonyLink instance
+     * 
+     * @returns the instance of the class
+     */
+    public initialize(manager: HarmonyLink): AbstractLibraryClass {
+        this.manager = manager
+        return this;
+    };
+
+    /**
+     * Handle raw packets from the gateway
+     * @param {Packet} incomingData The packet to handle
+     * 
+     * @abstract method to handle raw packets from the gateway
+     */
     protected raw(incomingData: Packet) {
         const { t, d } = incomingData;
 

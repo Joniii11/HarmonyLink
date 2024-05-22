@@ -1,27 +1,28 @@
 {
-    "compilerOptions": {
-      "lib": ["ESNext"],
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "target": "ESNext",
-      "outDir": "./dist",  
-      "sourceMap": true,
-      "esModuleInterop": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "allowSyntheticDefaultImports": true,
-      "skipLibCheck": true,
-      "skipDefaultLibCheck": true,
-      "declaration": true,
-      "strict": true,
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "outDir": "./dist",  
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "declaration": true,
+    "strict": true,
 
-      "paths": {
-        "@/*": ["./src/*"],
-        "@t/*": ["./src/typings/*"],
-      }
-    },
-    "exclude": [
-      "website",
-      "./dist/**/*" 
-    ]
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@t/*": ["src/typings/*"],
+    }
+  },
+  "exclude": [
+    "website",
+    "./dist/**/*" 
+  ]
+}

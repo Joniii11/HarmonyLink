@@ -2,16 +2,16 @@ import AbstractLibraryClass from "./AbstractLibraryClass";
 
 import type { AnyOtherPacket } from "@t/librarys";
 
-export class DJSLibrary extends AbstractLibraryClass {
+export class ErisJS extends AbstractLibraryClass {
     public get userID(): string {
         return this.client.user.id;
     };
 
     public sendPacket(shardId: number, payload: AnyOtherPacket, important: boolean = false): void {
-        return this.client.ws.shards.get(shardId)?.send(payload, important);
+        return this.client.shards.get(shardId)?.sendWS(payload.op, payload.d, important);
     };
 
     public listen(): void {
-        this.client.on("raw", this.raw.bind(this));
+        this.client.on("rawWS", this.raw.bind(this));
     };
 }

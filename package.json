@@ -4,7 +4,9 @@
   "description": "HarmonyLink: Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && npm run build:esm",
+    "build:esm": "gen-esm-wrapper dist/index.js dist/index.mjs",
+    "prepublishOnly": "npm run build:esm"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,20 @@
   },
   "homepage": "https://github.com/Joniii11/HarmonyLink#readme",
   "dependencies": {
-    "@types/node": "^20.12.12"
+    "module-alias": "^2.2.3",
+    "ws": "^8.17.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/ws": "^8.5.10",
+    "gen-esm-wrapper": "^1.1.3"
+  },
+
+  "_moduleAliases": {
+    "@" : "./dist/",
+    "@t": "./dist/typings"
   }
 }
