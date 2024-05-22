@@ -85,7 +85,6 @@ export interface NodeStats {
 
 export enum NodeType {
     LavaLinkV4 = "lavalinkv4",
-    LavaLinkV3 = "lavalinkv3",
     NodeLink = "nodelink",
     FrequenC = "frequenc"
 };
