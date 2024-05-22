@@ -1,4 +1,4 @@
-
+import type { EventData } from "./playerEvents";
 
 export interface NodeStats {
     /**
@@ -128,3 +128,39 @@ export interface NodeGroup {
      */
     type?: NodeType;
 };
+/**
+ * Dispatched when you successfully connect to the Lavalink node
+ */
+export interface LavalinkReadyPacket {
+   op: "ready";
+   resumed: boolean;
+   sessionId: string;
+};
+
+/**
+* Dispatched every x seconds with the latest player state
+*/
+export interface LavalinkPlayerUpdatePacket {
+   op: "playerUpdate";
+   guildId: string;
+   state: {
+       time: number;
+       position: number;
+       connected: true;
+       ping: number;
+   };
+};
+
+/**
+* Dispatched when the node sends stats once per minute
+*/
+export interface LavalinkNodeStatsPacket extends NodeStats {
+   op: "stats";
+};
+
+/**
+* Dispatched when player or voice events occur
+*/
+export type LavalinkEventPacket = { op: "event"; guildId: string; } & EventData;
+
+export type LavalinkPackets = LavalinkReadyPacket | LavalinkPlayerUpdatePacket | LavalinkNodeStatsPacket | LavalinkEventPacket
