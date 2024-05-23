@@ -15,3 +15,7 @@ export interface TrackData {
     };
     pluginInfo: Record<string, unknown>;
 }
+
+export type NodeLinkV2LoadTypes = "short" | "album" | "artist" | "show" | "episode" | "station" | "podcast";
+export type LavaLinkLoadTypes = "track" | "playlist" | "search" | "empty" | "error"
+export type Severity = "common" | "suspicious" | "fault"

@@ -1,4 +1,42 @@
+import type { CloseEvent, ErrorEvent } from "ws";
 import type { EventData } from "./playerEvents";
+
+export interface NodeEvents {
+    /**
+     * Dispatched when the node gives via the WebSocket a message to the client
+     * @param data The data that the node sends
+     * @returns {void} void
+     */
+    lavalinkEvent: (data: string) => void;
+
+    /**
+     * Dispatched when the WebSocket connection is opened
+     * @returns {void} void
+     */
+    lavalinkWSOpen: () => void;
+
+    /**
+     * Dispatched when the WebSocket connection is closed
+     * @param {number} code The event code of the WebSocket
+     * @param {Buffer} reason The reason of the WebSocket
+     * @returns {void} void
+     */
+    lavalinkWSClose: (code: number, reason: Buffer) => void;
+
+    /**
+     * Dispatched when the WebSocket connection has an error
+     * @param {Error} event The event of the WebSocket
+     * @returns {void} void
+     */
+    lavalinkWSError: (event: Error) => void;
+};
+
+export interface HarmonyLinkRequesterOptions extends RequestInit {
+    params?: string | Record<string, string>;
+    data?: Record<string, unknown>;
+    path: string;
+    //rawReqData?: UpdatePlayerInfo;
+};
 
 export interface NodeStats {
     /**
@@ -128,6 +166,36 @@ export interface NodeGroup {
      */
     type?: NodeType;
 };
+
+export interface NodeOption {
+    /**
+     * The timeout when trying to reconnect to the node
+     */
+    reconnectAttemptTimeout: NodeJS.Timeout | null;
+
+    /**
+     * The amount of times to try to reconnect to the node
+     */
+    reconnectTries: number;
+
+    /**
+     * The amount of current attempts to reconnect to the node
+     */
+    currentAttempts: number;
+
+    /**
+     * The timeout for the reconnect
+     */
+    reconnectTimeout: number;
+
+    /**
+     * The timeout for resuming the connection in seconds
+     */
+    resumeTimeout: number;
+}
+
+export type NodeOptions = NodeGroup & NodeOption;
+
 /**
  * Dispatched when you successfully connect to the Lavalink node
  */

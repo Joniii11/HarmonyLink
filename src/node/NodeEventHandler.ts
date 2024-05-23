@@ -9,11 +9,23 @@ export default class PlayerEvent {
     constructor(node: Node) {
         this.node = node;
         this.manager = this.node.manager;
+
+        this.listen();
     };
 
     public listen(): void {
         this.node.on("lavalinkEvent", this.onLavalinkEvent.bind(this));
+        this.node.on("lavalinkWSClose", this.onWSCloseEvent.bind(this));
+        this.node.on("lavalinkWSError", this.onWSErrorEvent.bind(this));
+        this.node.on("lavalinkWSOpen", this.onWSOpenEvent.bind(this));
     };
+
+    public destroy(): void {
+        this.node.removeAllListeners("lavalinkEvent");
+        this.node.removeAllListeners("lavalinkWSClose");
+        this.node.removeAllListeners("lavalinkWSError");
+        this.node.removeAllListeners("lavalinkWSOpen");
+    }
 
     protected onLavalinkEvent(data: string): void {
         try {
@@ -51,6 +63,47 @@ export default class PlayerEvent {
             }
         } catch (err) {
             this.manager.emit("debug", "[Web Socket] Error while parsing the payload.", err)
+        }
+    };
+
+    protected onWSOpenEvent(): void {
+        try {
+            if (this.node.options.reconnectAttemptTimeout) {
+                clearTimeout(this.node.options.reconnectAttemptTimeout);
+                this.node.options.reconnectAttemptTimeout = null;
+            };
+
+            this.manager.emit("nodeConnect", this.node);
+            this.node.isConnected = true;
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Connected to the node.`)
+
+            this.node.options.currentAttempts = 0;
+        } catch (err) {
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Error while parsing the payload.`, err)
+        };
+    };
+
+    protected async onWSCloseEvent(code: number, reason: Buffer): Promise<void> {
+        try {
+            await this.node.disconnect();
+
+            this.manager.emit("nodeDisconnect", this.node, code);
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Disconnected from the node. [${code}] [${reason.toString("utf-8")}]`)
+
+            if (code !== 100) await this.node.reconnect()
+        } catch (err) {
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Error while parsing the payload.`, err)
+        };
+    };
+
+    protected onWSErrorEvent(error: Error): void {
+        try {
+            if (!error) return;
+
+            this.manager.emit("nodeError", this.node, error);
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Error from the node.`, error)
+        } catch (err) {
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Error while parsing the payload.`, err)
         }
     }
 }

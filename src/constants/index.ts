@@ -6,7 +6,7 @@ export const config: Config = {
     author: "Joniii11",
     version: "1.0.0",
     github: "https://github.com/Joniii11/HarmonyLink"
-};
+} as const;
 
 export const getDefaultNodeStats = (): NodeStats => {
     return {

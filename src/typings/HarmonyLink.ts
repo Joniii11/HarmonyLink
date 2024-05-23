@@ -44,4 +44,25 @@ export interface HarmonyLinkConfiguration {
      * @default []
      */
     additionalDriver?: AbstractNodeDriver[];
+
+    /**
+     * The timeout to use when resuming players
+     * 
+     * @default 10000
+     */
+    resumeTimeout: number;
+
+    /**
+     * The amount of times to try to reconnect to the node
+     * 
+     * @default 5
+     */
+    reconnectTries: number;
+
+    /**
+     * The timeout for the reconnect
+     * 
+     * @default 5000
+     */
+    reconnectTimeout: number;
 }

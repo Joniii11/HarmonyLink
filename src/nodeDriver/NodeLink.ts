@@ -5,11 +5,11 @@ import { HarmonyLinkRequesterOptions, LavalinkPackets, NodeType } from "@t/node"
 
 import type { HarmonyLink } from "@/HarmonyLink";
 import type { Node } from "@/node/Node";
-import type { TrackData } from '@t/node/rest';
+import type { TrackData, NodeLinkV2LoadTypes, LavaLinkLoadTypes } from "@t/node/rest";
 
-export default class LavalinkV4 extends AbstractNodeDriver {
+export default class NodeLink extends AbstractNodeDriver {
     public clientId = "";
-    public type = NodeType.LavaLinkV4;
+    public type = NodeType.NodeLink;
     public wsUrl = "";
     public httpUrl = "";
     public manager: null | HarmonyLink = null;
@@ -35,15 +35,12 @@ export default class LavalinkV4 extends AbstractNodeDriver {
         return new Promise<WebSocket>((resolve, reject) => {
             if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
             if (!this.manager?.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
-            const shouldResume = this.manager?.options.resume ?? false;
 
             const headers: { [key: string]: string } = {
                 Authorization: this.node!.options.password,
                 "User-Id": this.manager.library.userID,
                 "Client-Name": this.clientId,
             };
-
-            if (shouldResume && this.sessionId) headers["Session-Id"] = this.sessionId;
 
             const ws = new WebSocket(`${this.wsUrl}/v4/websocket`, { headers });
 
@@ -55,16 +52,6 @@ export default class LavalinkV4 extends AbstractNodeDriver {
 
             return resolve(ws);
         });
-    };
-
-    public wsClose(withoutEmit: boolean = false): void {
-        if (withoutEmit) {
-            this.wsClient?.close(1006, "Self Closed");
-            this.manager?.emit("nodeDisconnect", this.node);
-        };
-
-        this.wsClient?.removeAllListeners()
-        this.wsClient = undefined;
     };
 
     public async request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined> {
@@ -139,6 +126,10 @@ export default class LavalinkV4 extends AbstractNodeDriver {
 
                 this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 200 OK. payload=${options.body ? String(options.body) : "{}"}`);
 
+                if ("loadType" in (data as Record<string, unknown>)) {
+                    (data as Record<string, unknown>).loadType = this.convertNodelinkResponseToLavalink((data as Record<string, unknown>).loadType as NodeLinkV2LoadTypes);
+                };
+
                 return data as T;
             };
 
@@ -150,17 +141,32 @@ export default class LavalinkV4 extends AbstractNodeDriver {
     }
 
     public async updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<void> {
-        const options: HarmonyLinkRequesterOptions = {
-            path: `/sessions/${sessionId}`,
-            method: "PATCH",
-            data: {
-                resuming: mode,
-                timeout
-            }
+        this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] NodeLink's do not support resuming, so set resume to true is useless.`);
+        return;
+    };
+
+    public wsClose(withoutEmit: boolean = false): void {
+        if (withoutEmit) {
+            this.wsClient?.close(1006, "Self Closed");
+            this.manager?.emit("nodeDisconnect", this.node);
         };
 
-        await this.request<{ resuming: boolean, timeout: number}>(options);
-        this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] Updated the session.`)
-        return;
+        this.wsClient?.removeAllListeners()
+        this.wsClient = undefined;
+    };
+
+    private convertNodelinkResponseToLavalink(loadType: NodeLinkV2LoadTypes | LavaLinkLoadTypes): LavaLinkLoadTypes {
+        switch (loadType) {
+            case "short": return "track";
+    
+            case "artist":
+            case "episode":
+            case "station":
+            case "podcast":
+            case "show":
+            case "album": return "playlist";
+    
+            default: return loadType;
+        };
     };
 }
