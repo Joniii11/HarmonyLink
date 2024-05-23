@@ -3,13 +3,13 @@ import AbstractLibraryClass from "@/librarys/AbstractLibraryClass";
 import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
 import LavalinkV4 from "./nodeDriver/LavalinkV4";
 import NodeManager from "./managers/NodeManager";
+import NodeLink from "./nodeDriver/NodeLink";
 
 import { config } from "@/constants";
 
 import type { Config } from "@t/constants";
 import type { HarmonyLinkConfiguration } from "@t/HarmonyLink";
 import type { NodeGroup } from "@t/node";
-import NodeLink from "./nodeDriver/NodeLink";
 
 export class HarmonyLink extends EventEmitter {
     public readonly config: Config = config;
