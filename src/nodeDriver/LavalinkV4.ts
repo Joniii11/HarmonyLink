@@ -123,9 +123,9 @@ export default class LavalinkV4 extends AbstractNodeDriver {
         };
 
         const res = await globalThis.fetch(url, {
+            ...options,
             method: options.method,
-            headers,
-            ...options
+            headers
         });
 
         switch (res.status) {

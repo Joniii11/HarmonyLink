@@ -67,6 +67,8 @@ export default class NodeLink extends AbstractNodeDriver {
             });
 
             return response.headers.get("content-type") === "application/json" ? await response.json() as T : await response.text() as T
+        } else if (options.path.startsWith("/routeplanner")) {
+
         };
 
         const url = new URL(`${this.httpUrl}/v4${options.path}`);
@@ -110,9 +112,9 @@ export default class NodeLink extends AbstractNodeDriver {
         };
 
         const res = await globalThis.fetch(url, {
+            ...options,
             method: options.method,
-            headers,
-            ...options
+            headers
         });
 
         switch (res.status) {

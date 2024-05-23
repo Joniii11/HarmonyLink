@@ -9,6 +9,7 @@ import { config } from "@/constants";
 import type { Config } from "@t/constants";
 import type { HarmonyLinkConfiguration } from "@t/HarmonyLink";
 import type { NodeGroup } from "@t/node";
+import NodeLink from "./nodeDriver/NodeLink";
 
 export class HarmonyLink extends EventEmitter {
     public readonly config: Config = config;
@@ -24,9 +25,7 @@ export class HarmonyLink extends EventEmitter {
         this.library = options.library.initialize(this);
         this.nodes = options.nodes;
         this.options = options;
-        this.drivers = [new LavalinkV4(), ...(options.additionalDriver ?? [])];
-
-
+        this.drivers = [new LavalinkV4(), new NodeLink(), ...(options.additionalDriver ?? [])];
 
         this.library.listen(this.nodes);
     };

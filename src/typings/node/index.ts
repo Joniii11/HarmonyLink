@@ -35,6 +35,7 @@ export interface HarmonyLinkRequesterOptions extends RequestInit {
     params?: string | Record<string, string>;
     data?: Record<string, unknown>;
     path: string;
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
     //rawReqData?: UpdatePlayerInfo;
 };
 

@@ -26,9 +26,9 @@ export class Node extends EventEmitter {
     public stats: NodeStats = getDefaultNodeStats()
     public driver: AbstractNodeDriver;
     public isConnected: boolean = false;
+    public readonly rest: Rest
 
-    protected readonly NoderEventsHandler: NodeEventHandler = new NodeEventHandler(this);
-    protected readonly rest: Rest
+    protected readonly NodeEventsHandler: NodeEventHandler = new NodeEventHandler(this);
 
     constructor(manager: HarmonyLink, options: NodeGroup) {
         super();
