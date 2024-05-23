@@ -27,7 +27,7 @@ export default class PlayerEvent {
         this.node.removeAllListeners("lavalinkWSOpen");
     }
 
-    protected onLavalinkEvent(data: string): void {
+    protected async onLavalinkEvent(data: string): Promise<void> {
         try {
             const packet = JSON.parse(data) as LavalinkPackets;
 
@@ -38,10 +38,8 @@ export default class PlayerEvent {
                     this.node.setSessionId(packet.sessionId)
                     this.manager.emit("debug", `[Web Socket] Node ${this.node.options.name} is ready.`)
 
-                    if (this.manager.options.resume) {
-                        /*
-                            Implement resume logic here
-                        */
+                    if (this.manager.options.resume && this.manager.options.resumeTimeout) {
+                        await this.node.driver.updateSessions(packet.sessionId, this.manager.options.resume, this.manager.options.resumeTimeout)
                     };
 
                     break;
