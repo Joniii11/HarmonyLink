@@ -163,53 +163,9 @@ export class FrequenC extends AbstractNodeDriver {
         this.wsClient = undefined;
     };
 
-    protected snakeToCamel(obj: Record<string, unknown>): Record<string, unknown> {
-		if (typeof obj !== 'object') return {};
-		if (!obj || JSON.stringify(obj) == '{}') return {};
-		const allKeys = Object.keys(obj);
-		for (const key of allKeys) {
-			let newKey;
-			if (/([-_][a-z])/.test(key)) {
-				newKey = key
-					.toLowerCase()
-					.replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''));
-				obj[newKey] = obj[key];
-				delete obj[key];
-			}
-			if (newKey && typeof obj[newKey] !== 'object' && typeof obj[key] !== 'object') continue;
-
-			newKey
-				? this.snakeToCamel(obj[newKey] as Record<string, unknown>)
-				: this.snakeToCamel(obj[key] as Record<string, unknown>);
-		}
-		return obj;
-	};
-
-    protected camelToSnake(obj: Record<string, unknown>): Record<string, unknown> {
-		if (typeof obj !== 'object') return {};
-		if (!obj || JSON.stringify(obj) == '{}') return {};
-		const allKeys = Object.keys(obj);
-		const regex = /^([a-z]{1,})(_[a-z0-9]{1,})*$/;
-
-		for (const key of allKeys) {
-			let newKey;
-			if (!regex.test(key)) {
-				newKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-				obj[newKey] = obj[key];
-				delete obj[key];
-			}
-			if (newKey && typeof obj[newKey] !== 'object' && typeof obj[key] !== 'object') continue;
-
-			newKey
-				? this.camelToSnake(obj[newKey] as Record<string, unknown>)
-				: this.camelToSnake(obj[key] as Record<string, unknown>);
-		}
-		return obj;
-	};
-
     protected async eventHandler(data: string): Promise<boolean> {
         if (!this.node) return false;
 
-        return this.node.emit("lavalinkEvent", data.toString(), this.snakeToCamel)
+        return this.node.emit("lavalinkEvent", data.toString(), snakeToCamel)
     };
-}
+};
