@@ -1,8 +1,11 @@
+import { getDefaultNodeStats } from "@/constants";
+
 import type NodeManager from "@/managers/NodeManager";
 import type { HarmonyLink } from "@/HarmonyLink";
 import type { Node } from "./Node";
-import type { ErrorResponses, PlayerObjectFromAPI, RoutePlannerStatus } from "@/typings/node/rest";
-import { HarmonyLinkRequesterOptions, NodeType } from "@/typings/node";
+import type { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@/typings/node/rest";
+import { FrequenCInfo, type HarmonyLinkRequesterOptions, type NodeInfo, type NodeStats, NodeType } from "@/typings/node";
+import { TrackData } from "@/typings/track";
 
 export default class Rest {
     public manager: HarmonyLink;
@@ -21,18 +24,151 @@ export default class Rest {
         return this.sessionId !== null;
     };
 
+    //? ----- Session API Begin ----- ?//
+
+    /**
+     * Set the session id
+     * @param sessionId The session id to set
+     */
     public setSessionId(sessionId: string): void {
         this.sessionId = sessionId;
     };
 
-    public async getAllPlayers(): Promise<PlayerObjectFromAPI[] | ErrorResponses> {
+    //? ----- Session API End ----- ?//
+
+    //? ----- Player API Begin ----- ?//
+
+    /**
+     * Get all the players on the node
+     * @returns {PlayerObjectFromAPI[] | ErrorResponses} The players on the node
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-players
+     */
+    public async getAllPlayers(): Promise<PlayerObjectFromAPI[]> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: `/sessions/${this.sessionId}/players`
         };
         
-        return await this.node.driver.request<PlayerObjectFromAPI[] | ErrorResponses | null>(options) ?? [];
+        return await this.node.driver.request<PlayerObjectFromAPI[] | null>(options) ?? [];
     };
+
+    /**
+     * Get a player by the guild id
+     * @param {string} guildId The guild id to get the player from
+     * @returns {PlayerObjectFromAPI | ErrorResponses} The player object
+     * 
+     * @example
+     * ```ts
+     * <Node>.rest.getPlayer("1234567890");
+     * ```
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-player
+     */
+    public async getPlayer(guildId: string): Promise<PlayerObjectFromAPI | null> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: `/sessions/${this.sessionId}/players/${guildId}`
+        };
+
+        return await this.node.driver.request<PlayerObjectFromAPI | null>(options) ?? null;
+    };
+
+    /**
+     * Destroy a player by the guild id
+     * @param {UpdatePlayerInfo} data The guild id to destroy the player from
+     * @returns {PlayerObjectFromAPI} The player object
+     * 
+     * @example
+     * ```ts
+     * <Node>.rest.updatePlayer({ guildId: "1234567890", noReplace: true, playerOptions: { volume: 100 } });
+     * ```
+     * 
+     * @docs https://lavalink.dev/api/rest.html#update-player
+     */
+    public async updatePlayer(data: UpdatePlayerInfo): Promise<PlayerObjectFromAPI | undefined> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "PATCH",
+            path: `/sessions/${this.sessionId}/players/${data.guildId}`,
+            data: data.playerOptions as Record<string, unknown>,
+            params: { noReplace: data.noReplace?.toString() ?? "false" },
+        };
+
+        return await this.node.driver.request<PlayerObjectFromAPI>(options)
+    };
+
+    /**
+     * Destroy a player by the guild id
+     * @param {string} guildId The guild id to destroy the player from
+     * @returns {undefined} 204 - No Content
+     */
+    public async destroyPlayer(guildId: string): Promise<undefined> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "DELETE",
+            path: `/sessions/${this.sessionId}/players/${guildId}`,
+        };
+
+        return await this.node.driver.request<undefined>(options);
+    };
+
+    //? ----- Player API End ----- ?//
+
+    //? ----- Track API Begin ----- ?//
+
+    /**
+     * Load a track by the identifier
+     * @param identifier The identifier of the track to load
+     * @returns {LoadTrackResult} The result of the track
+     * 
+     * @docs https://lavalink.dev/api/rest.html#track-loading
+     */
+    public async loadTrack(identifier: string): Promise<LoadTrackResult> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: `/loadtracks`,
+            params: { identifier }
+        };
+
+        return await this.node.driver.request<LoadTrackResult>(options) ?? { loadType: "empty", data: {} };
+    };
+
+    /**
+     * Decode a track from the base64 encoded track
+     * @param {string} encodedBase64Track The base64 encoded track to decode
+     * @returns {TrackData | null} The decoded track
+     * 
+     * @docs https://lavalink.dev/api/rest.html#track-decoding
+     */
+    public async decodeTrack(encodedBase64Track: string): Promise<TrackData | null>  {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: "/decodetrack",
+            params: { encodedTrack: encodedBase64Track }
+        };
+
+        return await this.node.driver.request<TrackData | null>(options) ?? null;
+    };
+
+    /**
+     * Decode multiple tracks from the base64 encoded tracks
+     * @param {string[]} encodedBase64Tracks The base64 encoded tracks to decode
+     * @returns {TrackData[]} The decoded tracks
+     * 
+     * @docs https://lavalink.dev/api/rest.html#track-decoding
+     */
+    public async decodeTracks(encodedBase64Tracks: string[]): Promise<TrackData[]> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "POST",
+            path: "/decodetracks",
+            data: encodedBase64Tracks
+        };
+
+        return await this.node.driver.request<TrackData[]>(options) ?? [];
+    };
+
+    //? ----- Track API End ----- ?//
+
+    //? ----- Route Planer Begin ----- ?//
 
     /**
      * Unmark a failed address
@@ -59,7 +195,7 @@ export default class Rest {
         const options: HarmonyLinkRequesterOptions = {
             method: "POST",
             path: "/routeplanner/free/address",
-            body: JSON.stringify({ address })
+            data: { address }
         }
 
         await this.node.driver.request<undefined>(options)
@@ -122,4 +258,76 @@ export default class Rest {
 
         return await this.node.driver.request<RoutePlannerStatus>(options) ?? {};
     };
+
+    //? ----- Route Planer End ----- ?//
+
+    //? ----- Node Begin ----- ?//
+
+    /**
+     * Get the node information
+     * @returns {NodeInfo} The information of the node
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-lavalink-info
+     */
+    public async getInfo(): Promise<NodeInfo | undefined> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: "/info"
+        };
+
+        const result = await this.node.driver.request<NodeInfo | FrequenCInfo>(options);
+
+        if (this.node.driver.type === NodeType.FrequenC) {
+            return {
+                version: {
+                    major: result?.version.major ?? 0,
+                    minor: result?.version.minor ?? 0,
+                    patch: result?.version.patch ?? 0,
+                    semver: "0.0.0"
+                },
+                jvm: "GNU Libgcj 7.3.0",
+                lavaplayer: `${(result?.version.major ?? 0)}.${(result?.version.minor ?? 0)}.${(result?.version.patch ?? 0)}`,
+                sourceManagers: (result as FrequenCInfo)?.source_managers ?? [],
+                filters: (result as FrequenCInfo)?.filters ?? [],
+                plugins: [],
+                git: {
+                    commit: result?.git.commit ?? "Unknown",
+                    branch: result?.git.branch ?? "main",
+                    commitTime: 0
+                },
+                buildTime: 0
+            };
+        };
+
+        return result as NodeInfo;
+    };
+
+    /**
+     * Get the version of the node
+     * @returns {string} The version of the node
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-lavalink-version
+     */
+    public async getVersion(): Promise<string> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: "/version",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return await this.node.driver.request<string>(options) ?? "Unknown";
+    };
+
+    public async getStats(): Promise<NodeStats> {
+        const options: HarmonyLinkRequesterOptions = {
+            method: "GET",
+            path: "/stats",
+        };
+
+        return await this.node.driver.request<NodeStats>(options) ?? getDefaultNodeStats();
+    };
+
+    //? ----- Node End ----- ?//
 };

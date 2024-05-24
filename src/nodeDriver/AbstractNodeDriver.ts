@@ -47,7 +47,7 @@ export default abstract class AbstractNodeDriver {
     protected async eventHandler(data: string): Promise<boolean> {
         if (!this.node) return false;
 
-        return this.node.emit("lavalinkEvent", data)
+        return this.node.emit("lavalinkEvent", data.toString())
     };
 
     protected async openHandler(): Promise<boolean> {

@@ -1,6 +1,6 @@
 import type { HarmonyLink } from "@/HarmonyLink";
 import type { Node } from "./Node";
-import type { LavalinkPackets, NodeStats } from "@t/node";
+import { LavalinkReadyPacket, NodeType, type LavalinkPackets, type NodeStats } from "@t/node";
 
 export default class PlayerEvent {
     public manager: HarmonyLink;
@@ -21,20 +21,20 @@ export default class PlayerEvent {
     };
 
     public destroy(): void {
-        this.node.removeAllListeners("lavalinkEvent");
-        this.node.removeAllListeners("lavalinkWSClose");
-        this.node.removeAllListeners("lavalinkWSError");
-        this.node.removeAllListeners("lavalinkWSOpen");
+        this.node.removeAllListeners();
     }
 
-    protected async onLavalinkEvent(data: string): Promise<void> {
+    protected async onLavalinkEvent(data: string, interceptor?: Function): Promise<void> {
         try {
-            const packet = JSON.parse(data) as LavalinkPackets;
+            const packet = interceptor ? interceptor(JSON.parse(data)) as LavalinkPackets : JSON.parse(data) as LavalinkPackets;
 
             if (!packet?.op) return;
 
             switch (packet.op) {
                 case "ready": {
+                    //? Making sure for compatibility with FrequenC
+                    if (this.node.driver.type === NodeType.FrequenC) packet.sessionId = (packet as { session_id: string } & LavalinkReadyPacket).session_id;
+
                     this.node.setSessionId(packet.sessionId)
                     this.manager.emit("debug", `[Web Socket] Node ${this.node.options.name} is ready.`)
 
@@ -43,7 +43,7 @@ export default class PlayerEvent {
                     };
 
                     break;
-                }
+                };
 
                 case "stats": {
                     delete (packet as NodeStats & { op: string | undefined}).op;

@@ -5,7 +5,8 @@ import { HarmonyLinkRequesterOptions, LavalinkPackets, NodeType } from "@t/node"
 
 import type { HarmonyLink } from "@/HarmonyLink";
 import type { Node } from "@/node/Node";
-import type { TrackData, NodeLinkV2LoadTypes, LavaLinkLoadTypes } from "@t/node/rest";
+import type { NodeLinkV2LoadTypes, LavaLinkLoadTypes } from "@t/node/rest";
+import type { TrackData } from "@t/track"
 
 export default class NodeLink extends AbstractNodeDriver {
     public clientId = "";
@@ -74,7 +75,7 @@ export default class NodeLink extends AbstractNodeDriver {
         const url = new URL(`${this.httpUrl}/v4${options.path}`);
 
         if (options.params) url.search = new URLSearchParams(options.params).toString();
-        if (options.body) options.body = JSON.stringify(options.body);
+        if (options.data) options.body = JSON.stringify(options.data);
 
         const headers = {
             ...this.defaultHeaders,
@@ -85,8 +86,8 @@ export default class NodeLink extends AbstractNodeDriver {
             const data: TrackData[] = [];
             const failedTracks: string[] = [];
 
-            if (options.body) {
-                (JSON.parse(options.body) as string[]).map((track) => {
+            if (options.data) {
+                (options.data as string[]).map((track) => {
                     const trackData = this.decoder(track);
                     if (trackData) data.push(trackData);
                     else failedTracks.push(track);
@@ -105,7 +106,7 @@ export default class NodeLink extends AbstractNodeDriver {
                     body: JSON.stringify(failedTracks)
                 });
 
-                return await res.json() as T;
+                data.push(...(await res.json() as TrackData[]))
             };
 
             return data as T;

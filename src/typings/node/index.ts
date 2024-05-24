@@ -1,4 +1,3 @@
-import type { CloseEvent, ErrorEvent } from "ws";
 import type { EventData } from "./playerEvents";
 
 export interface NodeEvents {
@@ -7,7 +6,7 @@ export interface NodeEvents {
      * @param data The data that the node sends
      * @returns {void} void
      */
-    lavalinkEvent: (data: string) => void;
+    lavalinkEvent: (data: string, interceptor?: Function) => void;
 
     /**
      * Dispatched when the WebSocket connection is opened
@@ -33,7 +32,7 @@ export interface NodeEvents {
 
 export interface HarmonyLinkRequesterOptions extends RequestInit {
     params?: string | Record<string, string>;
-    data?: Record<string, unknown>;
+    data?: any;
     path: string;
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
     //rawReqData?: UpdatePlayerInfo;
@@ -127,6 +126,150 @@ export enum NodeType {
     NodeLink = "nodelink",
     FrequenC = "frequenc"
 };
+
+export interface NodeInfo {
+    /**
+     * The version of this Lavalink server
+     */
+    version: {
+        /**
+         * The full version string of this Lavalink server
+         */
+        semver: string;
+
+        /**
+         * The major version of this Lavalink server
+         */
+        major: number;
+
+        /**
+         * The minor version of this Lavalink server
+         */
+        minor: number;
+
+        /**
+         * The patch version of this Lavalink server
+         */
+        patch: number;
+
+        /**
+         * The pre-release version according to semver as a `.` separated list of identifiers
+         */
+        preRelease?: string;
+
+        /**
+         * The build metadata according to semver as a `.` separated list of identifiers
+         */
+        build?: string;
+    };
+
+    /**
+     * 	The millisecond unix timestamp when this Lavalink jar was built
+     */
+    buildTime: number;
+
+    /**
+     * The git information of this Lavalink server
+     */
+    git: {
+        /**
+         * The branch this Lavalink server was built on
+         */
+        branch: string;
+
+        /**
+         * 	The commit this Lavalink server was built on
+         */
+        commit: string;
+
+        /**
+         * The millisecond unix timestamp for when the commit was created
+         */
+        commitTime: number;
+    };
+
+    /**
+     * The JVM version this Lavalink server runs on
+     */
+    jvm: string;
+    
+    /**
+     * The Lavaplayer version being used by this server
+     */
+    lavaplayer: string;
+
+    /**
+     * The enabled source managers for this server
+     */
+    sourceManagers: string[];
+
+    /**
+     * The enabled filters for this server
+     */
+    filters: string[];
+
+    /**
+     * The enabled plugins for this server
+     */
+    plugins: {
+        /**
+         * The name of the plugin
+         */
+        name: string;
+
+        /**
+         * The version of the plugin
+         */
+        version: string;
+    }[];
+};
+
+export interface FrequenCInfo {
+    /**
+     * The version of this FrequenC server
+     */
+    version: {
+        /**
+         * The major version of this FrequenC server
+         */
+        major: number;
+
+        /**
+         * The minor version of this FrequenC server
+         */
+        minor: number;
+
+        /**
+         * The patch version of this FrequenC server
+         */
+        patch: number;
+    },
+
+    /**
+     * The git information of this FrequenC server
+     */
+    git: {
+        /**
+         * The branch this FrequenC server was built on
+         */
+        branch: string;
+
+        /**
+         * 	The commit this FrequenC server was built on
+         */
+        commit: string;
+    },
+
+    /**
+     * The enabled source managers for this server
+     */
+    source_managers: string[];
+
+    /**
+     * The enabled filters for this server
+     */
+    filters: string[];
+}
 
 export interface NodeGroup {
     /**

@@ -1,4 +1,4 @@
-import { TrackData } from "@/typings/node/rest";
+import { TrackData } from "@t/track";
 import { NodeType } from "@t/node";
 
 export default class Decoder {
@@ -47,6 +47,7 @@ export default class Decoder {
                             position: Number(this.readLong())
                         },
                         pluginInfo: {},
+                        userData: {}
                     }
                 };
 
@@ -67,6 +68,7 @@ export default class Decoder {
                             position: Number(this.readLong())
                         },
                         pluginInfo: {},
+                        userData: {}
                     }
                 };
 
@@ -87,6 +89,7 @@ export default class Decoder {
                             position: Number(this.readLong())
                         },
                         pluginInfo: {},
+                        userData: {}
                     }
                 };
 
@@ -119,6 +122,7 @@ export default class Decoder {
 					position: 0,
 				},
 				pluginInfo: {},
+                userData: {}
 			};
 		} catch (err) {
 			return null;

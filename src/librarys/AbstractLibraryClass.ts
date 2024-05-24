@@ -80,7 +80,5 @@ export default abstract class AbstractLibraryClass {
 
         this.manager.botID = this.userID;
         this.manager.emit("debug", "[HarmonyLink] Finished initializing the library! | Connecting to the specified nodes...")
-
-        
     }
 };

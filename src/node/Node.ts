@@ -63,6 +63,7 @@ export class Node extends EventEmitter {
     public async disconnect(): Promise<void> {
         return new Promise<void>((resolve) => {
             if (!this.isConnected) return resolve();
+            this.isConnected = false;
 
             this.driver.wsClose(true);
 

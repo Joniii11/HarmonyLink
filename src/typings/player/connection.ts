@@ -89,3 +89,4 @@ export interface SetStateUpdate {
      */
     request_to_speak_timestamp?: TDateISO
 };
+
