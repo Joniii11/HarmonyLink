@@ -53,8 +53,8 @@ export function camelToSnake(obj: Record<string, unknown>): Record<string, unkno
         if (newKey && typeof obj[newKey] !== 'object' && typeof obj[key] !== 'object') continue;
 
         newKey
-            ? this.camelToSnake(obj[newKey] as Record<string, unknown>)
-            : this.camelToSnake(obj[key] as Record<string, unknown>);
+            ? camelToSnake(obj[newKey] as Record<string, unknown>)
+            : camelToSnake(obj[key] as Record<string, unknown>);
     }
     return obj;
 };
