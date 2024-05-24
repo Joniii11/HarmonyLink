@@ -32,9 +32,6 @@ export default class PlayerEvent {
 
             switch (packet.op) {
                 case "ready": {
-                    //? Making sure for compatibility with FrequenC
-                    if (this.node.driver.type === NodeType.FrequenC) packet.sessionId = (packet as { session_id: string } & LavalinkReadyPacket).session_id;
-
                     this.node.setSessionId(packet.sessionId)
                     this.manager.emit("debug", `[Web Socket] Node ${this.node.options.name} is ready.`)
 
