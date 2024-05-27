@@ -78,9 +78,8 @@ Seamlessly connect to LavaLink nodes for high-quality audio streaming in your ap
 
 | URL | Features | Additional Information |
 |-----|----------|------------------------|
-| [Poru Music](https://github.com/parasop/poru-example) | Basic example | Works with the latest Discord.js version |
-| [The world machine](https://github.com/Reishimanfr/TWM-bot) | See GitHub repo for the full list | - |
-| [Lunox](https://github.com/adh319/Lunox) | Look over the repo for the full list of features | Simply powerful Discord Music Bot |
+| [RhythmCore](https://rhythmcorehq.com/) | Advanced Music bot With AI | [Invite](https://discord.com/oauth2/authorize?client_id=971355817280430110&permissions=279176400136&scope=applications.commands+bot) |
+| [Example Bot](https://github.com) | Verry basic example bot | coming soon |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
