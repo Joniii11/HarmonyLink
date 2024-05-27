@@ -32,17 +32,17 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-<a href="#note">
-> [!NOTE]
-> Support for Lavalink Version 3 is planned, but not confirmed to be made
-</a>
+
 
 <br>
  <a href="https://nodei.co/npm/poru/">
     <img src="https://nodei.co/npm/poru.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
     </a>
 </div>
-
+<a href="#note">
+> [!NOTE]
+> Support for Lavalink Version 3 is planned, but not confirmed to be made
+</a>
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -159,4 +159,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [license-url]: https://github.com/Joniii11/HarmonyLink/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
 [ts]: https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white
-[ts-url]: https://nextjs.org/
+[ts-url]: https://www.typescriptlang.org/
