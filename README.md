@@ -33,13 +33,14 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-> [!WARNING]  
-> Support for Lavalink Version 3 is planned, but not confirmed to be made<a href="#warning">more info.</a>
 <br>
  <a href="https://nodei.co/npm/poru/">
     <img src="https://nodei.co/npm/poru.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
     </a>
 </div>
+
+> [!WARNING]  
+> Support for Lavalink Version 3 is planned, but not confirmed to be made<a href="#warning">more info.</a>
 
 <details>
   <summary>Table of Contents</summary>
