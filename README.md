@@ -39,6 +39,7 @@
     </a>
 </div>
 <center>
+
 > [!WARNING]  
 > Support for Lavalink Version 3 is planned, but not confirmed to be made <a href="#warning">more info.</a>
 </center>
