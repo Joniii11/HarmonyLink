@@ -34,9 +34,9 @@
 [![MIT License][license-shield]][license-url]
 
 <br>
- <a href="https://nodei.co/npm/poru/">
+<!-- <a href="https://nodei.co/npm/poru/">
     <img src="https://nodei.co/npm/poru.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
-    </a>
+    </a> -->
 </div>
 
 > [!WARNING]  
