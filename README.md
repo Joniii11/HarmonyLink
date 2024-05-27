@@ -33,16 +33,14 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-
+> [!WARNING]  
+> Support for Lavalink Version 3 is planned, but not confirmed to be made<a href="#warning">more info.</a>
 <br>
  <a href="https://nodei.co/npm/poru/">
     <img src="https://nodei.co/npm/poru.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
     </a>
 </div>
-<a href="#note">
-> [!NOTE]
-> Support for Lavalink Version 3 is planned, but not confirmed to be made
-</a>
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -63,7 +61,7 @@
     <li><a href="#example-usage">Example Usage</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#note">Note</a></li>
+    <li><a href="#warning">Warning</a></li>
   </ol>
 </details>
 
@@ -140,7 +138,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Note
+## Warning
 
 <img src="images/nov3.PNG" alt="No V3 Supported Bitch">
 
