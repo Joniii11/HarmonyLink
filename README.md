@@ -87,31 +87,20 @@ Seamlessly connect to LavaLink nodes for high-quality audio streaming in your ap
 
 Here is how to install HarmonyLink on your project.
 
-### Prerequisites
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 ### Installation
-1. Install HarmonyLink
-   ```sh
-   npm install harmonyLink@latest
-   ```
-2. idk 
-   ```sh
-   hey tell me what to run as a cmd here joniiiii
-   ```
-3. idk config ig
-   ```js
-   import { DJSLibrary } from "HarmonyLink";
-   ```
+```sh
+# Using npm
+npm install poru
+
+# Using yarn
+yarn add poru
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Example Usage
 
-Cuming soon
+Coming soon
 
 _For more examples, please refer to the [Documentation](https://github.com/Joniii11/HarmonyLink)_
 
@@ -135,12 +124,6 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Warning
-
-<img src="images/nov3.PNG" alt="No V3 Supported Bitch">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
