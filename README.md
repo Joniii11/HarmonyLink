@@ -40,7 +40,7 @@
 </div>
 
 > [!WARNING]  
-> Support for Lavalink Version 3 is planned, but not confirmed to be made <a href="#warning">more info.</a>
+> Support for Lavalink Version 3 is planned, but not confirmed to be done.</a>
 
 <details>
   <summary>Table of Contents</summary>
@@ -62,7 +62,6 @@
     <li><a href="#example-usage">Example Usage</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#warning">Warning</a></li>
   </ol>
 </details>
 
