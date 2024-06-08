@@ -19,3 +19,27 @@ export interface PlayerState {
      */
     ping: number;
 };
+
+export interface PlayerOptions {
+    guildId: string;
+    voiceId: string;
+    textId: string;
+    shardId: string;
+    mute: boolean;
+    deaf: boolean;
+}
+
+export enum PlayerConnectionState {
+    CONNECTED = 0,
+    DISCONNECTED = 1,
+    DESTROYED = 2,
+};
+
+export enum VoiceConnectionState {
+    CONNECTING = 0,
+    NEARLY = 1,
+    CONNECTED = 2,
+    RECONNECTING = 3,
+    DISCONNECTING = 4,
+    DISCONNECTED = 5,
+}
