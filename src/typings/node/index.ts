@@ -1,4 +1,4 @@
-import type { EventData } from "./playerEvents";
+import { EventData } from "./playerEvents";
 
 export interface NodeEvents {
     /**
@@ -6,7 +6,7 @@ export interface NodeEvents {
      * @param data The data that the node sends
      * @returns {void} void
      */
-    lavalinkEvent: (data: string, interceptor?: Function) => void;
+    lavalinkEvent: (data: string, interceptor?: (data: any) => LavalinkPackets) => void;
 
     /**
      * Dispatched when the WebSocket connection is opened
@@ -31,11 +31,11 @@ export interface NodeEvents {
 };
 
 export interface HarmonyLinkRequesterOptions extends RequestInit {
-    params?: string | Record<string, string>;
+    params?: Record<string, string> | string;
     data?: any;
     path: string;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-    //rawReqData?: UpdatePlayerInfo;
+    method: "DELETE" | "GET" | "PATCH" | "POST" | "PUT";
+    // rawReqData?: UpdatePlayerInfo;
 };
 
 export interface NodeStats {
@@ -263,6 +263,7 @@ export interface FrequenCInfo {
     /**
      * The enabled source managers for this server
      */
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     source_managers: string[];
 
     /**
@@ -373,6 +374,6 @@ export interface LavalinkNodeStatsPacket extends NodeStats {
 /**
 * Dispatched when player or voice events occur
 */
-export type LavalinkEventPacket = { op: "event"; guildId: string; } & EventData;
+export type LavalinkEventPacket = EventData & { op: "event"; guildId: string; };
 
-export type LavalinkPackets = LavalinkReadyPacket | LavalinkPlayerUpdatePacket | LavalinkNodeStatsPacket | LavalinkEventPacket
+export type LavalinkPackets = LavalinkEventPacket | LavalinkNodeStatsPacket | LavalinkPlayerUpdatePacket | LavalinkReadyPacket

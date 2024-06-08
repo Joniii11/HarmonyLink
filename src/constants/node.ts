@@ -1,5 +1,5 @@
-import type { HarmonyLinkConfiguration } from "@t/HarmonyLink";
-import type { NodeOption } from "@t/node";
+import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
+import { NodeOption } from "@t/node";
 
 export const defaultOptions = (harmoyLinkConfiguration: HarmonyLinkConfiguration): NodeOption => {
     const { reconnectTimeout, reconnectTries, resumeTimeout } = harmoyLinkConfiguration;

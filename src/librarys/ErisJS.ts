@@ -1,7 +1,7 @@
 import AbstractLibraryClass from "./AbstractLibraryClass";
 
-import type { NodeGroup } from "@t/node";
-import type { AnyOtherPacket } from "@t/librarys";
+import { NodeGroup } from "@t/node";
+import { AnyOtherPacket } from "@t/librarys";
 
 export class ErisJS extends AbstractLibraryClass {
     public get userID(): string {

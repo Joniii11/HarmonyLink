@@ -1,12 +1,12 @@
-import type { HarmonyLink } from "@/HarmonyLink";
-import type { Node } from "./Node";
-import { LavalinkReadyPacket, NodeType, type LavalinkPackets, type NodeStats } from "@t/node";
+import { HarmonyLink } from "@/HarmonyLink";
+import { Node } from "./Node";
+import { LavalinkPackets, NodeStats } from "@t/node";
 
 export default class PlayerEvent {
     public manager: HarmonyLink;
     public node: Node
 
-    constructor(node: Node) {
+    public constructor(node: Node) {
         this.node = node;
         this.manager = this.node.manager;
 
@@ -24,9 +24,9 @@ export default class PlayerEvent {
         this.node.removeAllListeners();
     }
 
-    protected async onLavalinkEvent(data: string, interceptor?: Function): Promise<void> {
+    protected async onLavalinkEvent(data: string, interceptor?: (data: any) => LavalinkPackets): Promise<void> {
         try {
-            const packet = interceptor ? interceptor(JSON.parse(data)) as LavalinkPackets : JSON.parse(data) as LavalinkPackets;
+            const packet = interceptor ? interceptor(JSON.parse(data)) : JSON.parse(data) as LavalinkPackets | undefined;
 
             if (!packet?.op) return;
 
@@ -52,8 +52,8 @@ export default class PlayerEvent {
 
                 case "event":
                 case "playerUpdate": {
-                    // const player = @TODO: Make a player Manager
-                    // look if packet.guildId and player exists, then emit the event on the player
+                    /* const player = @TODO: Make a player Manager
+                       look if packet.guildId and player exists, then emit the event on the player */
                 }
             }
         } catch (err) {
@@ -91,7 +91,7 @@ export default class PlayerEvent {
         };
     };
 
-    protected onWSErrorEvent(error: Error): void {
+    protected onWSErrorEvent(error?: Error): void {
         try {
             if (!error) return;
 

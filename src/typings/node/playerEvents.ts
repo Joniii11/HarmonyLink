@@ -1,11 +1,11 @@
-export type PlayerEventType = 'TrackStartEvent' | 'TrackEndEvent' | 'TrackExceptionEvent' | 'TrackStuckEvent' | 'WebSocketClosedEvent';
-export type TrackEndReason = 'finished' | 'loadFailed' | 'stopped' | 'replaced' | 'cleanup';
+export type PlayerEventType = 'TrackEndEvent' | 'TrackExceptionEvent' | 'TrackStartEvent' | 'TrackStuckEvent' | 'WebSocketClosedEvent';
+export type TrackEndReason = 'cleanup' | 'finished' | 'loadFailed' | 'replaced' | 'stopped';
 
 /**
  * The event data
  * @typedef {TrackEndEvent | TrackStuckEvent | WebSocketClosedEvent | TrackStartEvent | TrackExceptionEvent} EventData
  */
-export type EventData = TrackEndEvent | TrackStuckEvent | WebSocketClosedEvent | TrackStartEvent | TrackExceptionEvent;
+export type EventData = TrackEndEvent | TrackExceptionEvent | TrackStartEvent | TrackStuckEvent | WebSocketClosedEvent;
 
 /**
  * Represents an event related to a player.

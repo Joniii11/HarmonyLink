@@ -1,7 +1,9 @@
 import AbstractLibraryClass from "@/librarys/AbstractLibraryClass";
 import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
 
-import type { NodeGroup } from "@t/node";
+import NodeManager from "@/managers/NodeManager";
+import { NodeGroup } from "@t/node";
+import { Node } from "@/node/Node";
 
 export interface HarmonyLinkConfiguration {
     /**
@@ -29,7 +31,7 @@ export interface HarmonyLinkConfiguration {
     nodes: NodeGroup[];
 
     /**
-     * Whether to automatically resume players when the node is reconnected
+     * Whether to automatically resume players when the node is reconnected (Note: DOES NOT RESUME WHEN THE LAVALINK SERVER DIES)
      * 
      * @default true
      */
@@ -50,19 +52,59 @@ export interface HarmonyLinkConfiguration {
      * 
      * @default 10000
      */
-    resumeTimeout: number;
+    resumeTimeout?: number;
 
     /**
      * The amount of times to try to reconnect to the node
      * 
      * @default 5
      */
-    reconnectTries: number;
+    reconnectTries?: number;
 
     /**
      * The timeout for the reconnect
      * 
      * @default 5000
      */
-    reconnectTimeout: number;
+    reconnectTimeout?: number;
+
+    /**
+     * A custom resolver for the NodeResolver
+     * 
+     * @default
+     * ```ts
+     *  const nodes = this.allNodes;
+     *
+     *  const onlineNodes = nodes.filter(node => node.isConnected);
+     *
+     *  if (!onlineNodes || onlineNodes.length === 0) {
+     *      throw new Error("[HarmonyLink] [NodeManager] No nodes are online.");
+     *  };
+     *
+     *  const promises = onlineNodes.map(async node => {
+     *      const stats = await node.getStats();
+     *      return { node, stats };
+     *  });
+     *
+     *  const results = await Promise.all(promises);
+     *  const sorted = results.sort((a, b) => a.stats.players - b.stats.players);
+     *
+     *  return sorted[0].node;
+     * ```
+     */
+    nodeResolver?: (nodes: NodeManager) => Promise<Node | void>;
+
+    /**
+     * The default volume to use for players
+     * 
+     * @default 100
+     */
+    defaultVolume?: number
+
+    /**
+     * The timeout to use for voice connections
+     * 
+     * @default 10000
+     */
+    voiceConnectionTimeout?: number;
 }

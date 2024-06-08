@@ -1,11 +1,11 @@
-import type { PlayerState } from "@t/player";
-import type { VoiceServer } from "@t/player/connection";
-import type { FiltersOptions } from "@t/player/filters";
-import type { TrackData } from "@t/track";
+import { PlayerState } from "@t/player";
+import { VoiceServer } from "@t/player/connection";
+import { FiltersOptions } from "@t/player/filters";
+import { TrackData } from "@t/track";
 
-export type NodeLinkV2LoadTypes = "short" | "album" | "artist" | "show" | "episode" | "station" | "podcast";
-export type LavaLinkLoadTypes = "track" | "playlist" | "search" | "empty" | "error"
-export type Severity = "common" | "suspicious" | "fault"
+export type NodeLinkV2LoadTypes = "album" | "artist" | "episode" | "podcast" | "short" | "show" | "station";
+export type LavaLinkLoadTypes = "empty" | "error" | "playlist" | "search" | "track"
+export type Severity = "common" | "fault" | "suspicious"
 
 export interface TrackLoadingResultException {
     loadType: "error",
@@ -30,7 +30,7 @@ export interface TrackLoadingResultException {
 
 export interface TrackLoadResultEmpty {
     loadType: "empty";
-    data: {}
+    data: Record<string, never>
 };
 
 export interface TrackLoadResultSearch {
@@ -73,7 +73,7 @@ export interface TrackLoadResultTrack {
     data: TrackData;
 };
 
-export type LoadTrackResult = TrackLoadingResultException | TrackLoadResultEmpty | TrackLoadResultSearch | TrackLoadResultPlaylist | TrackLoadResultTrack;
+export type LoadTrackResult = TrackLoadingResultException | TrackLoadResultEmpty | TrackLoadResultPlaylist | TrackLoadResultSearch | TrackLoadResultTrack;
 
 export interface PlayerObjectFromAPI {
     /**
@@ -282,7 +282,7 @@ export interface RoutePlannerStatusRIRP {
     /**
      * The status details of the RoutePlanner
      */
-    details: {
+    details: RoutePlannerStatusBase & {
         /**
          * The number of rotations
          */
@@ -297,7 +297,7 @@ export interface RoutePlannerStatusRIRP {
          * The current address being used
          */
         currentAddress: string;
-    } & RoutePlannerStatusBase;
+    };
 };
 
 export interface RoutePlannerStatusNIRP {
@@ -309,12 +309,12 @@ export interface RoutePlannerStatusNIRP {
     /**
      * The status details of the RoutePlanner
      */
-    details: {
+    details: RoutePlannerStatusBase & {
         /**
          * The current offset in the ip block
          */
         currentAddressIndex: string;
-    } & RoutePlannerStatusBase;
+    };
 };
 
 export interface RoutePlannerStatusRNIP {
@@ -326,7 +326,7 @@ export interface RoutePlannerStatusRNIP {
     /**
      * The status details of the RoutePlanner
      */
-    details: {
+    details: RoutePlannerStatusBase & {
         /**
          * The current offset in the ip block
          */
@@ -336,8 +336,8 @@ export interface RoutePlannerStatusRNIP {
          * The information in which /64 block ips are chosen. This number increases on each ban.
          */
         blockIndex: string;
-    } & RoutePlannerStatusBase;
+    };
 };
 
 export type RoutePlannerStatusDisabled = Omit<RoutePlannerStatusNIRP, "class" | "details">
-export type RoutePlannerStatus = RoutePlannerStatusNIRP | RoutePlannerStatusRIRP | RoutePlannerStatusRNIP | RoutePlannerStatusDisabled;
+export type RoutePlannerStatus = RoutePlannerStatusDisabled | RoutePlannerStatusNIRP | RoutePlannerStatusRIRP | RoutePlannerStatusRNIP;

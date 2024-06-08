@@ -1,7 +1,7 @@
 import AbstractLibraryClass from "./AbstractLibraryClass";
 
-import type { NodeGroup } from "@t/node";
-import type { AnyOtherPacket } from "@t/librarys";
+import { NodeGroup } from "@t/node";
+import { AnyOtherPacket } from "@t/librarys";
 
 export class DJSLibrary extends AbstractLibraryClass {
     public get userID(): string {
@@ -13,7 +13,7 @@ export class DJSLibrary extends AbstractLibraryClass {
     };
 
     public listen(nodes: NodeGroup[]): void {
-        this.client.once("ready", () => this.ready(nodes))
+        this.client.once("ready", async () => this.ready(nodes))
 
         // Getting the raw data from the gateway
         this.client.on("raw", this.raw.bind(this));

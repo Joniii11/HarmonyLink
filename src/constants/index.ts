@@ -1,5 +1,5 @@
-import type { Config } from "@t/constants";
-import type { NodeStats } from "@t/node";
+import { Config } from "@t/constants";
+import { NodeStats } from "@t/node";
 
 export const config: Config = {
     name: "HarmonyLink",
@@ -8,8 +8,7 @@ export const config: Config = {
     github: "https://github.com/Joniii11/HarmonyLink"
 } as const;
 
-export const getDefaultNodeStats = (): NodeStats => {
-    return {
+export const getDefaultNodeStats = (): NodeStats => ({
         players: 0,
         playingPlayers: 0,
         uptime: 0,
@@ -29,5 +28,4 @@ export const getDefaultNodeStats = (): NodeStats => {
             nulled: 0,
             deficit: 0
         },
-    };
-};
+    });

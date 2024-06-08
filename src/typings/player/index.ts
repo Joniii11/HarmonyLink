@@ -1,3 +1,5 @@
+import { Node } from "@/node/Node";
+
 export interface PlayerState {
     /**
      * Unix timestamp in milliseconds
@@ -27,6 +29,13 @@ export interface PlayerOptions {
     shardId: string;
     mute: boolean;
     deaf: boolean;
+
+    /**
+     * The node to connect to
+     * @optional
+     * 
+     */
+    node?: Node;
 }
 
 export enum PlayerConnectionState {

@@ -1,4 +1,5 @@
-import type { TDateISO } from "@t/index";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { TDateISO } from "@t/index";
 
 export interface VoiceServer {
     /**
@@ -90,3 +91,51 @@ export interface SetStateUpdate {
     request_to_speak_timestamp?: TDateISO
 };
 
+export interface ConnectionOptions {
+    /**
+     * Voice Options
+     */
+    voice: {
+        /**
+         * The voice session id
+         */
+        sessionId: string | null;
+
+        /**
+         * The voice server token
+         */
+        token: string | null;
+
+        /**
+         * The voice server endpoint
+         */
+        endpoint: string | null;
+    };
+
+    /**
+     * Whether to mute myself
+     * 
+     * @default false
+     */
+    selfMute: boolean;
+
+    /** *
+     * Whether to deafen myself
+     * 
+     * @default false
+     */
+    selfDeaf: boolean;
+
+    /**
+     * The voice region
+     */
+    voiceRegion: string | null;
+};
+
+
+export enum DiscordVoiceStates {
+    SESSION_READY = 0,
+    SESSION_ID_MISSING = 1,
+    SESSION_ENDPOINT_MISSING = 2,
+    SESSION_FAILED_UPDATE = 3,
+};

@@ -26,3 +26,10 @@ export type TDateISOTime = `${THours}:${TMinutes}:${TSeconds}.${TMilliseconds}`;
  *   "Expression produces a union type that is too complex to represent. ts(2590)
  */
 export type TDateISO = `${TDateISODate}T${TDateISOTime}Z`;
+
+/**
+ * Represent a string like `123456789012` (Discord ID format).
+ * 
+ * https://discord.com/developers/docs/reference#snowflakes
+ */
+export type Snowflake = string

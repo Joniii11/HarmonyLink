@@ -1,43 +1,43 @@
 import AbstractNodeDriver from "./AbstractNodeDriver";
 
 import { WebSocket } from "ws";
-import { HarmonyLinkRequesterOptions, LavalinkPackets, NodeType } from "@t/node";
+import { HarmonyLinkRequesterOptions, NodeType } from "@t/node";
 
-import type { HarmonyLink } from "@/HarmonyLink";
-import type { Node } from "@/node/Node";
-import type { TrackData } from '@t/track';
+import { HarmonyLink } from "@/HarmonyLink";
+import { Node } from "@/node/Node";
+import { TrackData } from '@t/track';
 
 export default class LavalinkV4 extends AbstractNodeDriver {
     public clientId = "";
     public type = NodeType.LavaLinkV4;
     public wsUrl = "";
     public httpUrl = "";
-    public manager: null | HarmonyLink = null;
+    public manager: HarmonyLink | null = null;
 
     protected node: Node | null = null;
     protected sessionId: string | null = null;
     protected wsClient: WebSocket | undefined = undefined;
 
-    public get isRegistered() {
+    public get isRegistered(): boolean {
         return (this.manager !== null && this.node !== null && this.wsUrl.length !== 0 && this.httpUrl.length !== 0);
     };
 
-    public init(manager: HarmonyLink, node: Node) {
+    public init(manager: HarmonyLink, node: Node): void {
         this.manager = manager;
         this.clientId = `${manager.config.name}/${manager.config.version} (${manager.config.github})`;
         this.node = node;
 
-        this.wsUrl = `${(node.options.secure ?? false) ? "wss" : "ws"}://${node.options.host}:${node.options.port}`;
-        this.httpUrl = `${(node.options.secure ?? false) ? "https" : "http"}://${node.options.host}:${node.options.port}`;
+        this.wsUrl = `${(node.options.secure) ? "wss" : "ws"}://${node.options.host}:${node.options.port}`;
+        this.httpUrl = `${(node.options.secure) ? "https" : "http"}://${node.options.host}:${node.options.port}`;
     };
 
-    public async connect() {
+    public async connect(): Promise<WebSocket> {
         return new Promise<WebSocket>((resolve, reject) => {
             if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
-            if (!this.manager?.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
-            const shouldResume = this.manager?.options.resume ?? false;
+            if (!this.manager?.isReady || !this.manager.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
+            const shouldResume = this.manager.options.resume ?? false;
 
-            const headers: { [key: string]: string } = {
+            const headers: Record<string, string> = {
                 Authorization: this.node!.options.password,
                 "User-Id": this.manager.library.userID,
                 "Client-Name": this.clientId,
@@ -161,6 +161,6 @@ export default class LavalinkV4 extends AbstractNodeDriver {
 
         await this.request<{ resuming: boolean, timeout: number}>(options);
         this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] Updated the session.`)
-        return;
+        
     };
 }

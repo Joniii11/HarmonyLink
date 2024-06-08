@@ -7,14 +7,14 @@ export default class Decoder {
     protected type: NodeType
     protected track: string;
     
-    constructor(track: string, type: NodeType) {
+    public constructor(track: string, type: NodeType) {
         this.position = 0;
         this.buffer = Buffer.from(track, "base64");
         this.type = type;
         this.track = track;
     };
 
-    public get getTrack() {        
+    public get getTrack(): TrackData | null {        
         switch (this.type) {
             case NodeType.FrequenC: return this.FrequenCDecoder;
 
@@ -39,7 +39,7 @@ export default class Decoder {
                             length: Number(this.readLong()),
                             identifier: this.readUTF(),
                             isSeekable: true,
-                            isStream: !!this.readByte(),
+                            isStream: Boolean(this.readByte()),
                             uri: null,
                             artworkUrl: null,
                             isrc: null,
@@ -60,7 +60,7 @@ export default class Decoder {
                             length: Number(this.readLong()),
                             identifier: this.readUTF(),
                             isSeekable: true,
-                            isStream: !!this.readByte(),
+                            isStream: Boolean(this.readByte()),
                             uri: this.readByte() ? this.readUTF() : null,
                             artworkUrl: null,
                             isrc: null,
@@ -81,7 +81,7 @@ export default class Decoder {
                             length: Number(this.readLong()),
                             identifier: this.readUTF(),
                             isSeekable: true,
-                            isStream: !!this.readByte(),
+                            isStream: Boolean(this.readByte()),
                             uri: this.readByte() ? this.readUTF() : null,
                             artworkUrl: this.readByte() ? this.readUTF() : null,
                             isrc: this.readByte() ? this.readUTF() : null,
@@ -97,13 +97,14 @@ export default class Decoder {
                     return null;
                 }
             };
-        } catch (err) {
+        } catch {
             return null;
         };
     };
 
     private get FrequenCDecoder(): TrackData | null {
         try {
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-negated-condition
 			(((this.readInt() & 0xc0000000) >> 30) & 1) !== 0 ? this.readByte() : 1;
 
 			return {
@@ -124,40 +125,40 @@ export default class Decoder {
 				pluginInfo: {},
                 userData: {}
 			};
-		} catch (err) {
+		} catch {
 			return null;
 		}
     };
 
-    private changeBytes(bytes: number) {
+    private changeBytes(bytes: number): number {
         this.position += bytes
         return this.position - bytes
     };
     
-    private readByte() {
+    private readByte(): number {
         return this.buffer[this.changeBytes(1)]
     };
     
-    private readUShort() {
+    private readUShort(): number {
         return this.buffer.readUInt16BE(this.changeBytes(2))
     };
     
-    private readInt() {
+    private readInt(): number {
         return this.buffer.readInt32BE(this.changeBytes(4))
     };
     
-    private readLong() {
+    private readLong(): bigint {
         return this.buffer.readBigInt64BE(this.changeBytes(8))
     };
 
-    private readLongFrequenC() {
+    private readLongFrequenC(): bigint {
         const msg = BigInt(this.readInt());
         const lsb = BigInt(this.readInt());
 
         return msg * BigInt(2 ** 32) + lsb;
     };
     
-    private readUTF() {
+    private readUTF(): string {
         const len = Number(this.readUShort())
         const start = Number(this.changeBytes(len))
     

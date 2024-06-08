@@ -1,43 +1,43 @@
 import AbstractNodeDriver from "./AbstractNodeDriver";
 import WebSocket from "ws";
 
-import { type HarmonyLinkRequesterOptions, NodeType } from "@t/node";
+import { HarmonyLinkRequesterOptions, LavalinkPackets, NodeType } from "@t/node";
 
-import type { HarmonyLink } from '@/HarmonyLink';
-import type { Node} from '@/node/Node';
+import { HarmonyLink } from '@/HarmonyLink';
+import { Node} from '@/node/Node';
 import { TrackData } from "@/typings/track";
 import { camelToSnake, snakeToCamel } from "@/utils";
 
-export class FrequenC extends AbstractNodeDriver {
+export default class FrequenC extends AbstractNodeDriver {
     public clientId = "";
     public type = NodeType.NodeLink;
     public wsUrl = "";
     public httpUrl = "";
-    public manager: null | HarmonyLink = null;
+    public manager: HarmonyLink | null = null;
 
     protected node: Node | null = null;
     protected sessionId: string | null = null;
     protected wsClient: WebSocket | undefined = undefined;
 
-    public get isRegistered() {
+    public get isRegistered(): boolean {
         return (this.manager !== null && this.node !== null && this.wsUrl.length !== 0 && this.httpUrl.length !== 0);
     };
 
-    public init(manager: HarmonyLink, node: Node) {
+    public init(manager: HarmonyLink, node: Node): void {
         this.manager = manager;
         this.clientId = `${manager.config.name}/${manager.config.version} (${manager.config.github})`;
         this.node = node;
 
-        this.wsUrl = `${(node.options.secure ?? false) ? "wss" : "ws"}://${node.options.host}:${node.options.port}`;
-        this.httpUrl = `${(node.options.secure ?? false) ? "https" : "http"}://${node.options.host}:${node.options.port}`;
+        this.wsUrl = `${(node.options.secure ) ? "wss" : "ws"}://${node.options.host}:${node.options.port}`;
+        this.httpUrl = `${(node.options.secure) ? "https" : "http"}://${node.options.host}:${node.options.port}`;
     };
 
-    public async connect() {
+    public async connect(): Promise<WebSocket> {
         return new Promise<WebSocket>((resolve, reject) => {
             if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
-            if (!this.manager?.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
+            if (!this.manager?.isReady || !this.manager.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
 
-            const headers: { [key: string]: string } = {
+            const headers: Record<string, string> = {
                 Authorization: this.node!.options.password,
                 "User-Id": this.manager.library.userID,
                 "Client-Info": this.clientId,
@@ -73,7 +73,7 @@ export class FrequenC extends AbstractNodeDriver {
         const url = new URL(`${this.httpUrl}/v1${options.path}`);
         if (options.params) url.search = new URLSearchParams(options.params).toString();
         else if (options.data) {
-            const conv = camelToSnake(options.data);
+            const conv = camelToSnake(options.data as Record<string, unknown>);
             options.body = JSON.stringify(conv);
         };
 
@@ -119,7 +119,7 @@ export class FrequenC extends AbstractNodeDriver {
             return data as T;
         };
 
-        if (options.body && JSON.stringify(options.body) == '{}') delete options.body;
+        if (options.body && JSON.stringify(options.body) === '{}') delete options.body;
 
         const res = await globalThis.fetch(url, {
             ...options,
@@ -148,9 +148,12 @@ export class FrequenC extends AbstractNodeDriver {
         };
     };
 
-    public async updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<void> {
-        this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] FrequenC's do not support resuming yet, so set resume to true is useless.`);
-        return;
+    public async updateSessions(): Promise<void> {
+        return new Promise<void>((resolve) => {
+            this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] FrequenC's do not support resuming yet, so set resume to true is useless.`);
+            
+            resolve()
+        })
     };
 
     public wsClose(withoutEmit: boolean = false): void {
@@ -164,8 +167,10 @@ export class FrequenC extends AbstractNodeDriver {
     };
 
     protected async eventHandler(data: string): Promise<boolean> {
-        if (!this.node) return false;
+        return new Promise<boolean>((resolve) => {
+            if (!this.node) return resolve(false);
 
-        return this.node.emit("lavalinkEvent", data.toString(), snakeToCamel)
+            return resolve(this.node.emit("lavalinkEvent", data.toString(), snakeToCamel as (data: any) => LavalinkPackets))
+        })
     };
 };

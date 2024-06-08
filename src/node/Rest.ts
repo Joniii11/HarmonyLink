@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { getDefaultNodeStats } from "@/constants";
 
-import type NodeManager from "@/managers/NodeManager";
-import type { HarmonyLink } from "@/HarmonyLink";
-import type { Node } from "./Node";
-import type { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@/typings/node/rest";
-import { FrequenCInfo, type HarmonyLinkRequesterOptions, type NodeInfo, type NodeStats, NodeType } from "@/typings/node";
+import NodeManager from "@/managers/NodeManager";
+import { HarmonyLink } from "@/HarmonyLink";
+import { Node } from "./Node";
+import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@/typings/node/rest";
+import { FrequenCInfo, HarmonyLinkRequesterOptions, NodeInfo, NodeStats, NodeType } from "@/typings/node";
 import { TrackData } from "@/typings/track";
 
 export default class Rest {
@@ -14,7 +15,7 @@ export default class Rest {
     protected nodeManager: NodeManager;
     protected sessionId: string | null = null;
 
-    constructor(manager: HarmonyLink, node: Node) {
+    public constructor(manager: HarmonyLink, node: Node) {
         this.manager = manager;
         this.node = node;
         this.nodeManager = this.manager.nodeManager;
@@ -24,7 +25,7 @@ export default class Rest {
         return this.sessionId !== null;
     };
 
-    //? ----- Session API Begin ----- ?//
+    // ? ----- Session API Begin ----- ?//
 
     /**
      * Set the session id
@@ -34,9 +35,9 @@ export default class Rest {
         this.sessionId = sessionId;
     };
 
-    //? ----- Session API End ----- ?//
+    // ? ----- Session API End ----- ?//
 
-    //? ----- Player API Begin ----- ?//
+    // ? ----- Player API Begin ----- ?//
 
     /**
      * Get all the players on the node
@@ -94,7 +95,7 @@ export default class Rest {
             params: { noReplace: data.noReplace?.toString() ?? "false" },
         };
 
-        return await this.node.driver.request<PlayerObjectFromAPI>(options)
+        return this.node.driver.request<PlayerObjectFromAPI>(options)
     };
 
     /**
@@ -108,12 +109,12 @@ export default class Rest {
             path: `/sessions/${this.sessionId}/players/${guildId}`,
         };
 
-        return await this.node.driver.request<undefined>(options);
+        return this.node.driver.request<undefined>(options);
     };
 
-    //? ----- Player API End ----- ?//
+    // ? ----- Player API End ----- ?//
 
-    //? ----- Track API Begin ----- ?//
+    // ? ----- Track API Begin ----- ?//
 
     /**
      * Load a track by the identifier
@@ -166,9 +167,9 @@ export default class Rest {
         return await this.node.driver.request<TrackData[]>(options) ?? [];
     };
 
-    //? ----- Track API End ----- ?//
+    // ? ----- Track API End ----- ?//
 
-    //? ----- Route Planer Begin ----- ?//
+    // ? ----- Route Planer Begin ----- ?//
 
     /**
      * Unmark a failed address
@@ -182,7 +183,7 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
-    public async unmarkFailedAddress(address: string): Promise<void | ErrorResponses> {
+    public async unmarkFailedAddress(address: string): Promise<ErrorResponses | void> {
         if (this.node.driver.type === NodeType.NodeLink) return {
             timestamp: Date.now(),
             status: 404,
@@ -212,7 +213,7 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
-    public async unmarkAllFailedAddresses(): Promise<void | ErrorResponses> {
+    public async unmarkAllFailedAddresses(): Promise<ErrorResponses | void> {
         if (this.node.driver.type === NodeType.NodeLink) return {
             timestamp: Date.now(),
             status: 404,
@@ -259,9 +260,9 @@ export default class Rest {
         return await this.node.driver.request<RoutePlannerStatus>(options) ?? {};
     };
 
-    //? ----- Route Planer End ----- ?//
+    // ? ----- Route Planer End ----- ?//
 
-    //? ----- Node Begin ----- ?//
+    // ? ----- Node Begin ----- ?//
 
     /**
      * Get the node information
@@ -275,7 +276,7 @@ export default class Rest {
             path: "/info"
         };
 
-        const result = await this.node.driver.request<NodeInfo | FrequenCInfo>(options);
+        const result = await this.node.driver.request<FrequenCInfo | NodeInfo>(options);
 
         if (this.node.driver.type === NodeType.FrequenC) {
             return {
@@ -287,8 +288,8 @@ export default class Rest {
                 },
                 jvm: "GNU Libgcj 7.3.0",
                 lavaplayer: `${(result?.version.major ?? 0)}.${(result?.version.minor ?? 0)}.${(result?.version.patch ?? 0)}`,
-                sourceManagers: (result as FrequenCInfo)?.source_managers ?? [],
-                filters: (result as FrequenCInfo)?.filters ?? [],
+                sourceManagers: (result as FrequenCInfo).source_managers || [],
+                filters: (result as FrequenCInfo).filters || [],
                 plugins: [],
                 git: {
                     commit: result?.git.commit ?? "Unknown",
@@ -329,5 +330,5 @@ export default class Rest {
         return await this.node.driver.request<NodeStats>(options) ?? getDefaultNodeStats();
     };
 
-    //? ----- Node End ----- ?//
+    // ? ----- Node End ----- ?//
 };
