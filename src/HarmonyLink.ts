@@ -35,7 +35,7 @@ export class HarmonyLink extends EventEmitter {
     public readonly nodeManager = new NodeManager(this)
     public readonly playerManager = new PlayerManager(this)
 
-    constructor(options: HarmonyLinkConfiguration) {
+    public constructor(options: HarmonyLinkConfiguration) {
         super();
 
         // Initialize the library

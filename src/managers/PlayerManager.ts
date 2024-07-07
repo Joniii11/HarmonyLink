@@ -46,14 +46,14 @@ export default class PlayerManager extends Map<Snowflake, Player> {
         return newPlayer;
     };
 
-    /* public async removePlayer(guildId: string): Promise<Player | null> {
+    public async removePlayer(guildId: string): Promise<Player | null> {
         const player = this.get(guildId);
         if (!player) return null;
 
         await player.destroy();
         this.delete(guildId);
         return player;
-    };*/
+    };
 
     public async leastUsedNode(): Promise<Node> {
         return await this.manager.nodeManager.getLeastUsedNode() as Node | undefined ?? this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)]

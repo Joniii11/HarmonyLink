@@ -14,15 +14,20 @@
     "skipDefaultLibCheck": true,
     "declaration": true,
     "strict": true,
+    "resolveJsonModule": true,
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@t/*": ["src/typings/*"],
-    }
+    },
   },
   "exclude": [
     "website",
     "./dist/**/*" 
+  ],
+  "include": [
+    "src/**/*",
+    "utils/**/*"
   ]
 }
