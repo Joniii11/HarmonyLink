@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const AbstractNodeDriver_1 = __importDefault(require("./AbstractNodeDriver"));
 const ws_1 = require("ws");
-const node_1 = require("@t/node");
+const node_1 = require("../typings/node");
 class LavalinkV4 extends AbstractNodeDriver_1.default {
     clientId = "";
     type = node_1.NodeType.LavaLinkV4;

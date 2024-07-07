@@ -7,10 +7,10 @@ exports.Node = void 0;
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 const events_1 = __importDefault(require("events"));
 const NodeEventHandler_1 = __importDefault(require("./NodeEventHandler"));
-const constants_1 = require("@/constants");
+const constants_1 = require("../constants");
 const Rest_1 = __importDefault(require("./Rest"));
-const utils_1 = require("@/utils");
-const LavalinkV4_1 = __importDefault(require("@/nodeDriver/LavalinkV4"));
+const utils_1 = require("../utils");
+const LavalinkV4_1 = __importDefault(require("../nodeDriver/LavalinkV4"));
 class Node extends events_1.default {
     options;
     stats = (0, constants_1.getDefaultNodeStats)();

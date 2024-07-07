@@ -1,6 +1,6 @@
 import AbstractLibraryClass from "./AbstractLibraryClass";
-import { NodeGroup } from "@t/node";
-import { AnyOtherPacket } from "@t/librarys";
+import { NodeGroup } from "../typings/node";
+import { AnyOtherPacket } from "../typings/librarys";
 export declare class DJSLibrary extends AbstractLibraryClass {
     get userID(): string;
     sendPacket(shardId: number, payload: AnyOtherPacket, important?: boolean): void;

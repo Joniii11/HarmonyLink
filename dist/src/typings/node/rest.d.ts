@@ -1,7 +1,7 @@
-import { PlayerState } from "@t/player";
-import { VoiceServer } from "@t/player/connection";
-import { FiltersOptions } from "@t/player/filters";
-import { TrackData } from "@t/track";
+import { PlayerState } from "../player";
+import { VoiceServer } from "../player/connection";
+import { FiltersOptions } from "../player/filters";
+import { TrackData } from "../track";
 export type NodeLinkV2LoadTypes = "album" | "artist" | "episode" | "podcast" | "short" | "show" | "station";
 export type LavaLinkLoadTypes = "empty" | "error" | "playlist" | "search" | "track";
 export type Severity = "common" | "fault" | "suspicious";

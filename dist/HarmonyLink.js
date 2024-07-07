@@ -13,7 +13,7 @@ const LavalinkV4_1 = __importDefault(require("./nodeDriver/LavalinkV4"));
 const NodeLink_1 = __importDefault(require("./nodeDriver/NodeLink"));
 const FrequenC_1 = __importDefault(require("./nodeDriver/FrequenC"));
 // Constants
-const constants_1 = require("@/constants");
+const constants_1 = require("./constants");
 class HarmonyLink extends events_1.default {
     botID = "";
     isReady = false;

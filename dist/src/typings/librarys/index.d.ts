@@ -1,4 +1,4 @@
-import { VoiceServer, SetStateUpdate } from "@t/player/connection";
+import { VoiceServer, SetStateUpdate } from "../player/connection";
 export type Packet = AnyOtherPacket | PacketVoiceServerUpdate | PacketVoiceStateUpdate;
 export interface PacketVoiceStateUpdate {
     op: number;

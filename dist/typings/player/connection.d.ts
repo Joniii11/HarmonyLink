@@ -1,4 +1,4 @@
-import { TDateISO } from "@t/index";
+import { TDateISO } from "../index";
 export interface VoiceServer {
     /**
      * Voice connection token

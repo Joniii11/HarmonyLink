@@ -1,8 +1,8 @@
-import AbstractLibraryClass from "@/librarys/AbstractLibraryClass";
-import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
-import NodeManager from "@/managers/NodeManager";
-import { NodeGroup } from "@t/node";
-import { Node } from "@/node/Node";
+import AbstractLibraryClass from "../librarys/AbstractLibraryClass";
+import AbstractNodeDriver from "../nodeDriver/AbstractNodeDriver";
+import NodeManager from "../managers/NodeManager";
+import { NodeGroup } from "./node";
+import { Node } from "../node/Node";
 export interface HarmonyLinkConfiguration {
     /**
      * The library instance used for interacting with the Discord client.

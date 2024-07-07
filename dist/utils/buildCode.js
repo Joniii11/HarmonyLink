@@ -16,7 +16,7 @@ void (async () => {
                     return;
                 }
                 // Search for the require statements and replace @ or @t with the correct path which is specified in the package.json file
-                const result = data.replace(/require\(['"]@['"]\)/g, `require('${package_json_1.default._moduleAliases["@"]}')`);
+                const result = data.replace(/require\(['"]@['"]\)/g, `require('${package_json_1.default._moduleAliases["@t"]}')`);
                 node_fs_1.default.writeFile(node_path_1.default.join(__dirname, `/${file}`), result, (error) => {
                     if (error) {
                         console.error(error);

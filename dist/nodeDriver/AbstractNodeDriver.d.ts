@@ -1,9 +1,9 @@
 /// <reference types="node" />
-import { HarmonyLink } from "@/HarmonyLink";
-import { HarmonyLinkRequesterOptions, NodeType } from "@t/node";
+import { HarmonyLink } from "../HarmonyLink";
+import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
 import ws from "ws";
-import { Node } from "@/node/Node";
-import { TrackData } from "@/typings/track";
+import { Node } from "../node/Node";
+import { TrackData } from "../typings/track";
 export default abstract class AbstractNodeDriver {
     abstract clientId: string;
     abstract type: NodeType;

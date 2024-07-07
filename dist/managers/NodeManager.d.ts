@@ -1,7 +1,7 @@
-import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
-import { Node } from "@/node/Node";
-import { HarmonyLink } from "@/HarmonyLink";
-import { NodeGroup } from "@t/node";
+import AbstractNodeDriver from "../nodeDriver/AbstractNodeDriver";
+import { Node } from "../node/Node";
+import { HarmonyLink } from "../HarmonyLink";
+import { NodeGroup } from "../typings/node";
 export default class NodeManager extends Map<string, Node> {
     readonly nodes: Map<string, AbstractNodeDriver>;
     readonly manager: HarmonyLink;

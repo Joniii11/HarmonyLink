@@ -1,8 +1,8 @@
 import AbstractNodeDriver from "./AbstractNodeDriver";
 import { WebSocket } from "ws";
-import { HarmonyLinkRequesterOptions, NodeType } from "@t/node";
-import { HarmonyLink } from "@/HarmonyLink";
-import { Node } from "@/node/Node";
+import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
+import { HarmonyLink } from "../HarmonyLink";
+import { Node } from "../node/Node";
 export default class NodeLink extends AbstractNodeDriver {
     clientId: string;
     type: NodeType;

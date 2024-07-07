@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConnectionHandler = void 0;
-const connection_1 = require("@t/player/connection");
-const player_1 = require("@/constants/player");
-const player_2 = require("@/typings/player");
+const connection_1 = require("../typings/player/connection");
+const player_1 = require("../constants/player");
+const player_2 = require("../typings/player");
 class ConnectionHandler {
     player;
     options;

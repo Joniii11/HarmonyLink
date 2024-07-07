@@ -1,4 +1,24 @@
-import { Node } from "@/node/Node";
+import { Node } from "../../node/Node";
+import { LavalinkEventPacket, LavalinkPlayerUpdatePacket } from "../node";
+import { DiscordVoiceStates } from "./connection";
+export interface PlayerEvents {
+    /**
+     * Dispatched when the node sends an event to the player
+     * @param data The data that the node sends
+     * @returns {void} void
+     */
+    playerUpdate: (data: LavalinkPlayerUpdatePacket) => void;
+    /**
+     * Dispatched when the node sends an event to the player (e.g. TrackStartEvent, TrackEndEvent, TrackStuckEvent, WebSocketClosedEvent)
+     * @returns {void} void
+     */
+    event: (data: LavalinkEventPacket) => void;
+    /**
+     * Dispatched when the WebSocket connection is opened
+     * @returns {void} void
+     */
+    connectionUpdate: (state: DiscordVoiceStates) => void;
+}
 export interface PlayerState {
     /**
      * Unix timestamp in milliseconds
@@ -30,6 +50,11 @@ export interface PlayerOptions {
      *
      */
     node?: Node;
+}
+export declare enum PlayerLoop {
+    NONE = "NONE",
+    QUEUE = "QUEUE",
+    TRACK = "TRACK"
 }
 export declare enum PlayerConnectionState {
     CONNECTED = 0,

@@ -1,6 +1,6 @@
-import { HarmonyLink } from "@/HarmonyLink";
-import { NodeGroup } from "@t/node";
-import { Packet, AnyOtherPacket } from "@t/librarys";
+import { HarmonyLink } from "../HarmonyLink";
+import { NodeGroup } from "../typings/node";
+import { Packet, AnyOtherPacket } from "../typings/librarys";
 /**
  * Abstract class for library classes
  * @abstract

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-const constants_1 = require("@/constants");
-const node_1 = require("@/typings/node");
+const constants_1 = require("../constants");
+const node_1 = require("../typings/node");
 class Rest {
     manager;
     node;

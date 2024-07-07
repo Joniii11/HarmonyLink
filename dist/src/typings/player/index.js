@@ -1,6 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VoiceConnectionState = exports.PlayerConnectionState = void 0;
+exports.VoiceConnectionState = exports.PlayerConnectionState = exports.PlayerLoop = void 0;
+;
+;
+var PlayerLoop;
+(function (PlayerLoop) {
+    PlayerLoop["NONE"] = "NONE";
+    PlayerLoop["QUEUE"] = "QUEUE";
+    PlayerLoop["TRACK"] = "TRACK";
+})(PlayerLoop || (exports.PlayerLoop = PlayerLoop = {}));
 ;
 var PlayerConnectionState;
 (function (PlayerConnectionState) {

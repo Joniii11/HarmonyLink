@@ -1,5 +1,6 @@
 import { Node } from "@/node/Node";
 import { LavalinkEventPacket, LavalinkPlayerUpdatePacket } from "../node";
+import { DiscordVoiceStates } from "./connection";
 
 export interface PlayerEvents {
     /**
@@ -14,6 +15,12 @@ export interface PlayerEvents {
      * @returns {void} void
      */
     event: (data: LavalinkEventPacket) => void;
+
+    /**
+     * Dispatched when the WebSocket connection is opened
+     * @returns {void} void
+     */
+    connectionUpdate: (state: DiscordVoiceStates) => void;
 };
 
 export interface PlayerState {

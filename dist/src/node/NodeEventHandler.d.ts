@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { HarmonyLink } from "@/HarmonyLink";
+import { HarmonyLink } from "../HarmonyLink";
 import { Node } from "./Node";
-import { LavalinkPackets } from "@t/node";
+import { LavalinkPackets } from "../typings/node";
 export default class PlayerEvent {
     manager: HarmonyLink;
     node: Node;

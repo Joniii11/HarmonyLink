@@ -1,12 +1,12 @@
 /// <reference types="node" />
 import EventEmitter from "events";
 import NodeEventHandler from "./NodeEventHandler";
-import { HarmonyLink } from "@/HarmonyLink";
-import { NodeOptions, NodeGroup, NodeStats, NodeEvents } from "@t/node";
+import { HarmonyLink } from "../HarmonyLink";
+import { NodeOptions, NodeGroup, NodeStats, NodeEvents } from "../typings/node";
 import Rest from "./Rest";
-import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
+import AbstractNodeDriver from "../nodeDriver/AbstractNodeDriver";
 import { WebSocket } from "ws";
-import { Player } from "@/player/Player";
+import { Player } from "../player/Player";
 export declare interface Node {
     on: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;
     once: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;

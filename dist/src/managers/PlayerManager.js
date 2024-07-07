@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Player_1 = require("@/player/Player");
-const player_1 = require("@/typings/player");
-const connection_1 = require("@/typings/player/connection");
+const Player_1 = require("../player/Player");
+const player_1 = require("../typings/player");
+const connection_1 = require("../typings/player/connection");
 class PlayerManager extends Map {
     manager;
     constructor(manager) {
@@ -36,14 +36,15 @@ class PlayerManager extends Map {
         return newPlayer;
     }
     ;
-    /* public async removePlayer(guildId: string): Promise<Player | null> {
+    async removePlayer(guildId) {
         const player = this.get(guildId);
-        if (!player) return null;
-
+        if (!player)
+            return null;
         await player.destroy();
         this.delete(guildId);
         return player;
-    };*/
+    }
+    ;
     async leastUsedNode() {
         return await this.manager.nodeManager.getLeastUsedNode() ?? this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)];
     }

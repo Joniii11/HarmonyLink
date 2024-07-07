@@ -1,3 +1,3 @@
-import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
-import { NodeOption } from "@t/node";
+import { HarmonyLinkConfiguration } from "../typings/HarmonyLink";
+import { NodeOption } from "../typings/node";
 export declare const defaultOptions: (harmoyLinkConfiguration: HarmonyLinkConfiguration) => NodeOption;

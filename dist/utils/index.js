@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.camelToSnake = exports.snakeToCamel = exports.parseOptions = void 0;
-const node_1 = require("@/constants/node");
-const node_2 = require("@t/node");
+const node_1 = require("../constants/node");
+const node_2 = require("../typings/node");
 function parseOptions(options, harmonyLinkOptions) {
     return {
         name: options.name,

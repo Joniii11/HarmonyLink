@@ -44,10 +44,18 @@ class PlayerEvent {
                     }
                     ;
                 case "event":
-                case "playerUpdate": {
-                    /* const player = @TODO: Make a player Manager
-                       look if packet.guildId and player exists, then emit the event on the player */
-                }
+                case "playerUpdate":
+                    {
+                        if (!packet.guildId)
+                            return;
+                        const player = this.manager.playerManager.get(packet.guildId);
+                        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                        if (player)
+                            packet.op === "event" ? player.emit(packet.op, packet) : player.emit(packet.op, packet);
+                        break;
+                    }
+                    ;
+                default: break;
             }
         }
         catch (err) {

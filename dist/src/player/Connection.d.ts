@@ -1,4 +1,4 @@
-import { ConnectionOptions, SetStateUpdate, VoiceServer } from "@t/player/connection";
+import { ConnectionOptions, SetStateUpdate, VoiceServer } from "../typings/player/connection";
 import { Player } from "./Player";
 export declare class ConnectionHandler {
     readonly player: Player;

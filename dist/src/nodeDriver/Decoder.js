@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const node_1 = require("@t/node");
+const node_1 = require("../typings/node");
 class Decoder {
     buffer;
     position;

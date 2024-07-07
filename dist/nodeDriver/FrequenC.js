@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const AbstractNodeDriver_1 = __importDefault(require("./AbstractNodeDriver"));
 const ws_1 = __importDefault(require("ws"));
-const node_1 = require("@t/node");
-const utils_1 = require("@/utils");
+const node_1 = require("../typings/node");
+const utils_1 = require("../utils");
 class FrequenC extends AbstractNodeDriver_1.default {
     clientId = "";
     type = node_1.NodeType.NodeLink;

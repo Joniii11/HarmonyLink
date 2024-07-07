@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { TrackData } from "@t/track";
-import { NodeType } from "@t/node";
+import { TrackData } from "../typings/track";
+import { NodeType } from "../typings/node";
 export default class Decoder {
     protected buffer: Buffer;
     protected position: number;

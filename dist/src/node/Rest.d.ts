@@ -1,9 +1,9 @@
-import NodeManager from "@/managers/NodeManager";
-import { HarmonyLink } from "@/HarmonyLink";
+import NodeManager from "../managers/NodeManager";
+import { HarmonyLink } from "../HarmonyLink";
 import { Node } from "./Node";
-import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@/typings/node/rest";
-import { NodeInfo, NodeStats } from "@/typings/node";
-import { TrackData } from "@/typings/track";
+import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "../typings/node/rest";
+import { NodeInfo, NodeStats } from "../typings/node";
+import { TrackData } from "../typings/track";
 export default class Rest {
     manager: HarmonyLink;
     node: Node;
