@@ -37,6 +37,7 @@ export class Player extends EventEmitter {
     public state: PlayerConnectionState;
     public voiceState: VoiceConnectionState;
     public loop: PlayerLoop | "NONE" | "QUEUE" | "TRACK";
+    public autoplay: boolean;
 
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
@@ -63,6 +64,7 @@ export class Player extends EventEmitter {
         this.isPlaying = false;
         this.isPaused = false;
         this.position = 0;
+        this.autoplay = false;
         this.ping = -1;
         this.timestamp = 0;
         this.loop = PlayerLoop.NONE;
@@ -135,13 +137,31 @@ export class Player extends EventEmitter {
 		return this;
 	};
 
-    /* public async play(): Promise<Player> {
+    /**
+     * Plays the current track in the queue.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async play(): Promise<Player> {
         if (!this.queue.length || this.queue.length === 0) return this;
 
         this.queue.currentTrack = this.queue.shift() ?? null;
+        if (this.queue.currentTrack && !this.queue.currentTrack.track) this.queue.currentTrack = await this.queue.currentTrack.resolve(this.manager);
 
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                track: {
+                    encoded: this.queue.currentTrack?.track ?? null
+                }
+            }
+        });
 
-    }*/
+        this.isPlaying = true;
+        this.position = 0;
+        this.isPaused = false;
+
+        return this;
+    };
 
     /**
      * Destroys the player and cleans up associated resources.
@@ -271,7 +291,7 @@ export class Player extends EventEmitter {
                     this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`)
                     this.manager.emit("trackEnd", this, this.queue.previousTrack);
 
-                    return // TODO: play function
+                    return this.play();
                 };
 
                 switch (this.loop) {
@@ -284,7 +304,7 @@ export class Player extends EventEmitter {
 
                         this.queue.unshift(this.queue.previousTrack);
 
-                        return // TODO: play function
+                        return this.play()
                     };
 
                     case "QUEUE":
@@ -296,17 +316,19 @@ export class Player extends EventEmitter {
 
                         this.queue.push(this.queue.previousTrack);
 
-                        return // TODO: play function
+                        return this.play()
                     };
 
                     case "NONE":
                     case PlayerLoop.NONE: {
+                        if (this.autoplay) // TODO: autoplay function / logic
+
                         if (!this.queue.length || this.queue.length === 0) return this.manager.emit("queueEmpty", this);
 
                         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`);
                         this.manager.emit("trackEnd", this, this.queue.previousTrack);
 
-                        return // TODO: play function
+                        return this.play()
                     };
                 };
 
@@ -329,7 +351,7 @@ export class Player extends EventEmitter {
             };
 
             case "WebSocketClosedEvent": {
-                // EXPERIMENTAL WITH 4006 CODE
+                // ! EXPERIMENTAL WITH 4006 CODE
                 if ([4015, 4009, 4006].includes(data.code)) {
                     this.sendVoiceUpdate();
                 };
