@@ -66,11 +66,16 @@ export declare class Player extends EventEmitter {
     pause(toggle?: boolean): Promise<Player>;
     /**
      * Resolves a track.
-     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {ResolveOptions} [options] - Options for resolving tracks.
      * @param {Node} [node] - Node to use for resolution.
      * @returns {Promise<Response>} The response containing resolved tracks.
      */
     resolve({ query, source, requester }: ResolveOptions, node?: Node): Promise<Response>;
+    /**
+     * Autoplays a track.
+     * @param {Track | null} [previousTrack = null] The previous track to use for autoplay
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     autoplay(previousTrack?: Track | null): Promise<Player>;
     protected disconnect(): Promise<Player>;
     protected checkDestroyed(): void;

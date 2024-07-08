@@ -241,7 +241,7 @@ class Player extends events_1.EventEmitter {
     ;
     /**
      * Resolves a track.
-     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {ResolveOptions} [options] - Options for resolving tracks.
      * @param {Node} [node] - Node to use for resolution.
      * @returns {Promise<Response>} The response containing resolved tracks.
      */
@@ -252,8 +252,19 @@ class Player extends events_1.EventEmitter {
         return new Response_1.Response(result, requester);
     }
     ;
+    /**
+     * Autoplays a track.
+     * @param {Track | null} [previousTrack = null] The previous track to use for autoplay
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     async autoplay(previousTrack = null) {
         try {
+            if (this.manager.options.customAutoplay) {
+                const resolvedData = await this.manager.options.customAutoplay(this);
+                if (resolvedData && resolvedData instanceof Player)
+                    return resolvedData;
+            }
+            ;
             const prevTrack = previousTrack ?? this.queue.previousTrack;
             if (!prevTrack)
                 return this;
