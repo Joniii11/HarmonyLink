@@ -161,7 +161,7 @@ export class Player extends EventEmitter {
 
                     case "QUEUE":
                     case PlayerLoop.QUEUE: {
-                        this.loop = "NONE";
+                        this.loop = PlayerLoop.NONE;
                         break;
                     };
                 };
