@@ -35,17 +35,31 @@ export default abstract class AbstractLibraryClass {
      * 
      * @abstract method to handle raw packets from the gateway
      */
-    protected raw(incomingData: Packet): this {
-        const { t } = incomingData;
+    protected async raw(incomingData: Packet): Promise<this> {
+        const { t, d } = incomingData;
 
         switch (t) {
             case "VOICE_STATE_UPDATE": {
+                if (!d.guild_id) return this;
 
+                const player = this.manager?.playerManager.get(d.guild_id);
+                if (!player) return this;
+
+                if (d.user_id !== (this.manager?.botID ?? this.userID)) return this;
+                
+                player.ConnectionHandler.setStateUpdate(d);
 
                 break;
             };
 
             case "VOICE_SERVER_UPDATE": {
+                if (!d.guild_id) return this;
+                
+                const player = this.manager?.playerManager.get(d.guild_id);
+                if (!player) return this;
+
+                await player.ConnectionHandler.setServersUpdate(d)
+
                 break;
             };
 

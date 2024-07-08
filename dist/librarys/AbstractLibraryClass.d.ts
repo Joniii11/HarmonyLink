@@ -25,7 +25,7 @@ export default abstract class AbstractLibraryClass {
      *
      * @abstract method to handle raw packets from the gateway
      */
-    protected raw(incomingData: Packet): this;
+    protected raw(incomingData: Packet): Promise<this>;
     protected ready(nodes: NodeGroup[]): Promise<void>;
     /**
      * Get the user ID of the bot
