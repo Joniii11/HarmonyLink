@@ -67,7 +67,7 @@ export class Queue extends Array<Track> {
 
     /**
      * Shuffles the tracks in the queue.
-     * @returns {Queue} This method does not return anything.
+     * @returns {Queue} Returns the shuffled queue.
      */
     public shuffle(): this {
         for (let i = this.length - 1; i > 0; i -= 1) {

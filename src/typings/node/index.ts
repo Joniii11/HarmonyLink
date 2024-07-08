@@ -388,7 +388,7 @@ export interface LavalinkPlayerUpdatePacket {
 };
 
 /**
-* Dispatched when the node sends stats once per minute
+* Dispatched when the node sends stats every x seconds
 */
 export interface LavalinkNodeStatsPacket extends NodeStats {
    op: "stats";
