@@ -138,6 +138,40 @@ export class Player extends EventEmitter {
 	};
 
     /**
+     * Sets the loop mode for the player.
+     * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setLoop(mode?: PlayerLoop | "NONE" | "QUEUE" | "TRACK"): Promise<Player> {
+        return new Promise<this>((resolve) => {
+            if (mode) this.loop = mode;
+            else {
+                switch (this.loop) {
+                    case "NONE":
+                    case PlayerLoop.NONE: {
+                        this.loop = PlayerLoop.TRACK;
+                        break;
+                    };
+
+                    case "TRACK":
+                    case PlayerLoop.TRACK: {
+                        this.loop = PlayerLoop.QUEUE;
+                        break;
+                    };
+
+                    case "QUEUE":
+                    case PlayerLoop.QUEUE: {
+                        this.loop = "NONE";
+                        break;
+                    };
+                };
+            };
+
+            return resolve(this);
+        });
+    };
+
+    /**
      * Plays the current track in the queue.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
