@@ -269,7 +269,7 @@ export class Player extends EventEmitter {
 
     /**
      * Resolves a track.
-     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {ResolveOptions} [options] - Options for resolving tracks.
      * @param {Node} [node] - Node to use for resolution.
      * @returns {Promise<Response>} The response containing resolved tracks.
      */
@@ -281,6 +281,11 @@ export class Player extends EventEmitter {
         return new Response(result, requester);
     };
 
+    /**
+     * Autoplays a track.
+     * @param {Track | null} [previousTrack = null] The previous track to use for autoplay 
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     public async autoplay(previousTrack: Track | null = null): Promise<Player> {
         try {
             const prevTrack = previousTrack ?? this.queue.previousTrack;
