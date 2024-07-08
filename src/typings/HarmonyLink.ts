@@ -5,6 +5,7 @@ import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
 import NodeManager from "@/managers/NodeManager";
 import { NodeGroup } from "@t/node";
 import { Node } from "@/node/Node";
+import { Player } from "@/player/Player";
 
 export interface HarmonyLinkConfiguration {
     /**
@@ -94,6 +95,47 @@ export interface HarmonyLinkConfiguration {
      * ```
      */
     nodeResolver?: (nodes: NodeManager) => Promise<Node | void>;
+
+    /**
+     * A custom autoplay function to use for autoplaying tracks
+     * 
+     * @default
+     * ```ts
+     *  try {
+     *      const prevTrack = previousTrack ?? this.queue.previousTrack;
+     *      if (!prevTrack) return this;
+     *
+     *      switch (prevTrack.info.sourceName) {
+     *           case "soundcloud": {
+     *               const response = await this.resolve({ query: `${prevTrack.info.title}`, requester: prevTrack.info.requester, source: "scsearch" });
+     *           
+     *               if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType)) return await this.skip();
+     *
+     *              this.queue.add(response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))]);
+     *              return await this.play();
+     *           };
+     *
+     *           case "youtube":
+     *           default: {
+     *              const searchedURL = `https://www.youtube.com/watch?v=${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}&list=RD${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}`;
+     *              const response = await this.resolve({ query: searchedURL, requester: prevTrack.info.requester, source: "ytmsearch" });
+     *
+     *              if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType)) return await this.skip();
+     *          
+     *              response.tracks.shift();
+     *          
+     *              const track = response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))];
+     *              this.queue.add(track);
+     *
+     *              return await this.play();
+     *          };
+     *      }
+     *  } catch {
+     *      return this.skip()
+     *  }
+     * ```
+     */
+    customAutoplay?: (player: Player) => Promise<Player | void>
 
     /**
      * The default volume to use for players

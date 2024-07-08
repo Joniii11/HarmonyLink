@@ -288,6 +288,12 @@ export class Player extends EventEmitter {
      */
     public async autoplay(previousTrack: Track | null = null): Promise<Player> {
         try {
+            if (this.manager.options.customAutoplay) {
+                const resolvedData = await this.manager.options.customAutoplay(this);
+    
+                if (resolvedData && resolvedData instanceof Player) return resolvedData;
+            };
+
             const prevTrack = previousTrack ?? this.queue.previousTrack;
             if (!prevTrack) return this;
 
