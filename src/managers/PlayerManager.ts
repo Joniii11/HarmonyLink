@@ -56,7 +56,7 @@ export default class PlayerManager extends Map<Snowflake, Player> {
     };
 
     public async leastUsedNode(): Promise<Node> {
-        return await this.manager.nodeManager.getLeastUsedNode() as Node | undefined ?? this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)]
+        return await this.manager.nodeManager.getLeastUsedNode() ?? this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)]
     };
 
     // eslint-disable-next-line class-methods-use-this
