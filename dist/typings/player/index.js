@@ -26,4 +26,5 @@ var VoiceConnectionState;
     VoiceConnectionState[VoiceConnectionState["DISCONNECTING"] = 4] = "DISCONNECTING";
     VoiceConnectionState[VoiceConnectionState["DISCONNECTED"] = 5] = "DISCONNECTED";
 })(VoiceConnectionState || (exports.VoiceConnectionState = VoiceConnectionState = {}));
+;
 //# sourceMappingURL=index.js.map

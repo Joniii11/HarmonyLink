@@ -17,7 +17,7 @@ class Queue extends Array {
     }
     /**
      * Returns the first track in the queue.
-     * @returns {TrackData | null} The first track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The first track in the queue, or undefined if the queue is empty.
      */
     get current() {
         return this.currentTrack;
@@ -25,7 +25,7 @@ class Queue extends Array {
     ;
     /**
      * Returns the next track in the queue.
-     * @returns {TrackData | null} The next track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or undefined if the queue is empty.
      */
     get next() {
         return this[1];
@@ -36,7 +36,7 @@ class Queue extends Array {
     }
     /**
      * Adds a track to the queue.
-     * @param {TrackData} track - The track to add to the queue.
+     * @param {Track} track - The track to add to the queue.
      * @returns {Queue} The queue with the added track.
      */
     add(track) {
@@ -56,7 +56,7 @@ class Queue extends Array {
     ;
     /**
      * Clears the entire queue.
-     * @returns {TrackData[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
+     * @returns {Track[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
      */
     clear() {
         return this.splice(0);
@@ -76,7 +76,7 @@ class Queue extends Array {
     ;
     /**
      * Shifts the queue to the next track.
-     * @returns {TrackData | null} The next track in the queue, or null if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or null if the queue is empty.
      */
     _next() {
         if (this.length === 0)

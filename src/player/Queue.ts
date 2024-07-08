@@ -1,9 +1,9 @@
 // Types
-import { TrackData } from "@/typings/track";
+import { Track } from "./Track";
 
-export class Queue extends Array<TrackData> {
-    public currentTrack: TrackData | null = null;
-    public previousTrack: TrackData | null = null;
+export class Queue extends Array<Track> {
+    public currentTrack: Track | null = null;
+    public previousTrack: Track | null = null;
     
     public constructor() {
         super();
@@ -19,30 +19,30 @@ export class Queue extends Array<TrackData> {
 
     /**
      * Returns the first track in the queue.
-     * @returns {TrackData | null} The first track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The first track in the queue, or undefined if the queue is empty.
      */
-    public get current(): TrackData | null {
+    public get current(): Track | null {
         return this.currentTrack;
     };
 
     /**
      * Returns the next track in the queue.
-     * @returns {TrackData | null} The next track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or undefined if the queue is empty.
      */
-    public get next(): TrackData {
+    public get next(): Track {
         return this[1];
     };
 
-    public get previous(): TrackData | null {
+    public get previous(): Track | null {
         return this.previousTrack;
     }
 
     /**
      * Adds a track to the queue.
-     * @param {TrackData} track - The track to add to the queue.
+     * @param {Track} track - The track to add to the queue.
      * @returns {Queue} The queue with the added track.
      */
-    public add(track: TrackData): this {
+    public add(track: Track): this {
         this.push(track);
         return this;
     };
@@ -59,9 +59,9 @@ export class Queue extends Array<TrackData> {
 
     /**
      * Clears the entire queue.
-     * @returns {TrackData[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
+     * @returns {Track[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
      */
-    public clear(): TrackData[] | [] {
+    public clear(): Track[] | [] {
         return this.splice(0);
     };
 
@@ -80,9 +80,9 @@ export class Queue extends Array<TrackData> {
 
     /**
      * Shifts the queue to the next track.
-     * @returns {TrackData | null} The next track in the queue, or null if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or null if the queue is empty.
      */
-    public _next(): TrackData | null {
+    public _next(): Track | null {
         if (this.length === 0) return null;
 
         this.previousTrack = this.currentTrack;

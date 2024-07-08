@@ -1,7 +1,8 @@
+// Types
 import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
-import { NodeOption } from "@t/node";
+import { NodeGroup, NodeOption } from "@t/node";
 
-export const defaultOptions = (harmoyLinkConfiguration: HarmonyLinkConfiguration): NodeOption => {
+export const defaultOptions = (harmoyLinkConfiguration: Omit<HarmonyLinkConfiguration, "defaultPlatform" | "nodes"> & { defaultPlatform: string; nodes?: NodeGroup[] | undefined; }): NodeOption => {
     const { reconnectTimeout, reconnectTries, resumeTimeout } = harmoyLinkConfiguration;
     
     return {

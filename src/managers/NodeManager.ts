@@ -23,7 +23,7 @@ export default class NodeManager extends Map<string, Node> {
         return addedNode;
     };
 
-    public async getLeastUsedNode(): Promise<Node> {
+    public async getLeastUsedNode(): Promise<Node | undefined> {
         if (this.manager.options.nodeResolver) {
             const resolvedData = await this.manager.options.nodeResolver(this);
 

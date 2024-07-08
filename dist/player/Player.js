@@ -175,6 +175,8 @@ class Player extends events_1.EventEmitter {
         this.queue._cleanUp();
         await this.skip();
         this.isConnected = false;
+        this.state = player_1.PlayerConnectionState.DISCONNECTED;
+        this.voiceState = player_1.VoiceConnectionState.DISCONNECTED;
         this.sendToDiscord({
             guild_id: this.guildId,
             channel_id: null,

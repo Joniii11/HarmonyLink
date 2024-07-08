@@ -1,7 +1,7 @@
-import { TrackData } from "../typings/track";
-export declare class Queue extends Array<TrackData> {
-    currentTrack: TrackData | null;
-    previousTrack: TrackData | null;
+import { Track } from "./Track";
+export declare class Queue extends Array<Track> {
+    currentTrack: Track | null;
+    previousTrack: Track | null;
     constructor();
     /**
      * Returns the number of tracks in the queue.
@@ -10,21 +10,21 @@ export declare class Queue extends Array<TrackData> {
     get size(): number;
     /**
      * Returns the first track in the queue.
-     * @returns {TrackData | null} The first track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The first track in the queue, or undefined if the queue is empty.
      */
-    get current(): TrackData | null;
+    get current(): Track | null;
     /**
      * Returns the next track in the queue.
-     * @returns {TrackData | null} The next track in the queue, or undefined if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or undefined if the queue is empty.
      */
-    get next(): TrackData;
-    get previous(): TrackData | null;
+    get next(): Track;
+    get previous(): Track | null;
     /**
      * Adds a track to the queue.
-     * @param {TrackData} track - The track to add to the queue.
+     * @param {Track} track - The track to add to the queue.
      * @returns {Queue} The queue with the added track.
      */
-    add(track: TrackData): this;
+    add(track: Track): this;
     /**
      * Removes a track from the queue by its index.
      * @param {number} index - The index of the track to remove.
@@ -33,9 +33,9 @@ export declare class Queue extends Array<TrackData> {
     remove(index: number): this;
     /**
      * Clears the entire queue.
-     * @returns {TrackData[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
+     * @returns {Track[]} An array containing all the cleared tracks, or an empty array if the queue was already empty.
      */
-    clear(): TrackData[] | [];
+    clear(): Track[] | [];
     /**
      * Shuffles the tracks in the queue.
      * @returns {Queue} This method does not return anything.
@@ -43,8 +43,8 @@ export declare class Queue extends Array<TrackData> {
     shuffle(): this;
     /**
      * Shifts the queue to the next track.
-     * @returns {TrackData | null} The next track in the queue, or null if the queue is empty.
+     * @returns {Track | null} The next track in the queue, or null if the queue is empty.
      */
-    _next(): TrackData | null;
+    _next(): Track | null;
     _cleanUp(): void;
 }

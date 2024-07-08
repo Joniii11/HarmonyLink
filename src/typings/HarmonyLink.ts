@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import AbstractLibraryClass from "@/librarys/AbstractLibraryClass";
 import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
 
@@ -100,6 +101,13 @@ export interface HarmonyLinkConfiguration {
      * @default 100
      */
     defaultVolume?: number
+
+    /**
+     * The default source (platform) to use for resolving tracks
+     * 
+     * @default "ytsearch"
+     */
+    defaultPlatform?: string;
 
     /**
      * The timeout to use for voice connections

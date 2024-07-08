@@ -69,3 +69,19 @@ export declare enum VoiceConnectionState {
     DISCONNECTING = 4,
     DISCONNECTED = 5
 }
+export interface ResolveOptions {
+    /**
+     * The query to resolve
+     */
+    query: string;
+    /**
+     * The platform to resolve from
+     *
+     * @default manager.options.defaultPlatform || "ytsearch"
+     */
+    source?: string;
+    /**
+     * The requester of the track
+     */
+    requester?: any;
+}

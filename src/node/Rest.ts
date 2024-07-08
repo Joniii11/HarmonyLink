@@ -1,12 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-invalid-void-type, @typescript-eslint/no-unnecessary-condition, class-methods-use-this */
+
+// Constants
 import { getDefaultNodeStats } from "@/constants";
 
+// Types
 import NodeManager from "@/managers/NodeManager";
 import { HarmonyLink } from "@/HarmonyLink";
 import { Node } from "./Node";
-import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@/typings/node/rest";
-import { FrequenCInfo, HarmonyLinkRequesterOptions, NodeInfo, NodeStats, NodeType } from "@/typings/node";
-import { TrackData } from "@/typings/track";
+import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@t/node/rest";
+import { FrequenCInfo, HarmonyLinkRequesterOptions, NodeInfo, NodeStats, NodeType } from "@t/node";
+import { TrackData } from "@t/track";
 
 export default class Rest {
     public manager: HarmonyLink;
@@ -123,11 +126,10 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#track-loading
      */
-    public async loadTrack(identifier: string): Promise<LoadTrackResult> {
+    public async loadTrack(identifier: string, source?: string): Promise<LoadTrackResult> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
-            path: `/loadtracks`,
-            params: { identifier }
+            path: `/loadtracks?identifier=${encodeURIComponent((this.startsWithMultiple(identifier, ["https://", "http://"]) ? '' : `${source ?? this.manager.options.defaultPlatform ?? 'ytsearch'}:`) + identifier)}`,
         };
 
         return await this.node.driver.request<LoadTrackResult>(options) ?? { loadType: "empty", data: {} };
@@ -321,6 +323,12 @@ export default class Rest {
         return await this.node.driver.request<string>(options) ?? "Unknown";
     };
 
+    /**
+     * Get the stats of the node
+     * @returns {NodeStats} The stats of the node
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-lavalink-stats || 
+     */
     public async getStats(): Promise<NodeStats> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
@@ -331,4 +339,23 @@ export default class Rest {
     };
 
     // ? ----- Node End ----- ?//
+
+    // ? ----- Utils Begin ----- ?//
+
+    /**
+     * Check if a string starts with any of the words
+     * @param {string} s The string to check 
+     * @param {Array<string>} words The words to check if the string starts with 
+     * @returns {boolean} If the string starts with any of the words
+     * 
+     * @example
+     * ```ts
+     * this.startsWithMultiple("Hello World", ["Hello", "Hi", "Hey"]); // Returns true
+     * ```
+     */
+    private startsWithMultiple(s: string, words: string[]): boolean {
+        return words.some( w => s.startsWith(w))
+    };
+
+    // ? ----- Utils End ----- ?//
 };

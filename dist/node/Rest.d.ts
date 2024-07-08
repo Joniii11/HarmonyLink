@@ -62,7 +62,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#track-loading
      */
-    loadTrack(identifier: string): Promise<LoadTrackResult>;
+    loadTrack(identifier: string, source?: string): Promise<LoadTrackResult>;
     /**
      * Decode a track from the base64 encoded track
      * @param {string} encodedBase64Track The base64 encoded track to decode
@@ -130,5 +130,23 @@ export default class Rest {
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-version
      */
     getVersion(): Promise<string>;
+    /**
+     * Get the stats of the node
+     * @returns {NodeStats} The stats of the node
+     *
+     * @docs https://lavalink.dev/api/rest.html#get-lavalink-stats ||
+     */
     getStats(): Promise<NodeStats>;
+    /**
+     * Check if a string starts with any of the words
+     * @param {string} s The string to check
+     * @param {Array<string>} words The words to check if the string starts with
+     * @returns {boolean} If the string starts with any of the words
+     *
+     * @example
+     * ```ts
+     * this.startsWithMultiple("Hello World", ["Hello", "Hi", "Hey"]); // Returns true
+     * ```
+     */
+    private startsWithMultiple;
 }

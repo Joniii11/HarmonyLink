@@ -1,6 +1,7 @@
 "use strict";
+/* eslint-disable @typescript-eslint/no-invalid-void-type, @typescript-eslint/no-unnecessary-condition, class-methods-use-this */
 Object.defineProperty(exports, "__esModule", { value: true });
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+// Constants
 const constants_1 = require("../constants");
 const node_1 = require("../typings/node");
 class Rest {
@@ -107,11 +108,10 @@ class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#track-loading
      */
-    async loadTrack(identifier) {
+    async loadTrack(identifier, source) {
         const options = {
             method: "GET",
-            path: `/loadtracks`,
-            params: { identifier }
+            path: `/loadtracks?identifier=${encodeURIComponent((this.startsWithMultiple(identifier, ["https://", "http://"]) ? '' : `${source ?? this.manager.options.defaultPlatform ?? 'ytsearch'}:`) + identifier)}`,
         };
         return await this.node.driver.request(options) ?? { loadType: "empty", data: {} };
     }
@@ -292,12 +292,35 @@ class Rest {
         return await this.node.driver.request(options) ?? "Unknown";
     }
     ;
+    /**
+     * Get the stats of the node
+     * @returns {NodeStats} The stats of the node
+     *
+     * @docs https://lavalink.dev/api/rest.html#get-lavalink-stats ||
+     */
     async getStats() {
         const options = {
             method: "GET",
             path: "/stats",
         };
         return await this.node.driver.request(options) ?? (0, constants_1.getDefaultNodeStats)();
+    }
+    ;
+    // ? ----- Node End ----- ?//
+    // ? ----- Utils Begin ----- ?//
+    /**
+     * Check if a string starts with any of the words
+     * @param {string} s The string to check
+     * @param {Array<string>} words The words to check if the string starts with
+     * @returns {boolean} If the string starts with any of the words
+     *
+     * @example
+     * ```ts
+     * this.startsWithMultiple("Hello World", ["Hello", "Hi", "Hey"]); // Returns true
+     * ```
+     */
+    startsWithMultiple(s, words) {
+        return words.some(w => s.startsWith(w));
     }
     ;
 }

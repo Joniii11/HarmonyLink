@@ -117,7 +117,7 @@ class NodeLink extends AbstractNodeDriver_1.default {
             ...options,
             method: options.method,
             headers
-        });
+        }).catch((err) => ({ status: 500, statusText: err }));
         switch (res.status) {
             case 204:
                 {
@@ -127,6 +127,11 @@ class NodeLink extends AbstractNodeDriver_1.default {
                 ;
             case 200:
                 {
+                    if (!(res instanceof Response)) {
+                        this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned ${res.status} ${res.statusText}. payload=${options.body ? String(options.body) : "{}"}`);
+                        return undefined;
+                    }
+                    ;
                     const data = res.headers.get("content-type") === "application/json" ? await res.json() : await res.text();
                     this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 200 OK. payload=${options.body ? String(options.body) : "{}"}`);
                     if ("loadType" in data) {

@@ -12,6 +12,8 @@ const PlayerManager_1 = __importDefault(require("./managers/PlayerManager"));
 const LavalinkV4_1 = __importDefault(require("./nodeDriver/LavalinkV4"));
 const NodeLink_1 = __importDefault(require("./nodeDriver/NodeLink"));
 const FrequenC_1 = __importDefault(require("./nodeDriver/FrequenC"));
+// Classes
+const Response_1 = require("./player/Response");
 // Constants
 const constants_1 = require("./constants");
 class HarmonyLink extends events_1.default {
@@ -31,10 +33,29 @@ class HarmonyLink extends events_1.default {
         this.library = options.library.initialize(this);
         // Set some stuff
         this.nodes = options.nodes;
-        this.options = options;
+        this.options = {
+            ...options,
+            defaultPlatform: options.defaultPlatform ?? "ytsearch",
+        };
+        delete this.options.nodes;
         this.drivers = [new LavalinkV4_1.default(), new NodeLink_1.default(), new FrequenC_1.default(), ...(options.additionalDriver ?? [])];
         // Listen for updates in the ws on the client
         this.library.listen(this.nodes);
+    }
+    ;
+    /**
+     * Resolves a track.
+     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {Node} [node] - Node to use for resolution.
+     * @returns {Promise<Response>} The response containing resolved tracks.
+     */
+    async resolve({ query, source, requester }, node) {
+        if (!node)
+            node = await this.nodeManager.getLeastUsedNode();
+        if (!node)
+            throw new Error("No nodes available to resolve from");
+        const result = await node.rest.loadTrack(query, source);
+        return new Response_1.Response(result, requester);
     }
     ;
 }
