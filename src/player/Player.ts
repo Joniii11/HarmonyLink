@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unsafe-declaration-merging, no-sequences, @typescript-eslint/naming-convention */
+/* eslint-disable max-lines, @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unsafe-declaration-merging, no-sequences, @typescript-eslint/naming-convention */
 import { EventEmitter } from "events"
 
-// Types
-import { PlayerConnectionState, PlayerOptions, VoiceConnectionState, PlayerEvents, PlayerLoop } from "@t/player";
-import { DiscordVoiceStates } from "@/typings/player/connection";
-import { Node } from "@/node/Node";
-import { HarmonyLink } from "@/HarmonyLink"
-
-// Structures
+// Classes
 import { Queue } from './Queue';
 import { ConnectionHandler } from "./Connection";
-import { LavalinkEventPacket } from "@/typings/node";
+import { Track } from "./Track";
+import { Response } from "./Response";
+
+// Types
+import { PlayerConnectionState, PlayerOptions, VoiceConnectionState, PlayerEvents, PlayerLoop, ResolveOptions } from "@t/player";
+import { DiscordVoiceStates } from "@t/player/connection";
+import { Node } from "@/node/Node";
+import { HarmonyLink } from "@/HarmonyLink"
+import { LavalinkEventPacket } from "@t/node";
 
 export declare interface Player {
     on: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
@@ -37,7 +39,7 @@ export class Player extends EventEmitter {
     public state: PlayerConnectionState;
     public voiceState: VoiceConnectionState;
     public loop: PlayerLoop | "NONE" | "QUEUE" | "TRACK";
-    public autoplay: boolean;
+    public isAutoplay: boolean;
 
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
@@ -64,7 +66,7 @@ export class Player extends EventEmitter {
         this.isPlaying = false;
         this.isPaused = false;
         this.position = 0;
-        this.autoplay = false;
+        this.isAutoplay = false;
         this.ping = -1;
         this.timestamp = 0;
         this.loop = PlayerLoop.NONE;
@@ -171,6 +173,15 @@ export class Player extends EventEmitter {
         });
     };
 
+    public async setAutoplay(toggle?: boolean): Promise<Player> {
+        return new Promise<this>((resolve) => {
+            if (toggle) this.isAutoplay = toggle;
+            else this.isAutoplay = !this.isAutoplay;
+
+            return resolve(this);
+        });
+    };
+
     /**
      * Plays the current track in the queue.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
@@ -255,6 +266,55 @@ export class Player extends EventEmitter {
 
         return this;
     };
+
+    /**
+     * Resolves a track.
+     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {Node} [node] - Node to use for resolution.
+     * @returns {Promise<Response>} The response containing resolved tracks.
+     */
+    public async resolve({ query, source, requester}: ResolveOptions, node?: Node): Promise<Response> {
+        if (!node) node = this.node;
+
+        const result = await node.rest.loadTrack(query, source);
+
+        return new Response(result, requester);
+    };
+
+    public async autoplay(previousTrack: Track | null = null): Promise<Player> {
+        try {
+            const prevTrack = previousTrack ?? this.queue.previousTrack;
+            if (!prevTrack) return this;
+
+            switch (prevTrack.info.sourceName) {
+                case "soundcloud": {
+                    const response = await this.resolve({ query: `${prevTrack.info.title}`, requester: prevTrack.info.requester, source: "scsearch" });
+                
+                    if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType)) return await this.skip();
+
+                    this.queue.add(response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))]);
+                    return await this.play();
+                };
+
+                case "youtube":
+                default: {
+                    const searchedURL = `https://www.youtube.com/watch?v=${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}&list=RD${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}`;
+                    const response = await this.resolve({ query: searchedURL, requester: prevTrack.info.requester, source: "ytmsearch" });
+
+                    if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType)) return await this.skip();
+                
+                    response.tracks.shift();
+                
+                    const track = response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))];
+                    this.queue.add(track);
+
+                    return await this.play();
+                };
+            }
+        } catch {
+            return this.skip()
+        }
+    }
 
     protected async disconnect(): Promise<Player> {
         if (!this.voiceChannelId) return this;
@@ -355,7 +415,7 @@ export class Player extends EventEmitter {
 
                     case "NONE":
                     case PlayerLoop.NONE: {
-                        if (this.autoplay) // TODO: autoplay function / logic
+                        if (this.isAutoplay) return this.autoplay()
 
                         if (!this.queue.length || this.queue.length === 0) return this.manager.emit("queueEmpty", this);
 

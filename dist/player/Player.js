@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Player = void 0;
-/* eslint-disable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unsafe-declaration-merging, no-sequences, @typescript-eslint/naming-convention */
+/* eslint-disable max-lines, @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unsafe-declaration-merging, no-sequences, @typescript-eslint/naming-convention */
 const events_1 = require("events");
+// Classes
+const Queue_1 = require("./Queue");
+const Connection_1 = require("./Connection");
+const Response_1 = require("./Response");
 // Types
 const player_1 = require("../typings/player");
 const connection_1 = require("../typings/player/connection");
-// Structures
-const Queue_1 = require("./Queue");
-const Connection_1 = require("./Connection");
 class Player extends events_1.EventEmitter {
     node;
     manager;
@@ -23,6 +24,7 @@ class Player extends events_1.EventEmitter {
     state;
     voiceState;
     loop;
+    isAutoplay;
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
      */
@@ -44,6 +46,7 @@ class Player extends events_1.EventEmitter {
         this.isPlaying = false;
         this.isPaused = false;
         this.position = 0;
+        this.isAutoplay = false;
         this.ping = -1;
         this.timestamp = 0;
         this.loop = player_1.PlayerLoop.NONE;
@@ -110,13 +113,80 @@ class Player extends events_1.EventEmitter {
         return this;
     }
     ;
-    /* public async play(): Promise<Player> {
-        if (!this.queue.length || this.queue.length === 0) return this;
-
+    /**
+     * Sets the loop mode for the player.
+     * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setLoop(mode) {
+        return new Promise((resolve) => {
+            if (mode)
+                this.loop = mode;
+            else {
+                switch (this.loop) {
+                    case "NONE":
+                    case player_1.PlayerLoop.NONE:
+                        {
+                            this.loop = player_1.PlayerLoop.TRACK;
+                            break;
+                        }
+                        ;
+                    case "TRACK":
+                    case player_1.PlayerLoop.TRACK:
+                        {
+                            this.loop = player_1.PlayerLoop.QUEUE;
+                            break;
+                        }
+                        ;
+                    case "QUEUE":
+                    case player_1.PlayerLoop.QUEUE:
+                        {
+                            this.loop = player_1.PlayerLoop.NONE;
+                            break;
+                        }
+                        ;
+                }
+                ;
+            }
+            ;
+            return resolve(this);
+        });
+    }
+    ;
+    async setAutoplay(toggle) {
+        return new Promise((resolve) => {
+            if (toggle)
+                this.isAutoplay = toggle;
+            else
+                this.isAutoplay = !this.isAutoplay;
+            return resolve(this);
+        });
+    }
+    ;
+    /**
+     * Plays the current track in the queue.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async play() {
+        if (!this.queue.length || this.queue.length === 0)
+            return this;
         this.queue.currentTrack = this.queue.shift() ?? null;
-
-
-    }*/
+        if (this.queue.currentTrack && !this.queue.currentTrack.track)
+            this.queue.currentTrack = await this.queue.currentTrack.resolve(this.manager);
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                track: {
+                    encoded: this.queue.currentTrack?.track ?? null
+                }
+            }
+        });
+        this.isPlaying = true;
+        this.position = 0;
+        this.isPaused = false;
+        return this;
+    }
+    ;
     /**
      * Destroys the player and cleans up associated resources.
      * @returns {Promise<boolean>} - A Promise that resolves to a boolean which is true if an element in the Map existed and has been removed, or false if the element does not exist.
@@ -169,6 +239,53 @@ class Player extends events_1.EventEmitter {
         return this;
     }
     ;
+    /**
+     * Resolves a track.
+     * @param {ResolveOptions} options - Options for resolving tracks.
+     * @param {Node} [node] - Node to use for resolution.
+     * @returns {Promise<Response>} The response containing resolved tracks.
+     */
+    async resolve({ query, source, requester }, node) {
+        if (!node)
+            node = this.node;
+        const result = await node.rest.loadTrack(query, source);
+        return new Response_1.Response(result, requester);
+    }
+    ;
+    async autoplay(previousTrack = null) {
+        try {
+            const prevTrack = previousTrack ?? this.queue.previousTrack;
+            if (!prevTrack)
+                return this;
+            switch (prevTrack.info.sourceName) {
+                case "soundcloud":
+                    {
+                        const response = await this.resolve({ query: `${prevTrack.info.title}`, requester: prevTrack.info.requester, source: "scsearch" });
+                        if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType))
+                            return await this.skip();
+                        this.queue.add(response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))]);
+                        return await this.play();
+                    }
+                    ;
+                case "youtube":
+                default:
+                    {
+                        const searchedURL = `https://www.youtube.com/watch?v=${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}&list=RD${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}`;
+                        const response = await this.resolve({ query: searchedURL, requester: prevTrack.info.requester, source: "ytmsearch" });
+                        if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType))
+                            return await this.skip();
+                        response.tracks.shift();
+                        const track = response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))];
+                        this.queue.add(track);
+                        return await this.play();
+                    }
+                    ;
+            }
+        }
+        catch {
+            return this.skip();
+        }
+    }
     async disconnect() {
         if (!this.voiceChannelId)
             return this;
@@ -234,7 +351,7 @@ class Player extends events_1.EventEmitter {
                             return this.manager.emit("queueEmpty", this);
                         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`);
                         this.manager.emit("trackEnd", this, this.queue.previousTrack);
-                        return; // TODO: play function
+                        return this.play();
                     }
                     ;
                     switch (this.loop) {
@@ -246,7 +363,7 @@ class Player extends events_1.EventEmitter {
                                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track looped for player ${this.guildId}`);
                                 this.manager.emit("trackEnd", this, this.queue.previousTrack);
                                 this.queue.unshift(this.queue.previousTrack);
-                                return; // TODO: play function
+                                return this.play();
                             }
                             ;
                         case "QUEUE":
@@ -257,17 +374,19 @@ class Player extends events_1.EventEmitter {
                                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Queue looped for player ${this.guildId}`);
                                 this.manager.emit("trackEnd", this, this.queue.previousTrack);
                                 this.queue.push(this.queue.previousTrack);
-                                return; // TODO: play function
+                                return this.play();
                             }
                             ;
                         case "NONE":
                         case player_1.PlayerLoop.NONE:
                             {
+                                if (this.isAutoplay)
+                                    return this.autoplay();
                                 if (!this.queue.length || this.queue.length === 0)
                                     return this.manager.emit("queueEmpty", this);
                                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`);
                                 this.manager.emit("trackEnd", this, this.queue.previousTrack);
-                                return; // TODO: play function
+                                return this.play();
                             }
                             ;
                     }
@@ -292,7 +411,7 @@ class Player extends events_1.EventEmitter {
                 ;
             case "WebSocketClosedEvent":
                 {
-                    // EXPERIMENTAL WITH 4006 CODE
+                    // ! EXPERIMENTAL WITH 4006 CODE
                     if ([4015, 4009, 4006].includes(data.code)) {
                         this.sendVoiceUpdate();
                     }

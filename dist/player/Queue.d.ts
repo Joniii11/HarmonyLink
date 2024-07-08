@@ -38,7 +38,7 @@ export declare class Queue extends Array<Track> {
     clear(): Track[] | [];
     /**
      * Shuffles the tracks in the queue.
-     * @returns {Queue} This method does not return anything.
+     * @returns {Queue} Returns the shuffled queue.
      */
     shuffle(): this;
     /**

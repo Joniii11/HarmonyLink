@@ -64,7 +64,7 @@ class Queue extends Array {
     ;
     /**
      * Shuffles the tracks in the queue.
-     * @returns {Queue} This method does not return anything.
+     * @returns {Queue} Returns the shuffled queue.
      */
     shuffle() {
         for (let i = this.length - 1; i > 0; i -= 1) {
