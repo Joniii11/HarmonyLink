@@ -14,7 +14,7 @@ export default class PlayerManager extends Map<Snowflake, Player> {
         this.manager = manager;
     };
 
-    public async createPlayer(options: PlayerOptions): Promise<Player> {
+    public async createPlayer(options: Omit<PlayerOptions, "shardId"> & { shardId?: string }): Promise<Player> {
         if (this.has(options.guildId)) return this.get(options.guildId)!;
         
         const node = options.node ?? await this.leastUsedNode()

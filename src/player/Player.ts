@@ -50,14 +50,14 @@ export class Player extends EventEmitter {
     // Track Related
     public position: number;
     
-    public constructor(manager: HarmonyLink, node: Node, options: PlayerOptions) {
+    public constructor(manager: HarmonyLink, node: Node, options: Omit<PlayerOptions, "shardId"> & { shardId?: string }) {
         super();
 
         this.node = node;
         this.manager = manager;
         this.voiceChannelId = options.voiceId,
         this.guildId = options.guildId;
-        this.shardId = options.shardId;
+        this.shardId = options.shardId ?? String(manager.library.shardID(this.guildId)) as string | undefined ?? "0";
 
         // States
         this.voiceState = VoiceConnectionState.DISCONNECTED;

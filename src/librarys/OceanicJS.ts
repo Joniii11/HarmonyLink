@@ -8,6 +8,10 @@ export class OceanicJS extends AbstractLibraryClass {
         return this.client.user.id;
     };
 
+    public shardID(guildId: string): number {
+        return this.client.guilds.get(guildId)?.shard.id
+    }
+
     public sendPacket(shardId: number, payload: AnyOtherPacket, important: boolean = false): void {
         return this.client.shards.get(shardId)?.send(payload.op, payload.d, important);
     };

@@ -8,6 +8,10 @@ export class DJSLibrary extends AbstractLibraryClass {
         return this.client.user.id;
     };
 
+    public shardID(guildId: string): number {
+        return this.client.guilds.cache.get(guildId)?.shardId
+    };
+
     public sendPacket(shardId: number, payload: AnyOtherPacket, important: boolean = false): void {
         return this.client.ws.shards.get(shardId)?.send(payload, important);
     };
