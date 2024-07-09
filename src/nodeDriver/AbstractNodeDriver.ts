@@ -33,6 +33,10 @@ export default abstract class AbstractNodeDriver {
         return headers;
     };
 
+    public setSessionId(sessionId: string): void{
+        this.sessionId = sessionId;
+    };
+
     protected async eventHandler(data: string): Promise<boolean> {
         return new Promise((resolve) => {
             if (!this.node) return resolve(false);

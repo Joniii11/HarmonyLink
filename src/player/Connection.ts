@@ -17,13 +17,10 @@ export class ConnectionHandler {
      * @param {VoiceServer} data The incoming data from the voice server from discord.
      */
     public async setServersUpdate(data: VoiceServer): Promise<void> {
+        console.log(data)
+
         if (!data.endpoint) {
             this.player.emit('connectionUpdate', DiscordVoiceStates.SESSION_ENDPOINT_MISSING);
-            return;
-        };
-
-        if (!data.sessionId) {
-            this.player.emit('connectionUpdate', DiscordVoiceStates.SESSION_ID_MISSING);
             return;
         };
 
@@ -42,6 +39,7 @@ export class ConnectionHandler {
             },
         });
 
+        this.player.emit("connectionUpdate", DiscordVoiceStates.SESSION_READY)
         this.player.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Updated voice server for player ${this.player.guildId} in the region ${this.options.voiceRegion}.`);
     };
 

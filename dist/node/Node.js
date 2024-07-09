@@ -19,12 +19,13 @@ class Node extends events_1.default {
     rest;
     driver;
     players = new Map();
-    NodeEventsHandler = new NodeEventHandler_1.default(this);
+    NodeEventsHandler;
     constructor(manager, options) {
         super();
         this.manager = manager;
         this.options = (0, utils_1.parseOptions)(options, this.manager.options);
         this.rest = new Rest_1.default(manager, this);
+        this.NodeEventsHandler = new NodeEventHandler_1.default(this);
         const getDriver = this.manager.drivers.filter(driver => driver.type === options.type);
         if (!getDriver || getDriver.length === 0) {
             this.manager.emit("debug", `[HarmonyLink] [Node ${this.options.name}] No driver found for the node type [${this.options.type}]. Using default driver LavalinkV4.`);
@@ -44,6 +45,7 @@ class Node extends events_1.default {
     ;
     setSessionId(sessionId) {
         this.rest.setSessionId(sessionId);
+        this.driver.setSessionId(sessionId);
     }
     ;
     async connect() {

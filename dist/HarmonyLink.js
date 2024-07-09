@@ -36,6 +36,7 @@ class HarmonyLink extends events_1.default {
         this.options = {
             ...options,
             defaultPlatform: options.defaultPlatform ?? "ytsearch",
+            voiceConnectionTimeout: options.voiceConnectionTimeout ?? 20000,
         };
         delete this.options.nodes;
         this.drivers = [new LavalinkV4_1.default(), new NodeLink_1.default(), new FrequenC_1.default(), ...(options.additionalDriver ?? [])];

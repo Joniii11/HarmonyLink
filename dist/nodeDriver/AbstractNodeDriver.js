@@ -19,6 +19,10 @@ class AbstractNodeDriver {
         return headers;
     }
     ;
+    setSessionId(sessionId) {
+        this.sessionId = sessionId;
+    }
+    ;
     async eventHandler(data) {
         return new Promise((resolve) => {
             if (!this.node)

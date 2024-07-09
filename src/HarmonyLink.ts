@@ -51,6 +51,7 @@ export class HarmonyLink extends EventEmitter {
         this.options = {
             ...options,
             defaultPlatform: options.defaultPlatform ?? "ytsearch",
+            voiceConnectionTimeout: options.voiceConnectionTimeout ?? 20000,
         };
 
         delete this.options.nodes;

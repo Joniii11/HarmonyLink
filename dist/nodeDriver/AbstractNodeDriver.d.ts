@@ -15,6 +15,7 @@ export default abstract class AbstractNodeDriver {
     protected abstract sessionId: string | null;
     abstract get isRegistered(): boolean;
     get defaultHeaders(): Record<string, string>;
+    setSessionId(sessionId: string): void;
     protected eventHandler(data: string): Promise<boolean>;
     protected openHandler(): Promise<boolean>;
     protected closeHandler(code: number, reason: Buffer): Promise<boolean>;

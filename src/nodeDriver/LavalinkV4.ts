@@ -166,6 +166,5 @@ export default class LavalinkV4 extends AbstractNodeDriver {
 
         await this.request<{ resuming: boolean, timeout: number}>(options);
         this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] Updated the session.`)
-        
     };
 }

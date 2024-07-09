@@ -33,13 +33,14 @@ export class Node extends EventEmitter {
     public readonly driver: AbstractNodeDriver;
     public readonly players = new Map<Snowflake, Player>();
 
-    protected readonly NodeEventsHandler: NodeEventHandler = new NodeEventHandler(this);
+    protected readonly NodeEventsHandler: NodeEventHandler;
 
     public constructor(manager: HarmonyLink, options: NodeGroup) {
         super();
         this.manager = manager;
         this.options = parseOptions(options, this.manager.options);
         this.rest = new Rest(manager, this);
+        this.NodeEventsHandler = new NodeEventHandler(this)
 
         const getDriver = this.manager.drivers.filter(driver => driver.type === options.type) as AbstractNodeDriver[] | undefined;
 
@@ -60,6 +61,7 @@ export class Node extends EventEmitter {
 
     public setSessionId(sessionId: string): void {
         this.rest.setSessionId(sessionId);
+        this.driver.setSessionId(sessionId);
     };
 
     public async connect(): Promise<WebSocket> {
