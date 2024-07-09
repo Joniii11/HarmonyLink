@@ -6,7 +6,9 @@ import { PlayerOptions } from "../typings/player";
 export default class PlayerManager extends Map<Snowflake, Player> {
     readonly manager: HarmonyLink;
     constructor(manager: HarmonyLink);
-    createPlayer(options: PlayerOptions): Promise<Player>;
+    createPlayer(options: Omit<PlayerOptions, "shardId"> & {
+        shardId?: string;
+    }): Promise<Player>;
     removePlayer(guildId: string): Promise<Player | null>;
     leastUsedNode(): Promise<Node>;
     private playerUpdateObject;

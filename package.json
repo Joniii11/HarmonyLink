@@ -15,6 +15,13 @@
     "type": "git",
     "url": "git+https://github.com/Joniii11/HarmonyLink.git"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "keywords": [
     "LavaLink",
     "NodeLink",

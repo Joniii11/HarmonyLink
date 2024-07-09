@@ -1,4 +1,25 @@
 import mod from "./index.js";
 
 export default mod;
+export const ConnectionHandler = mod.ConnectionHandler;
+export const DJSLibrary = mod.DJSLibrary;
+export const DiscordVoiceStates = mod.DiscordVoiceStates;
+export const ErisJS = mod.ErisJS;
 export const HarmonyLink = mod.HarmonyLink;
+export const Node = mod.Node;
+export const NodeType = mod.NodeType;
+export const OceanicJS = mod.OceanicJS;
+export const Player = mod.Player;
+export const PlayerConnectionState = mod.PlayerConnectionState;
+export const PlayerLoop = mod.PlayerLoop;
+export const Queue = mod.Queue;
+export const Response = mod.Response;
+export const Track = mod.Track;
+export const VoiceConnectionState = mod.VoiceConnectionState;
+export const camelToSnake = mod.camelToSnake;
+export const config = mod.config;
+export const defaultOptions = mod.defaultOptions;
+export const getDefaultConnectionOptions = mod.getDefaultConnectionOptions;
+export const getDefaultNodeStats = mod.getDefaultNodeStats;
+export const parseOptions = mod.parseOptions;
+export const snakeToCamel = mod.snakeToCamel;

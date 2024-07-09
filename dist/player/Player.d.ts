@@ -19,6 +19,7 @@ export declare class Player extends EventEmitter {
     readonly ConnectionHandler: ConnectionHandler;
     readonly queue: Queue;
     voiceChannelId: string;
+    textChannelId: string;
     guildId: string;
     shardId: string;
     isConnected: boolean;
@@ -28,13 +29,20 @@ export declare class Player extends EventEmitter {
     voiceState: VoiceConnectionState;
     loop: PlayerLoop | "NONE" | "QUEUE" | "TRACK";
     isAutoplay: boolean;
+    volume: number;
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
      */
     ping: number;
     timestamp: number;
     position: number;
-    constructor(manager: HarmonyLink, node: Node, options: PlayerOptions);
+    constructor(manager: HarmonyLink, node: Node, options: Omit<PlayerOptions, "shardId"> & {
+        shardId?: string;
+    });
+    /**
+     * Connects the player to the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     connect(): Promise<Player>;
     /**
      * Sets the loop mode for the player.
@@ -42,7 +50,36 @@ export declare class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     setLoop(mode?: PlayerLoop | "NONE" | "QUEUE" | "TRACK"): Promise<Player>;
+    /**
+     * Sets the voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    setTextChannel(channelId: string): Promise<Player>;
+    /**
+     * Sets a new voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    setVoiceChannel(channelId: string): Promise<Player>;
+    /**
+     * Sets the autoplay mode for the player.
+     * @param {boolean} [toggle] - Whether to enable or disable autoplay.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     setAutoplay(toggle?: boolean): Promise<Player>;
+    /**
+     * Sets the volume for the player.
+     * @param {number} volume - The volume to set. Must be between 0 and 1000.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    setVolume(volume: number): Promise<Player>;
+    /**
+     * Seeks to a position in the current track.
+     * @param {number} position - The position to seek to in milliseconds. Must be between 0 and `<Track>.info.length`
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    seekTo(position: number): Promise<Player>;
     /**
      * Plays the current track in the queue.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
@@ -77,7 +114,7 @@ export declare class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     autoplay(previousTrack?: Track | null): Promise<Player>;
-    protected disconnect(): Promise<Player>;
+    protected disconnect(cleanQueue?: boolean): Promise<Player>;
     protected checkDestroyed(): void;
     private sendVoiceUpdate;
     private sendToDiscord;

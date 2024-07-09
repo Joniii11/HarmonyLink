@@ -10,6 +10,10 @@ class DJSLibrary extends AbstractLibraryClass_1.default {
         return this.client.user.id;
     }
     ;
+    shardID(guildId) {
+        return this.client.guilds.cache.get(guildId)?.shardId;
+    }
+    ;
     sendPacket(shardId, payload, important = false) {
         return this.client.ws.shards.get(shardId)?.send(payload, important);
     }

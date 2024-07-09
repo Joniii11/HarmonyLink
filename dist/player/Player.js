@@ -16,6 +16,7 @@ class Player extends events_1.EventEmitter {
     ConnectionHandler;
     queue;
     voiceChannelId;
+    textChannelId;
     guildId;
     shardId;
     isConnected;
@@ -25,6 +26,7 @@ class Player extends events_1.EventEmitter {
     voiceState;
     loop;
     isAutoplay;
+    volume;
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
      */
@@ -38,7 +40,8 @@ class Player extends events_1.EventEmitter {
         this.manager = manager;
         this.voiceChannelId = options.voiceId,
             this.guildId = options.guildId;
-        this.shardId = options.shardId;
+        this.shardId = options.shardId ?? String(manager.library.shardID(this.guildId)) ?? "0";
+        this.textChannelId = options.textId;
         // States
         this.voiceState = player_1.VoiceConnectionState.DISCONNECTED;
         this.state = player_1.PlayerConnectionState.DESTROYED;
@@ -50,6 +53,7 @@ class Player extends events_1.EventEmitter {
         this.ping = -1;
         this.timestamp = 0;
         this.loop = player_1.PlayerLoop.NONE;
+        this.volume = 100;
         // Handlers
         this.ConnectionHandler = new Connection_1.ConnectionHandler(this);
         this.queue = new Queue_1.Queue();
@@ -66,6 +70,10 @@ class Player extends events_1.EventEmitter {
         this.on("event", this._eventHandler.bind(this));
     }
     ;
+    /**
+     * Connects the player to the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     async connect() {
         if (this.state === player_1.PlayerConnectionState.CONNECTED || !this.voiceChannelId)
             return this;
@@ -153,6 +161,35 @@ class Player extends events_1.EventEmitter {
         });
     }
     ;
+    /**
+     * Sets the voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setTextChannel(channelId) {
+        return new Promise((resolve) => {
+            this.textChannelId = channelId;
+            return resolve(this);
+        });
+    }
+    ;
+    /**
+     * Sets a new voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setVoiceChannel(channelId) {
+        await this.disconnect(false);
+        this.voiceChannelId = channelId;
+        await this.connect();
+        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] New Voice channel set for player ${this.guildId}`);
+        return this;
+    }
+    /**
+     * Sets the autoplay mode for the player.
+     * @param {boolean} [toggle] - Whether to enable or disable autoplay.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     async setAutoplay(toggle) {
         return new Promise((resolve) => {
             if (toggle)
@@ -161,6 +198,49 @@ class Player extends events_1.EventEmitter {
                 this.isAutoplay = !this.isAutoplay;
             return resolve(this);
         });
+    }
+    ;
+    /**
+     * Sets the volume for the player.
+     * @param {number} volume - The volume to set. Must be between 0 and 1000.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setVolume(volume) {
+        if (volume < 0 || volume > 1000)
+            throw new RangeError("[HarmonyLink] [Player] [Connection] Volume must be between 0 and 1000");
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                volume,
+            }
+        });
+        this.volume = volume;
+        return this;
+    }
+    ;
+    /**
+     * Seeks to a position in the current track.
+     * @param {number} position - The position to seek to in milliseconds. Must be between 0 and `<Track>.info.length`
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async seekTo(position) {
+        if (!this.queue.currentTrack)
+            throw new Error("[HarmonyLink] [Player] [Connection] No track is currently playing");
+        if (!this.queue.currentTrack.info.isSeekable)
+            throw new Error("[HarmonyLink] [Player] [Connection] The current track is not seekable");
+        position = Number(position);
+        if (isNaN(position))
+            throw new TypeError("[HarmonyLink] [Player] [Connection] Position must be a number");
+        if (position < 0 || position > this.queue.currentTrack.info.length)
+            position = Math.max(Math.min(position, this.queue.currentTrack.info.length), 0);
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                position,
+            }
+        });
+        this.position = position;
+        return this;
     }
     ;
     /**
@@ -192,7 +272,7 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<boolean>} - A Promise that resolves to a boolean which is true if an element in the Map existed and has been removed, or false if the element does not exist.
      */
     async destroy() {
-        await this.disconnect();
+        await this.disconnect(true);
         await this.node.rest.destroyPlayer(this.guildId);
         this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
         this.manager.emit("playerDestroy", this.guildId);
@@ -297,10 +377,11 @@ class Player extends events_1.EventEmitter {
             return this.skip();
         }
     }
-    async disconnect() {
-        if (!this.voiceChannelId)
+    async disconnect(cleanQueue = false) {
+        if (!this.voiceChannelId || this.voiceState === player_1.VoiceConnectionState.DISCONNECTED)
             return this;
-        this.queue._cleanUp();
+        if (cleanQueue)
+            this.queue._cleanUp();
         await this.skip();
         this.isConnected = false;
         this.state = player_1.PlayerConnectionState.DISCONNECTED;

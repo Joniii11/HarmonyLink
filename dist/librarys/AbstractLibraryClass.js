@@ -27,20 +27,20 @@ class AbstractLibraryClass {
     /**
      * Handle raw packets from the gateway
      * @param {Packet} incomingData The packet to handle
-     *
-     * @abstract method to handle raw packets from the gateway
      */
     async raw(incomingData) {
+        if (!this.manager)
+            throw new Error("[HarmonyLink] [Library] The Manager is not initialized yet!");
         const { t, d } = incomingData;
         switch (t) {
             case "VOICE_STATE_UPDATE":
                 {
                     if (!d.guild_id)
                         return this;
-                    const player = this.manager?.playerManager.get(d.guild_id);
+                    const player = this.manager.playerManager.get(d.guild_id);
                     if (!player)
                         return this;
-                    if (d.user_id !== (this.manager?.botID ?? this.userID))
+                    if (d.user_id !== this.manager.botID)
                         return this;
                     player.ConnectionHandler.setStateUpdate(d);
                     break;
@@ -50,7 +50,7 @@ class AbstractLibraryClass {
                 {
                     if (!d.guild_id)
                         return this;
-                    const player = this.manager?.playerManager.get(d.guild_id);
+                    const player = this.manager.playerManager.get(d.guild_id);
                     if (!player)
                         return this;
                     await player.ConnectionHandler.setServersUpdate(d);

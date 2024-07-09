@@ -10,6 +10,9 @@ class OceanicJS extends AbstractLibraryClass_1.default {
         return this.client.user.id;
     }
     ;
+    shardID(guildId) {
+        return this.client.guilds.get(guildId)?.shard.id;
+    }
     sendPacket(shardId, payload, important = false) {
         return this.client.shards.get(shardId)?.send(payload.op, payload.d, important);
     }

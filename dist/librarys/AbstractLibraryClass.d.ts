@@ -22,8 +22,6 @@ export default abstract class AbstractLibraryClass {
     /**
      * Handle raw packets from the gateway
      * @param {Packet} incomingData The packet to handle
-     *
-     * @abstract method to handle raw packets from the gateway
      */
     protected raw(incomingData: Packet): Promise<this>;
     protected ready(nodes: NodeGroup[]): Promise<void>;
@@ -33,6 +31,7 @@ export default abstract class AbstractLibraryClass {
      * @abstract getter method for the user ID of the bot
      */
     abstract get userID(): string;
+    abstract shardID(guildId: string): number;
     /**
      * Send raw packets to the gateway to communicate with the Discord API
      * @param {number} shardId The shard ID to send the packet with
