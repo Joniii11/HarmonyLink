@@ -189,7 +189,9 @@ export class Player extends EventEmitter {
         })
     };
 
-    
+    /*public async setVoiceChannel(channelId: string): Promise<Player> {
+
+    }*/
 
     /**
      * Sets the autoplay mode for the player.
@@ -231,7 +233,9 @@ export class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     public async seekTo(position: number): Promise<Player> {
-        if (position >= (this.queue.currentTrack?.info.length ?? 0)) position = this.position + 10000;
+        if (!this.queue.currentTrack) throw new Error("[HarmonyLink] [Player] [Connection] No track is currently playing");
+        if (!this.queue.currentTrack.info.isSeekable) throw new Error("[HarmonyLink] [Player] [Connection] The current track is not seekable");
+        if (position >= this.queue.currentTrack.info.length) position = this.position + 10000;
 
         await this.node.rest.updatePlayer({
             guildId: this.guildId,
