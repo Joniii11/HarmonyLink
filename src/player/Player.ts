@@ -40,6 +40,7 @@ export class Player extends EventEmitter {
     public voiceState: VoiceConnectionState;
     public loop: PlayerLoop | "NONE" | "QUEUE" | "TRACK";
     public isAutoplay: boolean;
+    public volume: number;
 
     /**
      * The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
@@ -70,6 +71,7 @@ export class Player extends EventEmitter {
         this.ping = -1;
         this.timestamp = 0;
         this.loop = PlayerLoop.NONE;
+        this.volume = 100;
 
         // Handlers
         this.ConnectionHandler = new ConnectionHandler(this)
@@ -180,6 +182,26 @@ export class Player extends EventEmitter {
 
             return resolve(this);
         });
+    };
+
+    /**
+     * Sets the volume for the player.
+     * @param {number} volume - The volume to set. Must be between 0 and 1000.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setVolume(volume: number): Promise<Player> {
+        if (volume < 0 || volume > 1000) throw new RangeError("[HarmonyLink] [Player] [Connection] Volume must be between 0 and 1000");
+
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                volume,
+            }
+        });
+
+        this.volume = volume;
+
+        return this;
     };
 
     /**
