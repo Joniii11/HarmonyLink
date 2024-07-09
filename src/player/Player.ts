@@ -95,6 +95,10 @@ export class Player extends EventEmitter {
         this.on("event", this._eventHandler.bind(this));
     };
 
+    /**
+     * Connects the player to the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     public async connect(): Promise<Player> {
 		if (this.state === PlayerConnectionState.CONNECTED || !this.voiceChannelId) return this;
 		if (this.voiceState === VoiceConnectionState.CONNECTING || this.voiceState === VoiceConnectionState.CONNECTED) return this;
