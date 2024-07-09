@@ -31,6 +31,7 @@ export class Player extends EventEmitter {
     public readonly queue: Queue;
 
     public voiceChannelId: string;
+    public textChannelId: string;
     public guildId: string;
     public shardId: string;
     public isConnected: boolean;
@@ -59,6 +60,7 @@ export class Player extends EventEmitter {
         this.voiceChannelId = options.voiceId,
         this.guildId = options.guildId;
         this.shardId = options.shardId ?? String(manager.library.shardID(this.guildId)) as string | undefined ?? "0";
+        this.textChannelId = options.textId
 
         // States
         this.voiceState = VoiceConnectionState.DISCONNECTED;
@@ -174,6 +176,20 @@ export class Player extends EventEmitter {
             return resolve(this);
         });
     };
+
+    /**
+     * Sets the voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setTextChannel(channelId: string): Promise<Player> {
+        return new Promise<this>((resolve) => {
+            this.textChannelId = channelId;
+            return resolve(this);
+        })
+    };
+
+    
 
     /**
      * Sets the autoplay mode for the player.
