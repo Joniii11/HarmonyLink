@@ -189,9 +189,20 @@ export class Player extends EventEmitter {
         })
     };
 
-    /*public async setVoiceChannel(channelId: string): Promise<Player> {
+    /**
+     * Sets a new voice channel for the player.
+     * @param {string} channelId - The channel ID to set for the player.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setVoiceChannel(channelId: string): Promise<Player> {
+        await this.disconnect(false)
+        this.voiceChannelId = channelId;
+        await this.connect();
+        
+        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] New Voice channel set for player ${this.guildId}`)
 
-    }*/
+        return this;
+    }
 
     /**
      * Sets the autoplay mode for the player.
@@ -284,7 +295,7 @@ export class Player extends EventEmitter {
      * @returns {Promise<boolean>} - A Promise that resolves to a boolean which is true if an element in the Map existed and has been removed, or false if the element does not exist.
      */
     public async destroy(): Promise<boolean> {
-       await this.disconnect();
+       await this.disconnect(true);
        await this.node.rest.destroyPlayer(this.guildId);
 
        this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
@@ -398,9 +409,9 @@ export class Player extends EventEmitter {
         }
     }
 
-    protected async disconnect(): Promise<Player> {
+    protected async disconnect(cleanQueue: boolean = false): Promise<Player> {
         if (!this.voiceChannelId) return this;
-        this.queue._cleanUp()
+        if (cleanQueue) this.queue._cleanUp()
         await this.skip();
         
         this.isConnected = false;
