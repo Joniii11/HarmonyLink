@@ -28,4 +28,7 @@ export const getDefaultNodeStats = (): NodeStats => ({
             nulled: 0,
             deficit: 0
         },
-    });
+});
+
+export * from "./node";
+export * from "./player";

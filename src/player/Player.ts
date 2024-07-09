@@ -414,7 +414,7 @@ export class Player extends EventEmitter {
     }
 
     protected async disconnect(cleanQueue: boolean = false): Promise<Player> {
-        if (!this.voiceChannelId) return this;
+        if (!this.voiceChannelId || this.voiceState === VoiceConnectionState.DISCONNECTED) return this;
         if (cleanQueue) this.queue._cleanUp()
         await this.skip();
         
