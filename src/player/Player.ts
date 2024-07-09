@@ -205,6 +205,24 @@ export class Player extends EventEmitter {
     };
 
     /**
+     * Seeks to a position in the current track.
+     * @param {number} position - The position to seek to in milliseconds. Must be between 0 and `<Track>.info.length`
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async seekTo(position: number): Promise<Player> {
+        if (position >= (this.queue.currentTrack?.info.length ?? 0)) position = this.position + 10000;
+
+        await this.node.rest.updatePlayer({
+            guildId: this.guildId,
+            playerOptions: {
+                position,
+            }
+        });
+    
+        return this;
+    };
+
+    /**
      * Plays the current track in the queue.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
