@@ -235,7 +235,11 @@ export class Player extends EventEmitter {
     public async seekTo(position: number): Promise<Player> {
         if (!this.queue.currentTrack) throw new Error("[HarmonyLink] [Player] [Connection] No track is currently playing");
         if (!this.queue.currentTrack.info.isSeekable) throw new Error("[HarmonyLink] [Player] [Connection] The current track is not seekable");
-        if (position >= this.queue.currentTrack.info.length) position = this.position + 10000;
+        
+        position = Number(position);
+
+        if (isNaN(position)) throw new TypeError("[HarmonyLink] [Player] [Connection] Position must be a number");
+        if (position < 0 || position > this.queue.currentTrack.info.length) position = Math.max(Math.min(position, this.queue.currentTrack.info.length), 0);
 
         await this.node.rest.updatePlayer({
             guildId: this.guildId,
@@ -243,6 +247,8 @@ export class Player extends EventEmitter {
                 position,
             }
         });
+
+        this.position = position;
     
         return this;
     };
