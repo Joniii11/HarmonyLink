@@ -175,6 +175,11 @@ export class Player extends EventEmitter {
         });
     };
 
+    /**
+     * Sets the autoplay mode for the player.
+     * @param {boolean} [toggle] - Whether to enable or disable autoplay.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
     public async setAutoplay(toggle?: boolean): Promise<Player> {
         return new Promise<this>((resolve) => {
             if (toggle) this.isAutoplay = toggle;
