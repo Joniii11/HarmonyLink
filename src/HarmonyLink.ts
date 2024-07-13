@@ -21,10 +21,12 @@ import { config, parseHarmonyLinkConfig } from "@/constants";
 
 // Types
 import { Config } from "@t/constants";
-import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
+import { HarmonyLinkConfiguration, RequiredHarmonyLinkConfiguration } from "@t/HarmonyLink";
 import { NodeGroup } from "@t/node";
 import { Node } from "@/node/Node";
-import { ResolveOptions } from "@t/player";
+import { PlayerOptions, ResolveOptions } from "@t/player";
+import { loadPlugins } from "./plugin";
+import { Player } from "./player";
 
 export class HarmonyLink extends EventEmitter {
     public botID: string = "";
@@ -33,7 +35,7 @@ export class HarmonyLink extends EventEmitter {
     public readonly config: Config = config;
     public readonly library: AbstractLibraryClass;
     public readonly nodes: NodeGroup[];
-    public readonly options: Omit<HarmonyLinkConfiguration, "defaultPlatform" | "nodes"> & { defaultPlatform: string; nodes?: NodeGroup[] };
+    public readonly options: RequiredHarmonyLinkConfiguration
     public readonly drivers: AbstractNodeDriver[] = []; 
 
     /* Managers */
@@ -50,6 +52,12 @@ export class HarmonyLink extends EventEmitter {
         this.nodes = options.nodes;
         this.options = parseHarmonyLinkConfig(options)
 
+        // Loading all of the plugins asynchorously
+        void (async () => {
+            await loadPlugins(this);
+        })().catch((error) => this.emit("debug", "[HarmonyLink] [Initialization] Error while loading plugins.", error));
+
+        // Clean up some stuff
         delete this.options.nodes;
 
         this.drivers = [new LavalinkV4(), new NodeLink(), new FrequenC(), ...(options.additionalDriver ?? [])];
@@ -71,5 +79,51 @@ export class HarmonyLink extends EventEmitter {
         const result = await node.rest.loadTrack(query, source);
 
         return new Response(result, requester);
+    };
+
+    /**
+     * Creates a player.
+     * @param {PlayerOptions} playerOptions - Options for the player.
+     * @param {Node} [node] - Node to use for the player.
+     * @returns {Promise<Player>} The created player.
+     */
+    public async createPlayer(playerOptions: Omit<PlayerOptions, "shardId"> & { shardId?: string }, node?: Node): Promise<Player> {
+        return this.playerManager.createPlayer({ ...playerOptions, node })
+    };
+
+    /**
+     * Destroys a player.
+     * @param {string} guildId - The guild ID of the player to destroy.
+     * @returns {Promise<Player | null>} The destroyed player.
+     */
+    public async destroyPlayer(guildId: string): Promise<Player | null> {
+        return this.playerManager.removePlayer(guildId);
+    };
+
+    /**
+     * Adds a node to the node manager.
+     * @param {NodeGroup | NodeGroup[]} node - The node to add.
+     * @returns {Promise<Node | Node[]>} The added node.
+     */
+    public async addNode(node: NodeGroup | NodeGroup[]): Promise<Node | Node[]> {
+        if (!this.isReady) throw new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet.");
+
+        if (Array.isArray(node)) {
+            const nodes = await Promise.all(node.map(n => this.nodeManager.addNode(n))).catch((error) => this.emit("debug", "[HarmonyLink] [NodeManager] Error while adding nodes.", error));
+            return typeof nodes === "boolean" ? [] : nodes;
+        };
+
+        return this.nodeManager.addNode(node);
+    };
+
+    /**
+     * Removes a node from the node manager.
+     * @param {string} nodeName - The name of the node to remove.
+     * @returns {Promise<Node | null>} The removed node.
+     */
+    public async removeNode(nodeName: string): Promise<Node | null> {
+        if (!this.isReady) throw new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet.");
+
+        return this.nodeManager.removeNode(nodeName)
     };
 }
