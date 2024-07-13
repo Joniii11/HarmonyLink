@@ -9,11 +9,13 @@ const Connection_1 = require("./Connection");
 // Types
 const player_1 = require("../typings/player");
 const connection_1 = require("../typings/player/connection");
+const Filters_1 = require("./Filters");
 class Player extends events_1.EventEmitter {
     node;
     manager;
     ConnectionHandler;
     queue;
+    filters;
     voiceChannelId;
     textChannelId;
     guildId;
@@ -56,6 +58,7 @@ class Player extends events_1.EventEmitter {
         // Handlers
         this.ConnectionHandler = new Connection_1.ConnectionHandler(this);
         this.queue = new Queue_1.Queue();
+        this.filters = new Filters_1.Filters(this);
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Player created for guild ${this.guildId} on node ${this.node.options.name}.`);
         this.manager.emit("playerCreate", this);
         this.on("playerUpdate", (packet) => {
@@ -535,7 +538,7 @@ class Player extends events_1.EventEmitter {
                 {
                     // ! EXPERIMENTAL WITH 4006 CODE
                     if ([4015, 4009, 4006].includes(data.code)) {
-                        this.sendVoiceUpdate();
+                        return this.reconnect(!this.isPaused);
                     }
                     ;
                     this.manager.emit("socketClose", this, this.queue.currentTrack, data);

@@ -7,6 +7,7 @@ import { Response } from "./Response";
 import { PlayerConnectionState, PlayerOptions, VoiceConnectionState, PlayerEvents, PlayerLoop, ResolveOptions } from "../typings/player";
 import { Node } from "../node/Node";
 import { HarmonyLink } from "../HarmonyLink";
+import { Filters } from "./Filters";
 export declare interface Player {
     on: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
     once: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
@@ -18,6 +19,7 @@ export declare class Player extends EventEmitter {
     readonly manager: HarmonyLink;
     readonly ConnectionHandler: ConnectionHandler;
     readonly queue: Queue;
+    filters: Filters;
     voiceChannelId: string;
     textChannelId: string;
     guildId: string;

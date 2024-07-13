@@ -13,6 +13,7 @@ import { DiscordVoiceStates } from "@t/player/connection";
 import { Node } from "@/node/Node";
 import { HarmonyLink } from "@/HarmonyLink"
 import { LavalinkEventPacket } from "@t/node";
+import { Filters } from "./Filters";
 
 export declare interface Player {
     on: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
@@ -29,6 +30,7 @@ export class Player extends EventEmitter {
     public readonly manager: HarmonyLink;
     public readonly ConnectionHandler: ConnectionHandler
     public readonly queue: Queue;
+    public filters: Filters;
 
     public voiceChannelId: string;
     public textChannelId: string;
@@ -78,6 +80,7 @@ export class Player extends EventEmitter {
         // Handlers
         this.ConnectionHandler = new ConnectionHandler(this)
         this.queue = new Queue();
+        this.filters = new Filters(this)
 
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Player created for guild ${this.guildId} on node ${this.node.options.name}.`);
         this.manager.emit("playerCreate", this);
@@ -580,7 +583,7 @@ export class Player extends EventEmitter {
             case "WebSocketClosedEvent": {
                 // ! EXPERIMENTAL WITH 4006 CODE
                 if ([4015, 4009, 4006].includes(data.code)) {
-                    this.sendVoiceUpdate();
+                    return this.reconnect(!this.isPaused)
                 };
 
                 this.manager.emit("socketClose", this, this.queue.currentTrack!, data);
