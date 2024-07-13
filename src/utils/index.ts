@@ -3,7 +3,7 @@ import { defaultOptions } from "@/constants/node";
 import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
 import { NodeType, NodeGroup, NodeOptions } from "@t/node";
 
-export function parseOptions(options: NodeGroup, harmonyLinkOptions: Omit<HarmonyLinkConfiguration, "defaultPlatform" | "nodes"> & { defaultPlatform: string; nodes?: NodeGroup[] | undefined; }): Required<NodeOptions> {
+export function parseOptions(options: NodeGroup, harmonyLinkOptions: Omit<HarmonyLinkConfiguration, "nodes"> & { nodes?: NodeGroup[] | undefined; }): Required<NodeOptions> {
     return {
         name: options.name,
         host: options.host,

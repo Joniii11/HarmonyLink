@@ -6,6 +6,7 @@ import NodeManager from "@/managers/NodeManager";
 import { NodeGroup } from "@t/node";
 import { Node } from "@/node/Node";
 import { Player } from "@/player/Player";
+import { AbstractPlugin } from "@/plugin";
 
 export interface HarmonyLinkConfiguration {
     /**
@@ -38,6 +39,13 @@ export interface HarmonyLinkConfiguration {
      * @default true
      */
     resume?: boolean;
+
+    /**
+     * Additional plugins to use for the library
+     * 
+     * @default []
+     */
+    plugins?: AbstractPlugin[]
 
     /**
      * Additional drivers to use for connecting to other nodes.
@@ -157,4 +165,6 @@ export interface HarmonyLinkConfiguration {
      * @default 10000
      */
     voiceConnectionTimeout?: number;
-}
+};
+
+export type RequiredHarmonyLinkConfiguration = Omit<Required<HarmonyLinkConfiguration>, "customAutoplay" | "nodeResolver" | "nodes"> & { nodes?: NodeGroup[]; customAutoplay: ((player: Player) => Promise<Player | void>) | undefined; nodeResolver: ((nodes: NodeManager) => Promise<Node | void>) | undefined; };

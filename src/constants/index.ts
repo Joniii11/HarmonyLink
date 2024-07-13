@@ -1,6 +1,6 @@
-import { HarmonyLinkConfiguration } from "@t/HarmonyLink";
+import { HarmonyLinkConfiguration, RequiredHarmonyLinkConfiguration } from "@t/HarmonyLink";
 import { Config } from "@t/constants";
-import { NodeGroup, NodeStats } from "@t/node";
+import { NodeStats } from "@t/node";
 
 export const config: Config = {
     name: "HarmonyLink",
@@ -31,8 +31,8 @@ export const getDefaultNodeStats = (): NodeStats => ({
         },
 });
 
-export const parseHarmonyLinkConfig = (harmonylinkConfig: Partial<HarmonyLinkConfiguration>): Omit<HarmonyLinkConfiguration, "defaultPlatform" | "nodes"> & { defaultPlatform: string; nodes?: NodeGroup[] } => {
-    if (!harmonylinkConfig.library) throw new Error("No library was provided.");
+export const parseHarmonyLinkConfig = (harmonylinkConfig: Partial<HarmonyLinkConfiguration>): RequiredHarmonyLinkConfiguration => {
+    if (!harmonylinkConfig.library) throw new Error("[HarmonyLink] [Initialization] No library was provided.");
 
     return {
         library: harmonylinkConfig.library,
@@ -47,7 +47,8 @@ export const parseHarmonyLinkConfig = (harmonylinkConfig: Partial<HarmonyLinkCon
         reconnectTries: harmonylinkConfig.reconnectTries ?? 5,
         reconnectTimeout: harmonylinkConfig.reconnectTimeout ?? 5000,
         defaultVolume: harmonylinkConfig.defaultVolume ?? 100,
-    } satisfies  Omit<HarmonyLinkConfiguration, "defaultPlatform" | "nodes"> & { defaultPlatform: string; nodes?: NodeGroup[] };
+        plugins: harmonylinkConfig.plugins ?? [],
+    } satisfies RequiredHarmonyLinkConfiguration;
 }
 
 export * from "./node";
