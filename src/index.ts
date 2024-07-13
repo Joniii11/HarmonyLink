@@ -7,3 +7,4 @@ export * from "./node";
 export * from "./nodeDriver";
 export * from "./player";
 export * from "./utils"
+export * from "./plugin";
