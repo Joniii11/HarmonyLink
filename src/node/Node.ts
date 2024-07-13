@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+/* eslint-disable @typescript-eslint/no-invalid-void-type, @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from "events";
 import NodeEventHandler from "./NodeEventHandler";
 
@@ -12,6 +12,7 @@ import LavalinkV4 from "@/nodeDriver/LavalinkV4";
 import { WebSocket } from "ws";
 import { Player } from "@/player/Player";
 import { Snowflake } from "@/typings";
+import { ErrorResponses, RoutePlannerStatus } from "@/typings/exporter";
 
 export declare interface Node {
     on: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;
@@ -55,15 +56,26 @@ export class Node extends EventEmitter {
         this.driver.init(this.manager, this);
     };
 
+    /**
+     * This method is used to check if the node is ready.
+     */
     public get isReady(): boolean {
         return this.rest.isReady && this.isConnected;
     };
 
+    /**
+     * This method is used to set the session id.
+     * @param {string} sessionId The session id.
+     */
     public setSessionId(sessionId: string): void {
         this.rest.setSessionId(sessionId);
         this.driver.setSessionId(sessionId);
     };
 
+    /**
+     * This method is used to connect to the node.
+     * @returns {Promise<WebSocket>} The websocket connection.
+     */
     public async connect(): Promise<WebSocket> {
         const ws = await this.driver.connect();
 
@@ -73,6 +85,10 @@ export class Node extends EventEmitter {
         return ws;
     };
 
+    /**
+     * This method is used to disconnect from the node.
+     * @returns {Promise<void>} Resolves once the node is disconnected.
+     */
     public async disconnect(): Promise<void> {
         return new Promise<void>((resolve) => {
             if (!this.isConnected) return resolve();
@@ -84,6 +100,10 @@ export class Node extends EventEmitter {
         });
     };
 
+    /**
+     * This method is used to reconnect to the node.
+     * @returns {Promise<void>} Resolves once the node is reconnected.
+     */
     public async reconnect(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.options.reconnectAttemptTimeout = setTimeout(async () => {
@@ -103,6 +123,10 @@ export class Node extends EventEmitter {
         })
     };
 
+    /**
+     * This method is used to get the node stats.
+     * @returns {Promise<NodeStats>} The node stats.
+     */
     public async getStats(): Promise<NodeStats> {
         const stats = await this.rest.getStats();
 
@@ -112,5 +136,36 @@ export class Node extends EventEmitter {
         };
 
         return this.stats;
+    };
+
+    /**
+     * This method is used to get the route planner status.
+     * @returns {Promise<RoutePlannerStatus>} The route planner status.
+     * 
+     * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
+     */
+    public async getRoutePlannerStatus(): Promise<RoutePlannerStatus> {
+        return this.rest.getRoutePlannerStatus()
+    };
+
+    /**
+     * This method is used to unmark all failed addresses.
+     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * 
+     * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
+     */
+    public async unmarkAllFailingAddresses(): Promise<ErrorResponses | void> {
+        return this.rest.unmarkAllFailedAddresses()
+    };
+
+    /**
+     * This method is used to unmark a failed address.
+     * @param {string} address The address to unmark.
+     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * 
+     * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
+     */
+    public async unmarkFailingAddress(address: string): Promise<ErrorResponses | void> {
+        return this.rest.unmarkFailedAddress(address)
     };
 }
