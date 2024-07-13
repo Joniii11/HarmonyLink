@@ -68,7 +68,16 @@ export default class FrequenC extends AbstractNodeDriver {
             });
 
             return response.headers.get("content-type") === "application/json" ? await response.json() as T : await response.text() as T
-        };
+        } else if (options.path.startsWith("/routeplanner")) {
+            return {
+                timestamp: Date.now(),
+                status: 404,
+                error: "Not found.",
+                message: "The specified node is a FrequenC Node. FrequenC Nodes do not have the routeplanner feature.",
+                path: `/v4${options.path}`,
+                trace: new Error().stack
+            } as unknown as T;
+        };;
 
         const url = new URL(`${this.httpUrl}/v1${options.path}`);
         if (options.params) url.search = new URLSearchParams(options.params).toString();

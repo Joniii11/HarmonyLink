@@ -35,7 +35,7 @@ export default class LavalinkV4 extends AbstractNodeDriver {
         return new Promise<WebSocket>((resolve, reject) => {
             if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
             if (!this.manager?.isReady || !this.manager.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
-            const shouldResume = this.manager.options.resume ?? false;
+            const shouldResume = this.manager.options.resume;
 
             const headers: Record<string, string> = {
                 Authorization: this.node!.options.password,
