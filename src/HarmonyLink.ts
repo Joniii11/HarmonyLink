@@ -17,7 +17,7 @@ import FrequenC from "@/nodeDriver/FrequenC";
 import { Response } from "@/player/Response";
 
 // Constants
-import { config } from "@/constants";
+import { config, parseHarmonyLinkConfig } from "@/constants";
 
 // Types
 import { Config } from "@t/constants";
@@ -48,11 +48,7 @@ export class HarmonyLink extends EventEmitter {
         
         // Set some stuff
         this.nodes = options.nodes;
-        this.options = {
-            ...options,
-            defaultPlatform: options.defaultPlatform ?? "ytsearch",
-            voiceConnectionTimeout: options.voiceConnectionTimeout ?? 20000,
-        };
+        this.options = parseHarmonyLinkConfig(options)
 
         delete this.options.nodes;
 
