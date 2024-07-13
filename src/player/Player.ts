@@ -362,9 +362,7 @@ export class Player extends EventEmitter {
     public async resolve({ query, source, requester}: ResolveOptions, node?: Node): Promise<Response> {
         if (!node) node = this.node;
 
-        const result = await node.rest.loadTrack(query, source);
-
-        return new Response(result, requester);
+        return this.manager.resolve({ query, source, requester }, node);
     };
 
     /**
