@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 const AbstractNodeDriver_1 = __importDefault(require("./AbstractNodeDriver"));
 const ws_1 = require("ws");
 const node_1 = require("../typings/node");
@@ -33,7 +34,7 @@ class LavalinkV4 extends AbstractNodeDriver_1.default {
                 return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
             if (!this.manager?.isReady || !this.manager.library.userID)
                 return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
-            const shouldResume = this.manager.options.resume ?? false;
+            const shouldResume = this.manager.options.resume;
             const headers = {
                 Authorization: this.node.options.password,
                 "User-Id": this.manager.library.userID,
@@ -54,7 +55,7 @@ class LavalinkV4 extends AbstractNodeDriver_1.default {
     wsClose(withoutEmit = false) {
         if (withoutEmit) {
             this.wsClient?.close(1006, "Self Closed");
-            this.manager?.emit("nodeDisconnect", this.node);
+            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
         }
         ;
         this.wsClient?.removeAllListeners();

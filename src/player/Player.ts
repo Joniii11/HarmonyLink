@@ -150,6 +150,40 @@ export class Player extends EventEmitter {
 	};
 
     /**
+     * Reconnects the player to the voice channel.
+     * @param {boolean} [restartSong=true] - Whether to restart the current song or not.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async reconnect(restartSong: boolean = true): Promise<Player> {
+        const currentTrack = this.queue.currentTrack;
+        
+        // Disconnect the player and not clean up the queue
+        await this.disconnect(false)
+
+        // Reconnect
+        await this.connect();
+
+        // Restart the music if it was playing
+        if (currentTrack && restartSong) {
+            this.queue.unshift(currentTrack);
+            await this.node.rest.updatePlayer({
+                guildId: this.guildId,
+                playerOptions: {
+                    track: {
+                        encoded: currentTrack.track,
+                    },
+                    position: this.position,
+                }
+            });
+
+            this.isPlaying = true;
+            this.isPaused = false;
+        };
+
+        return this;
+    };
+
+    /**
      * Sets the loop mode for the player.
      * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
@@ -305,7 +339,7 @@ export class Player extends EventEmitter {
         await this.node.rest.destroyPlayer(this.guildId);
 
         this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
-        this.manager.emit("playerDestroy", this.guildId);
+        this.manager.emit("playerDestroy", this);
 
         this.node.players.delete(this.guildId);
 
@@ -461,7 +495,7 @@ export class Player extends EventEmitter {
                 this.position = 0;
                 
                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track started for player ${this.guildId}`)
-                this.manager.emit("trackStart", this, this.queue.currentTrack);
+                this.manager.emit("trackStart", this, this.queue.currentTrack!);
 
                 break;
             };
@@ -475,14 +509,14 @@ export class Player extends EventEmitter {
 
                 if (data.reason === "replaced") {
                     this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track replaced for player ${this.guildId}`)
-                    return this.manager.emit("trackEnd", this, data);
+                    return this.manager.emit("trackEnd", this, this.queue.previousTrack!, data);
                 };
 
                 if (["loadFailed", "cleanup"].includes(data.reason)) {
                     if (!this.queue.length || this.queue.length === 0) return this.manager.emit("queueEmpty", this);
 
                     this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`)
-                    this.manager.emit("trackEnd", this, this.queue.previousTrack);
+                    this.manager.emit("trackEnd", this, this.queue.previousTrack!);
 
                     return this.play();
                 };
@@ -519,7 +553,7 @@ export class Player extends EventEmitter {
                         if (!this.queue.length || this.queue.length === 0) return this.manager.emit("queueEmpty", this);
 
                         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`);
-                        this.manager.emit("trackEnd", this, this.queue.previousTrack);
+                        this.manager.emit("trackEnd", this, this.queue.previousTrack!);
 
                         return this.play()
                     };
@@ -530,14 +564,14 @@ export class Player extends EventEmitter {
             };
 
             case "TrackStuckEvent": {
-                this.manager.emit("trackError", this, this.queue.currentTrack, data);
+                this.manager.emit("trackError", this, this.queue.currentTrack!, data);
 
                 await this.skip();
                 break;
             };
 
             case "TrackExceptionEvent": {
-                this.manager.emit("trackError", this, this.queue.previousTrack, data);
+                this.manager.emit("trackError", this, this.queue.previousTrack!, data);
 
                 await this.skip();
                 break;
@@ -549,7 +583,7 @@ export class Player extends EventEmitter {
                     this.sendVoiceUpdate();
                 };
 
-                this.manager.emit("socketClose", this, this.queue.currentTrack, data);
+                this.manager.emit("socketClose", this, this.queue.currentTrack!, data);
                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Websocket closed for player ${this.guildId} with status code ${data.code}`);
                 
                 await this.pause(true);

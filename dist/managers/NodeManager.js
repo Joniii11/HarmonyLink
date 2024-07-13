@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../node/Node");
 class NodeManager extends Map {
-    nodes = new Map();
     manager;
     constructor(manager) {
         super();

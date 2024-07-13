@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Node = void 0;
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+/* eslint-disable @typescript-eslint/no-invalid-void-type, @typescript-eslint/no-unsafe-declaration-merging */
 const events_1 = __importDefault(require("events"));
 const NodeEventHandler_1 = __importDefault(require("./NodeEventHandler"));
 const constants_1 = require("../constants");
@@ -39,15 +39,26 @@ class Node extends events_1.default {
         this.driver.init(this.manager, this);
     }
     ;
+    /**
+     * This method is used to check if the node is ready.
+     */
     get isReady() {
         return this.rest.isReady && this.isConnected;
     }
     ;
+    /**
+     * This method is used to set the session id.
+     * @param {string} sessionId The session id.
+     */
     setSessionId(sessionId) {
         this.rest.setSessionId(sessionId);
         this.driver.setSessionId(sessionId);
     }
     ;
+    /**
+     * This method is used to connect to the node.
+     * @returns {Promise<WebSocket>} The websocket connection.
+     */
     async connect() {
         const ws = await this.driver.connect();
         this.isConnected = true;
@@ -55,6 +66,10 @@ class Node extends events_1.default {
         return ws;
     }
     ;
+    /**
+     * This method is used to disconnect from the node.
+     * @returns {Promise<void>} Resolves once the node is disconnected.
+     */
     async disconnect() {
         return new Promise((resolve) => {
             if (!this.isConnected)
@@ -65,6 +80,10 @@ class Node extends events_1.default {
         });
     }
     ;
+    /**
+     * This method is used to reconnect to the node.
+     * @returns {Promise<void>} Resolves once the node is reconnected.
+     */
     async reconnect() {
         return new Promise((resolve, reject) => {
             this.options.reconnectAttemptTimeout = setTimeout(async () => {
@@ -81,6 +100,10 @@ class Node extends events_1.default {
         });
     }
     ;
+    /**
+     * This method is used to get the node stats.
+     * @returns {Promise<NodeStats>} The node stats.
+     */
     async getStats() {
         const stats = await this.rest.getStats();
         this.stats = {
@@ -88,6 +111,37 @@ class Node extends events_1.default {
             ...stats
         };
         return this.stats;
+    }
+    ;
+    /**
+     * This method is used to get the route planner status.
+     * @returns {Promise<RoutePlannerStatus>} The route planner status.
+     *
+     * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
+     */
+    async getRoutePlannerStatus() {
+        return this.rest.getRoutePlannerStatus();
+    }
+    ;
+    /**
+     * This method is used to unmark all failed addresses.
+     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     *
+     * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
+     */
+    async unmarkAllFailingAddresses() {
+        return this.rest.unmarkAllFailedAddresses();
+    }
+    ;
+    /**
+     * This method is used to unmark a failed address.
+     * @param {string} address The address to unmark.
+     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     *
+     * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
+     */
+    async unmarkFailingAddress(address) {
+        return this.rest.unmarkFailedAddress(address);
     }
     ;
 }

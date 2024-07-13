@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 const AbstractNodeDriver_1 = __importDefault(require("./AbstractNodeDriver"));
 const ws_1 = require("ws");
 const node_1 = require("../typings/node");
@@ -160,7 +161,7 @@ class NodeLink extends AbstractNodeDriver_1.default {
     wsClose(withoutEmit = false) {
         if (withoutEmit) {
             this.wsClient?.close(1006, "Self Closed");
-            this.manager?.emit("nodeDisconnect", this.node);
+            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
         }
         ;
         this.wsClient?.removeAllListeners();

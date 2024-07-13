@@ -1,6 +1,7 @@
 import mod from "./index.js";
 
 export default mod;
+export const AbstractPlugin = mod.AbstractPlugin;
 export const ConnectionHandler = mod.ConnectionHandler;
 export const DJSLibrary = mod.DJSLibrary;
 export const DiscordVoiceStates = mod.DiscordVoiceStates;
@@ -21,5 +22,7 @@ export const config = mod.config;
 export const defaultOptions = mod.defaultOptions;
 export const getDefaultConnectionOptions = mod.getDefaultConnectionOptions;
 export const getDefaultNodeStats = mod.getDefaultNodeStats;
+export const loadPlugins = mod.loadPlugins;
+export const parseHarmonyLinkConfig = mod.parseHarmonyLinkConfig;
 export const parseOptions = mod.parseOptions;
 export const snakeToCamel = mod.snakeToCamel;

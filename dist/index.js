@@ -23,4 +23,5 @@ __exportStar(require("./node"), exports);
 __exportStar(require("./nodeDriver"), exports);
 __exportStar(require("./player"), exports);
 __exportStar(require("./utils"), exports);
+__exportStar(require("./plugin"), exports);
 //# sourceMappingURL=index.js.map

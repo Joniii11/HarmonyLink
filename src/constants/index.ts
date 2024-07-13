@@ -48,6 +48,7 @@ export const parseHarmonyLinkConfig = (harmonylinkConfig: Partial<HarmonyLinkCon
         reconnectTimeout: harmonylinkConfig.reconnectTimeout ?? 5000,
         defaultVolume: harmonylinkConfig.defaultVolume ?? 100,
         plugins: harmonylinkConfig.plugins ?? [],
+        reconnectVoiceConnection: harmonylinkConfig.reconnectVoiceConnection ?? true,
     } satisfies RequiredHarmonyLinkConfiguration;
 }
 

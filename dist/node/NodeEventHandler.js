@@ -68,6 +68,7 @@ class PlayerEvent {
             if (this.node.options.reconnectAttemptTimeout) {
                 clearTimeout(this.node.options.reconnectAttemptTimeout);
                 this.node.options.reconnectAttemptTimeout = null;
+                this.manager.options.reconnectVoiceConnection ? this.node.players.forEach(async (player) => player.reconnect(true)) : null;
             }
             ;
             this.manager.emit("nodeConnect", this.node);

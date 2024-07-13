@@ -6,7 +6,6 @@ const events_1 = require("events");
 // Classes
 const Queue_1 = require("./Queue");
 const Connection_1 = require("./Connection");
-const Response_1 = require("./Response");
 // Types
 const player_1 = require("../typings/player");
 const connection_1 = require("../typings/player/connection");
@@ -116,6 +115,37 @@ class Player extends events_1.EventEmitter {
             clearTimeout(timeout);
             this.state = player_1.PlayerConnectionState.CONNECTED;
             this.manager.emit('debug', '[HarmonyLink] [Player] [Connection] Player connected');
+            this.node.players.set(this.guildId, this);
+        }
+        ;
+        return this;
+    }
+    ;
+    /**
+     * Reconnects the player to the voice channel.
+     * @param {boolean} [restartSong=true] - Whether to restart the current song or not.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async reconnect(restartSong = true) {
+        const currentTrack = this.queue.currentTrack;
+        // Disconnect the player and not clean up the queue
+        await this.disconnect(false);
+        // Reconnect
+        await this.connect();
+        // Restart the music if it was playing
+        if (currentTrack && restartSong) {
+            this.queue.unshift(currentTrack);
+            await this.node.rest.updatePlayer({
+                guildId: this.guildId,
+                playerOptions: {
+                    track: {
+                        encoded: currentTrack.track,
+                    },
+                    position: this.position,
+                }
+            });
+            this.isPlaying = true;
+            this.isPaused = false;
         }
         ;
         return this;
@@ -275,7 +305,8 @@ class Player extends events_1.EventEmitter {
         await this.disconnect(true);
         await this.node.rest.destroyPlayer(this.guildId);
         this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
-        this.manager.emit("playerDestroy", this.guildId);
+        this.manager.emit("playerDestroy", this);
+        this.node.players.delete(this.guildId);
         return this.manager.playerManager.delete(this.guildId);
     }
     ;
@@ -328,8 +359,7 @@ class Player extends events_1.EventEmitter {
     async resolve({ query, source, requester }, node) {
         if (!node)
             node = this.node;
-        const result = await node.rest.loadTrack(query, source);
-        return new Response_1.Response(result, requester);
+        return this.manager.resolve({ query, source, requester }, node);
     }
     ;
     /**
@@ -435,7 +465,7 @@ class Player extends events_1.EventEmitter {
                     this.queue.currentTrack = null;
                     if (data.reason === "replaced") {
                         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track replaced for player ${this.guildId}`);
-                        return this.manager.emit("trackEnd", this, data);
+                        return this.manager.emit("trackEnd", this, this.queue.previousTrack, data);
                     }
                     ;
                     if (["loadFailed", "cleanup"].includes(data.reason)) {

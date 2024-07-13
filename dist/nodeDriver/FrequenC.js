@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 const AbstractNodeDriver_1 = __importDefault(require("./AbstractNodeDriver"));
 const ws_1 = __importDefault(require("ws"));
 const node_1 = require("../typings/node");
@@ -62,6 +63,17 @@ class FrequenC extends AbstractNodeDriver_1.default {
             });
             return response.headers.get("content-type") === "application/json" ? await response.json() : await response.text();
         }
+        else if (options.path.startsWith("/routeplanner")) {
+            return {
+                timestamp: Date.now(),
+                status: 404,
+                error: "Not found.",
+                message: "The specified node is a FrequenC Node. FrequenC Nodes do not have the routeplanner feature.",
+                path: `/v4${options.path}`,
+                trace: new Error().stack
+            };
+        }
+        ;
         ;
         const url = new URL(`${this.httpUrl}/v1${options.path}`);
         if (options.params)
@@ -159,7 +171,7 @@ class FrequenC extends AbstractNodeDriver_1.default {
     wsClose(withoutEmit = false) {
         if (withoutEmit) {
             this.wsClient?.close(1006, "Self Closed");
-            this.manager?.emit("nodeDisconnect", this.node);
+            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
         }
         ;
         this.wsClient?.removeAllListeners();

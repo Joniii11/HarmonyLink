@@ -45,6 +45,12 @@ export declare class Player extends EventEmitter {
      */
     connect(): Promise<Player>;
     /**
+     * Reconnects the player to the voice channel.
+     * @param {boolean} [restartSong=true] - Whether to restart the current song or not.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    reconnect(restartSong?: boolean): Promise<Player>;
+    /**
      * Sets the loop mode for the player.
      * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.

@@ -14,7 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDefaultNodeStats = exports.config = void 0;
+exports.parseHarmonyLinkConfig = exports.getDefaultNodeStats = exports.config = void 0;
 exports.config = {
     name: "HarmonyLink",
     author: "Joniii11",
@@ -43,6 +43,27 @@ const getDefaultNodeStats = () => ({
     },
 });
 exports.getDefaultNodeStats = getDefaultNodeStats;
+const parseHarmonyLinkConfig = (harmonylinkConfig) => {
+    if (!harmonylinkConfig.library)
+        throw new Error("[HarmonyLink] [Initialization] No library was provided.");
+    return {
+        library: harmonylinkConfig.library,
+        nodes: harmonylinkConfig.nodes ?? [],
+        defaultPlatform: harmonylinkConfig.defaultPlatform ?? "ytsearch",
+        voiceConnectionTimeout: harmonylinkConfig.voiceConnectionTimeout ?? 10000,
+        additionalDriver: harmonylinkConfig.additionalDriver ?? [],
+        resumeTimeout: harmonylinkConfig.resumeTimeout ?? 10000,
+        nodeResolver: harmonylinkConfig.nodeResolver ?? undefined,
+        customAutoplay: harmonylinkConfig.customAutoplay ?? undefined,
+        resume: harmonylinkConfig.resume ?? true,
+        reconnectTries: harmonylinkConfig.reconnectTries ?? 5,
+        reconnectTimeout: harmonylinkConfig.reconnectTimeout ?? 5000,
+        defaultVolume: harmonylinkConfig.defaultVolume ?? 100,
+        plugins: harmonylinkConfig.plugins ?? [],
+        reconnectVoiceConnection: harmonylinkConfig.reconnectVoiceConnection ?? true,
+    };
+};
+exports.parseHarmonyLinkConfig = parseHarmonyLinkConfig;
 __exportStar(require("./node"), exports);
 __exportStar(require("./player"), exports);
 //# sourceMappingURL=index.js.map

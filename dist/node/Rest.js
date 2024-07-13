@@ -163,12 +163,12 @@ class Rest {
      * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
     async unmarkFailedAddress(address) {
-        if (this.node.driver.type === node_1.NodeType.NodeLink)
+        if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
             return {
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
-                message: "The specified node is a NodeLink. NodeLink's do not have the routeplanner feature.",
+                message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/free/address",
                 trace: new Error().stack
             };
@@ -192,12 +192,12 @@ class Rest {
      * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
     async unmarkAllFailedAddresses() {
-        if (this.node.driver.type === node_1.NodeType.NodeLink)
+        if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
             return {
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
-                message: "The specified node is a NodeLink. NodeLink's do not have the routeplanner feature.",
+                message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/free/all",
                 trace: new Error().stack
             };
@@ -220,12 +220,12 @@ class Rest {
      * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
      */
     async getRoutePlannerStatus() {
-        if (this.node.driver.type === node_1.NodeType.NodeLink)
+        if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
             return {
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
-                message: "The specified node is a NodeLink. NodeLink's do not have the routeplanner feature.",
+                message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/status",
                 trace: new Error().stack
             };

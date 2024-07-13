@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from "events";
 
 // Abstract Classes
@@ -21,12 +22,22 @@ import { config, parseHarmonyLinkConfig } from "@/constants";
 
 // Types
 import { Config } from "@t/constants";
-import { HarmonyLinkConfiguration, RequiredHarmonyLinkConfiguration } from "@t/HarmonyLink";
+import { HarmonyLinkConfiguration, HarmonyLinkEvents, RequiredHarmonyLinkConfiguration } from "@t/HarmonyLink";
 import { NodeGroup } from "@t/node";
 import { Node } from "@/node/Node";
 import { PlayerOptions, ResolveOptions } from "@t/player";
 import { loadPlugins } from "./plugin";
 import { Player } from "./player";
+
+export declare interface HarmonyLink {
+    on: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
+    once: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
+    emit: <K extends keyof HarmonyLinkEvents>(
+        event: K,
+        ...args: Parameters<HarmonyLinkEvents[K]>
+    ) => boolean;
+    off: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
+}
 
 export class HarmonyLink extends EventEmitter {
     public botID: string = "";

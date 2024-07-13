@@ -3,10 +3,12 @@ import AbstractLibraryClass from "@/librarys/AbstractLibraryClass";
 import AbstractNodeDriver from "@/nodeDriver/AbstractNodeDriver";
 
 import NodeManager from "@/managers/NodeManager";
-import { NodeGroup } from "@t/node";
+import { LavalinkPlayerUpdatePacket, NodeGroup } from "@t/node";
 import { Node } from "@/node/Node";
 import { Player } from "@/player/Player";
 import { AbstractPlugin } from "@/plugin";
+import { Track } from "@/player";
+import { TrackEndEvent, TrackExceptionEvent, TrackStuckEvent, WebSocketClosedEvent } from "./exporter";
 
 export interface HarmonyLinkConfiguration {
     /**
@@ -165,6 +167,116 @@ export interface HarmonyLinkConfiguration {
      * @default 10000
      */
     voiceConnectionTimeout?: number;
+
+    /**
+     * Reconnect the player when the voice connection is lost and recovered
+     * 
+     * @default true
+     */
+    reconnectVoiceConnection?: boolean;
 };
 
 export type RequiredHarmonyLinkConfiguration = Omit<Required<HarmonyLinkConfiguration>, "customAutoplay" | "nodeResolver" | "nodes"> & { nodes?: NodeGroup[]; customAutoplay: ((player: Player) => Promise<Player | void>) | undefined; nodeResolver: ((nodes: NodeManager) => Promise<Node | void>) | undefined; };
+
+export interface HarmonyLinkEvents {
+    /**
+     * Emitted for useful debugging information.
+     * @param {unknown[]} args The arguments to log.
+     * @returns {void} 
+     */
+    debug: (...args: unknown[]) => void;
+
+    /**
+     * Emitted when a node has reconnected and is ready to be used.
+     * @param {Node} node The node that reconnected.
+     * @returns {void}
+     */
+    nodeReconnect: (node: Node) => void;
+
+    /**
+     * Emitted when a node has disconnected and is no longer available.
+     * @param {Node} node The node that disconnected.
+     * @param {number} code The code for the disconnection.
+     * @returns {void}
+     */
+    nodeDisconnect: (node: Node, code: number) => void;
+
+    /**
+     * Emitted when a node has connected and is ready to be used.
+     * @param {Node} node The node that connected.
+     * @returns {void}
+     */
+    nodeConnect: (node: Node) => void;
+
+    /**
+     * Emitted when a node threw an error
+     * @param {Node} node The node that threw the error.
+     * @param {Error} error The error that was thrown.
+     * @returns {void}
+     */
+    nodeError: (node: Node, error: Error) => void;
+
+    /**
+     * Emitted when a player has been created.
+     * @param {Player} player The player that was created.
+     * @returns {void}
+     */
+    playerCreate: (player: Player) => void;
+
+    /**
+     * Emitted when a player has been destroyed.
+     * @param {Player} player The player that was destroyed.
+     * @returns {void}
+     */
+    playerDestroy: (player: Player) => void;
+
+    /**
+     * Emitted when a player has been updated.
+     * @param {Player} player The player that was updated.
+     * @param {LavalinkPlayerUpdatePacket} packet The packet that was sent.
+     * @returns {void}
+     */
+    playerUpdate: (player: Player, packet: LavalinkPlayerUpdatePacket) => void;
+
+    /**
+     * Emitted when a track has ended.
+     * @param {Player} player The player that the track ended on.
+     * @param {Track} previousTrack The track that ended.
+     * @param {(TrackEndEvent & { op: "event"; guildId: string; }) | undefined} packet The packet that was sent.
+     * @returns {void}
+     */
+    trackEnd: (player: Player, previousTrack: Track, packet?: TrackEndEvent & { op: "event"; guildId: string; }) => void;
+
+    /**
+     * Emitted when a track has started.
+     * @param {Player} player The player that the track started on.
+     * @param {Track} track The track that started.
+     * @returns {void}
+     */
+    trackStart: (player: Player, track: Track) => void;
+
+    /**
+     * Emitted when a track has errored.
+     * @param {Player} player The player that the track errored on.
+     * @param {Track} track The track that errored.
+     * @param {{ op: "event"; guildId: string; } & (TrackExceptionEvent | TrackStuckEvent)} error The error that was sent.
+     * @returns {void}
+     */
+    trackError: (player: Player, track: Track, error: { op: "event"; guildId: string; } & (TrackExceptionEvent | TrackStuckEvent)) => void;
+
+    /**
+     * Emitted when the socket disconnects.
+     * @param {Player} player The player that the socket disconnection occured on
+     * @param {Track} track The track that was playing during the socket disconnection.
+     * @param {{ op: "event"; guildId: string; } & WebSocketClosedEvent} error The error that was sent.
+     * @returns {void}
+     */
+    socketClose: (player: Player, track: Track, wsCloseData: WebSocketClosedEvent & { op: "event"; guildId: string; }) => void;
+
+    /**
+     * Emitted when the queue is empty.
+     * @param {Player} player The player that the queue emptied on.
+     * @returns {void}
+     */
+    queueEmpty: (player: Player) => void;
+};

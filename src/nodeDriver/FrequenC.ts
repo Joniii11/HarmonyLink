@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import AbstractNodeDriver from "./AbstractNodeDriver";
 import WebSocket from "ws";
 
@@ -173,7 +174,7 @@ export default class FrequenC extends AbstractNodeDriver {
     public wsClose(withoutEmit: boolean = false): void {
         if (withoutEmit) {
             this.wsClient?.close(1006, "Self Closed");
-            this.manager?.emit("nodeDisconnect", this.node);
+            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
         };
 
         this.wsClient?.removeAllListeners()
