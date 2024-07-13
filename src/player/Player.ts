@@ -142,6 +142,8 @@ export class Player extends EventEmitter {
 			this.state = PlayerConnectionState.CONNECTED;
 
             this.manager.emit('debug', '[HarmonyLink] [Player] [Connection] Player connected');
+
+            this.node.players.set(this.guildId, this);
 		};
 
 		return this;
@@ -299,13 +301,15 @@ export class Player extends EventEmitter {
      * @returns {Promise<boolean>} - A Promise that resolves to a boolean which is true if an element in the Map existed and has been removed, or false if the element does not exist.
      */
     public async destroy(): Promise<boolean> {
-       await this.disconnect(true);
-       await this.node.rest.destroyPlayer(this.guildId);
+        await this.disconnect(true);
+        await this.node.rest.destroyPlayer(this.guildId);
 
-       this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
-       this.manager.emit("playerDestroy", this.guildId);
+        this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
+        this.manager.emit("playerDestroy", this.guildId);
 
-       return this.manager.playerManager.delete(this.guildId);
+        this.node.players.delete(this.guildId);
+
+        return this.manager.playerManager.delete(this.guildId);
     };
 
     /**
