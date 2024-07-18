@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDefaultConnectionOptions = void 0;
-function getDefaultConnectionOptions() {
+function getDefaultConnectionOptions(options) {
     return {
         voiceRegion: null,
         voice: {
@@ -9,8 +9,8 @@ function getDefaultConnectionOptions() {
             token: null,
             endpoint: null,
         },
-        selfDeaf: false,
-        selfMute: false,
+        selfDeaf: options.deaf ?? false,
+        selfMute: options.mute ?? false,
     };
 }
 exports.getDefaultConnectionOptions = getDefaultConnectionOptions;

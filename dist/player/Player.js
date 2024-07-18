@@ -56,7 +56,7 @@ class Player extends events_1.EventEmitter {
         this.loop = player_1.PlayerLoop.NONE;
         this.volume = 100;
         // Handlers
-        this.ConnectionHandler = new Connection_1.ConnectionHandler(this);
+        this.ConnectionHandler = new Connection_1.ConnectionHandler(this, options);
         this.queue = new Queue_1.Queue();
         this.filters = new Filters_1.Filters(this);
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Player created for guild ${this.guildId} on node ${this.node.options.name}.`);
@@ -74,6 +74,7 @@ class Player extends events_1.EventEmitter {
     ;
     /**
      * Connects the player to the voice channel.
+     *
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async connect() {
@@ -410,6 +411,33 @@ class Player extends events_1.EventEmitter {
             return this.skip();
         }
     }
+    ;
+    /**
+     * Sets the mute state for the player.
+     * @param {boolean} mute - Whether to mute or unmute the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setMute(mute) {
+        return new Promise((resolve) => {
+            this.ConnectionHandler.options.selfMute = mute;
+            this.sendVoiceUpdate();
+            return resolve(this);
+        });
+    }
+    ;
+    /**
+     * Sets the deaf state for the player.
+     * @param {boolean} deaf - Whether to deafen or undeafen the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    async setDeaf(deaf) {
+        return new Promise((resolve) => {
+            this.ConnectionHandler.options.selfDeaf = deaf;
+            this.sendVoiceUpdate();
+            return resolve(this);
+        });
+    }
+    ;
     async disconnect(cleanQueue = false) {
         if (!this.voiceChannelId || this.voiceState === player_1.VoiceConnectionState.DISCONNECTED)
             return this;

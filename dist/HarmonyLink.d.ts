@@ -41,9 +41,7 @@ export declare class HarmonyLink extends EventEmitter {
      * @param {Node} [node] - Node to use for the player.
      * @returns {Promise<Player>} The created player.
      */
-    createPlayer(playerOptions: Omit<PlayerOptions, "shardId"> & {
-        shardId?: string;
-    }, node?: Node): Promise<Player>;
+    createPlayer(playerOptions: Omit<PlayerOptions, "node">, node?: Node): Promise<Player>;
     /**
      * Destroys a player.
      * @param {string} guildId - The guild ID of the player to destroy.

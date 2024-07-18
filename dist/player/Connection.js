@@ -7,9 +7,9 @@ const player_2 = require("../typings/player");
 class ConnectionHandler {
     player;
     options;
-    constructor(player) {
+    constructor(player, options) {
         this.player = player;
-        this.options = (0, player_1.getDefaultConnectionOptions)();
+        this.options = (0, player_1.getDefaultConnectionOptions)(options);
     }
     ;
     /**
@@ -17,7 +17,6 @@ class ConnectionHandler {
      * @param {VoiceServer} data The incoming data from the voice server from discord.
      */
     async setServersUpdate(data) {
-        console.log(data);
         if (!data.endpoint) {
             this.player.emit('connectionUpdate', connection_1.DiscordVoiceStates.SESSION_ENDPOINT_MISSING);
             return;

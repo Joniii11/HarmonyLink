@@ -38,11 +38,10 @@ export declare class Player extends EventEmitter {
     ping: number;
     timestamp: number;
     position: number;
-    constructor(manager: HarmonyLink, node: Node, options: Omit<PlayerOptions, "shardId"> & {
-        shardId?: string;
-    });
+    constructor(manager: HarmonyLink, node: Node, options: PlayerOptions);
     /**
      * Connects the player to the voice channel.
+     *
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     connect(): Promise<Player>;
@@ -122,6 +121,18 @@ export declare class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     autoplay(previousTrack?: Track | null): Promise<Player>;
+    /**
+     * Sets the mute state for the player.
+     * @param {boolean} mute - Whether to mute or unmute the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    setMute(mute: boolean): Promise<Player>;
+    /**
+     * Sets the deaf state for the player.
+     * @param {boolean} deaf - Whether to deafen or undeafen the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    setDeaf(deaf: boolean): Promise<Player>;
     protected disconnect(cleanQueue?: boolean): Promise<Player>;
     protected checkDestroyed(): void;
     private sendVoiceUpdate;

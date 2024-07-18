@@ -45,8 +45,8 @@ export interface HarmonyLinkConfiguration {
     /**
      * Additional drivers to use for connecting to other nodes.
      *
-     * @note If you are using a custom driver, you should extend `AbstractNodeDriver` and implement the methods.
-     * @note If you want, you can go onto our github and create a pull request to add your driver to the main repository so that it is supported by default.
+     * @see If you are using a custom driver, you should extend `AbstractNodeDriver` and implement the methods.
+     * @see If you want, you can go onto our github and create a pull request to add your driver to the main repository so that it is supported by default.
      *
      * @default []
      */

@@ -38,16 +38,36 @@ export interface PlayerState {
     ping: number;
 }
 export interface PlayerOptions {
+    /**
+     * The guild id to create the player for
+     */
     guildId: string;
+    /**
+     * The voice channel id to connect to
+     */
     voiceId: string;
+    /**
+     * The text channel id to send messages to
+     */
     textId: string;
-    shardId: string;
-    mute: boolean;
-    deaf: boolean;
+    /**
+     * The shard id this player's guild is on
+     * @optional
+     */
+    shardId?: string;
+    /**
+     * If the player should be muted
+     * @optional
+     */
+    mute?: boolean;
+    /**
+     * If the player should be deafened
+     * @optional
+     */
+    deaf?: boolean;
     /**
      * The node to connect to
      * @optional
-     *
      */
     node?: Node;
 }

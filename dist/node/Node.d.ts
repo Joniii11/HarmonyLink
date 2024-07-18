@@ -57,14 +57,14 @@ export declare class Node extends EventEmitter {
      * This method is used to get the route planner status.
      * @returns {Promise<RoutePlannerStatus>} The route planner status.
      *
-     * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
+     * @see https://lavalink.dev/api/rest.html#get-routeplanner-status
      */
     getRoutePlannerStatus(): Promise<RoutePlannerStatus>;
     /**
      * This method is used to unmark all failed addresses.
      * @returns {Promise<ErrorResponses | void>} 204 - No content.
      *
-     * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
+     * @see https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
     unmarkAllFailingAddresses(): Promise<ErrorResponses | void>;
     /**
@@ -72,7 +72,7 @@ export declare class Node extends EventEmitter {
      * @param {string} address The address to unmark.
      * @returns {Promise<ErrorResponses | void>} 204 - No content.
      *
-     * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
+     * @see https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
     unmarkFailingAddress(address: string): Promise<ErrorResponses | void>;
 }

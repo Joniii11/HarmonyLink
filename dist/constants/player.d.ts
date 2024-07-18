@@ -1,2 +1,3 @@
 import { ConnectionOptions } from "../typings/player/connection";
-export declare function getDefaultConnectionOptions(): ConnectionOptions;
+import { PlayerOptions } from "../typings/player";
+export declare function getDefaultConnectionOptions(options: PlayerOptions): ConnectionOptions;
