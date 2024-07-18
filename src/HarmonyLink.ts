@@ -28,6 +28,7 @@ import { Node } from "@/node/Node";
 import { PlayerOptions, ResolveOptions } from "@t/player";
 import { loadPlugins } from "./plugin";
 import { Player } from "./player";
+import { TrackData } from "./typings/track";
 
 export declare interface HarmonyLink {
     on: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
@@ -136,5 +137,17 @@ export class HarmonyLink extends EventEmitter {
         if (!this.isReady) throw new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet.");
 
         return this.nodeManager.removeNode(nodeName)
+    };
+
+    public async decodeTracks(tracks: string[] | string, node?: Node): Promise<TrackData[] | null> {
+        if (!Array.isArray(tracks)) tracks = [tracks];
+
+        node ??= await this.nodeManager.getLeastUsedNode();
+        if (!node) {
+            this.emit("debug", "[HarmonyLink] [PlayerManager] No nodes available to decode tracks.");
+            return null;
+        };
+
+        return node.rest.decodeTracks(tracks);
     };
 }
