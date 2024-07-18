@@ -14,6 +14,7 @@ import { Node } from "@/node/Node";
 import { HarmonyLink } from "@/HarmonyLink"
 import { LavalinkEventPacket } from "@t/node";
 import { Filters } from "./Filters";
+import { TrackData } from "@/typings/track";
 
 export declare interface Player {
     on: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
@@ -185,6 +186,17 @@ export class Player extends EventEmitter {
         };
 
         return this;
+    };
+
+    /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
+    public async decodeTracks(tracks: string[] | string): Promise<TrackData[]> {
+        if (!Array.isArray(tracks)) tracks = [tracks];
+
+        return this.node.rest.decodeTracks(tracks);
     };
 
     /**

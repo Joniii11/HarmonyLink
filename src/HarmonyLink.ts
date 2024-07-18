@@ -139,6 +139,11 @@ export class HarmonyLink extends EventEmitter {
         return this.nodeManager.removeNode(nodeName)
     };
 
+    /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
     public async decodeTracks(tracks: string[] | string, node?: Node): Promise<TrackData[] | null> {
         if (!Array.isArray(tracks)) tracks = [tracks];
 
