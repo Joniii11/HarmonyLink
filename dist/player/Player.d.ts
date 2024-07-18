@@ -8,6 +8,7 @@ import { PlayerConnectionState, PlayerOptions, VoiceConnectionState, PlayerEvent
 import { Node } from "../node/Node";
 import { HarmonyLink } from "../HarmonyLink";
 import { Filters } from "./Filters";
+import { TrackData } from "../typings/track";
 export declare interface Player {
     on: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
     once: <K extends keyof PlayerEvents>(event: K, listener: PlayerEvents[K]) => this;
@@ -51,6 +52,12 @@ export declare class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     reconnect(restartSong?: boolean): Promise<Player>;
+    /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
+    decodeTracks(tracks: string[] | string): Promise<TrackData[]>;
     /**
      * Sets the loop mode for the player.
      * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.

@@ -11,6 +11,7 @@ import { NodeGroup } from "./typings/node";
 import { Node } from "./node/Node";
 import { PlayerOptions, ResolveOptions } from "./typings/player";
 import { Player } from "./player";
+import { TrackData } from "./typings/track";
 export declare interface HarmonyLink {
     on: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
     once: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
@@ -60,4 +61,10 @@ export declare class HarmonyLink extends EventEmitter {
      * @returns {Promise<Node | null>} The removed node.
      */
     removeNode(nodeName: string): Promise<Node | null>;
+    /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
+    decodeTracks(tracks: string[] | string, node?: Node): Promise<TrackData[] | null>;
 }

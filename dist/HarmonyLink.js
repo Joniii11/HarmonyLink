@@ -108,6 +108,23 @@ class HarmonyLink extends events_1.default {
         return this.nodeManager.removeNode(nodeName);
     }
     ;
+    /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
+    async decodeTracks(tracks, node) {
+        if (!Array.isArray(tracks))
+            tracks = [tracks];
+        node ??= await this.nodeManager.getLeastUsedNode();
+        if (!node) {
+            this.emit("debug", "[HarmonyLink] [PlayerManager] No nodes available to decode tracks.");
+            return null;
+        }
+        ;
+        return node.rest.decodeTracks(tracks);
+    }
+    ;
 }
 exports.HarmonyLink = HarmonyLink;
 //# sourceMappingURL=HarmonyLink.js.map

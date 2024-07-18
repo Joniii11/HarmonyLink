@@ -156,6 +156,17 @@ class Player extends events_1.EventEmitter {
     }
     ;
     /**
+     * Decodes a or multiple encoded tracks.
+     * @param {string | string[]} tracks - The track to decode.
+     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     */
+    async decodeTracks(tracks) {
+        if (!Array.isArray(tracks))
+            tracks = [tracks];
+        return this.node.rest.decodeTracks(tracks);
+    }
+    ;
+    /**
      * Sets the loop mode for the player.
      * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
