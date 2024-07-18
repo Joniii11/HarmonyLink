@@ -100,6 +100,7 @@ export class Player extends EventEmitter {
 
     /**
      * Connects the player to the voice channel.
+     * 
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     public async connect(): Promise<Player> {

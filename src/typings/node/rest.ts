@@ -114,7 +114,7 @@ export interface PlayerObjectFromAPI {
 
 /**
  * This interface represents the LavaLink V4 Error Responses
- * @reference https://lavalink.dev/api/rest.html#error-responses
+ * @see https://lavalink.dev/api/rest.html#error-responses
  */
 export interface ErrorResponses {
     /**

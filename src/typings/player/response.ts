@@ -1,7 +1,7 @@
 /**
  * The response of the player API
  * 
- * @docs https://lavalink.dev/api/rest#playlist-info
+ * @see https://lavalink.dev/api/rest#playlist-info
  */
 export interface PlaylistInfoFound {
     /**
