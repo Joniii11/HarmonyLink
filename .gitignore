@@ -43,7 +43,6 @@ node_modules/
 jspm_packages/
 .VSCodeCounter
 test/
-docs/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
