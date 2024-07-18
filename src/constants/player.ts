@@ -1,6 +1,7 @@
 import { ConnectionOptions } from "@t/player/connection";
+import { PlayerOptions } from "@/typings/player";
 
-export function getDefaultConnectionOptions(): ConnectionOptions {
+export function getDefaultConnectionOptions(options: PlayerOptions): ConnectionOptions {
     return {
         voiceRegion: null,
         voice: {
@@ -8,7 +9,7 @@ export function getDefaultConnectionOptions(): ConnectionOptions {
             token: null,
             endpoint: null,
         },
-        selfDeaf: false,
-        selfMute: false,
+        selfDeaf: options.deaf ?? false,
+        selfMute: options.mute ?? false,
     } satisfies ConnectionOptions;
 };

@@ -54,7 +54,7 @@ export class Player extends EventEmitter {
     // Track Related
     public position: number;
     
-    public constructor(manager: HarmonyLink, node: Node, options: Omit<PlayerOptions, "shardId"> & { shardId?: string }) {
+    public constructor(manager: HarmonyLink, node: Node, options: PlayerOptions) {
         super();
 
         this.node = node;
@@ -78,7 +78,7 @@ export class Player extends EventEmitter {
         this.volume = 100;
 
         // Handlers
-        this.ConnectionHandler = new ConnectionHandler(this)
+        this.ConnectionHandler = new ConnectionHandler(this, options)
         this.queue = new Queue();
         this.filters = new Filters(this)
 
@@ -450,7 +450,35 @@ export class Player extends EventEmitter {
         } catch {
             return this.skip()
         }
-    }
+    };
+
+    /**
+     * Sets the mute state for the player.
+     * @param {boolean} mute - Whether to mute or unmute the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setMute(mute: boolean): Promise<Player> {
+        return new Promise<Player>((resolve) => {
+            this.ConnectionHandler.options.selfMute = mute;
+            this.sendVoiceUpdate();
+
+            return resolve(this);
+        });
+    };
+
+    /**
+     * Sets the deaf state for the player.
+     * @param {boolean} deaf - Whether to deafen or undeafen the player in the voice channel.
+     * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
+     */
+    public async setDeaf(deaf: boolean): Promise<Player> {
+        return new Promise<Player>((resolve) => {
+            this.ConnectionHandler.options.selfDeaf = deaf;
+            this.sendVoiceUpdate();
+
+            return resolve(this);
+        });
+    };
 
     protected async disconnect(cleanQueue: boolean = false): Promise<Player> {
         if (!this.voiceChannelId || this.voiceState === VoiceConnectionState.DISCONNECTED) return this;

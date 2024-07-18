@@ -1,15 +1,15 @@
 import { DiscordVoiceStates, ConnectionOptions, SetStateUpdate, VoiceServer } from "@t/player/connection";
 import { Player } from "./Player";
 import { getDefaultConnectionOptions } from "@/constants/player";
-import { VoiceConnectionState } from "@/typings/player";
+import { PlayerOptions, VoiceConnectionState } from "@/typings/player";
 
 export class ConnectionHandler {
     public readonly player: Player;
     public options: ConnectionOptions
 
-    public constructor(player: Player) {
+    public constructor(player: Player, options: PlayerOptions) {
         this.player = player;
-        this.options = getDefaultConnectionOptions();
+        this.options = getDefaultConnectionOptions(options);
     };
 
     /**
@@ -17,8 +17,6 @@ export class ConnectionHandler {
      * @param {VoiceServer} data The incoming data from the voice server from discord.
      */
     public async setServersUpdate(data: VoiceServer): Promise<void> {
-        console.log(data)
-
         if (!data.endpoint) {
             this.player.emit('connectionUpdate', DiscordVoiceStates.SESSION_ENDPOINT_MISSING);
             return;

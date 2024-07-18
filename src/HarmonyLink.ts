@@ -98,7 +98,7 @@ export class HarmonyLink extends EventEmitter {
      * @param {Node} [node] - Node to use for the player.
      * @returns {Promise<Player>} The created player.
      */
-    public async createPlayer(playerOptions: Omit<PlayerOptions, "shardId"> & { shardId?: string }, node?: Node): Promise<Player> {
+    public async createPlayer(playerOptions: Omit<PlayerOptions, "node">, node?: Node): Promise<Player> {
         return this.playerManager.createPlayer({ ...playerOptions, node })
     };
 

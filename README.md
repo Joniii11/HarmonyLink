@@ -34,9 +34,9 @@
 [![MIT License][license-shield]][license-url]
 
 <br>
-<!-- <a href="https://nodei.co/npm/poru/">
-    <img src="https://nodei.co/npm/poru.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
-    </a> -->
+  <a href="https://nodei.co/npm/harmonylink/">
+    <img src="https://nodei.co/npm/harmonylink.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
+    </a> 
 </div>
 
 > [!WARNING]  
@@ -88,17 +88,42 @@ Here is how to install HarmonyLink on your project.
 ### Installation
 ```sh
 # Using npm
-npm install poru
+npm install harmonylink
 
 # Using yarn
-yarn add poru
+yarn add harmonylink
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Example Usage
 
-Coming soon
+```ts
+// With Discord.js Version 14
+import { DJSLibrary } from "HarmonyLink";
+import { Client } from "discord.js"
+
+// Initialize your client
+const client = new Client();
+
+const config: HarmonyLinkConfiguration = {
+  nodes: [
+    {
+      name: "Example Node",
+      host: "example.com",
+      port: 2333,
+      password: "youshallnotpass",
+      secure: false
+    }
+  ] // Your nodes. 
+  library: new DJSLibrary(client),
+};
+
+const HarmonyLink = new HarmonyLink(config)
+
+// Creating a player
+await HarmonyLink.createPlayer()
+```
 
 _For more examples, please refer to the [Documentation](https://github.com/Joniii11/HarmonyLink)_
 
