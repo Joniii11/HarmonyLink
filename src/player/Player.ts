@@ -601,6 +601,12 @@ export class Player extends EventEmitter {
 
                         return this.play()
                     };
+
+                    default: {
+                        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Unknown Loop Mode ${this.loop}. These are all of the valid loops: "NONE", "TRACK", "QUEUE", PlayerLoop.TRACK, PlayerLoop.QUEUE, PlayerLoop.NONE`);
+
+                        return this.loop = PlayerLoop.NONE;   
+                    };
                 };
 
                 // Because ESLint would cry for no-fallthrough.
