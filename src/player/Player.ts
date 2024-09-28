@@ -367,10 +367,7 @@ export class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     public async skip(): Promise<Player> {
-        if (!this.queue.length || this.queue.length === 0) return this; // TODO: Emit an event here for queue empty?
-
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Skipping track for player ${this.guildId}`);
-        // TODO: Emit an event here for track skipped
 
         this.position = 0;
         this.isPlaying = false;
