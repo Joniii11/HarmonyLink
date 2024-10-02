@@ -38,8 +38,13 @@ export class ConnectionHandler {
         });
 
         setTimeout(async () => {
-            await this.player.pause(false)
-        })
+            await this.player.node.rest.updatePlayer({
+                guildId: this.player.guildId,
+                playerOptions: {
+                    paused: false
+                }
+            });
+        }, 1000);
 
         this.player.emit("connectionUpdate", DiscordVoiceStates.SESSION_READY)
         this.player.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Updated voice server for player ${this.player.guildId} in the region ${this.options.voiceRegion}.`);
