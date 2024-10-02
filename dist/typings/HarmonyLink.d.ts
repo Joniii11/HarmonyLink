@@ -82,8 +82,8 @@ export interface HarmonyLinkConfiguration {
      *      throw new Error("[HarmonyLink] [NodeManager] No nodes are online.");
      *  };
      *
-     *  const promises = onlineNodes.map(async node => {
-     *      const stats = await node.getStats();
+     *  const promises = onlineNodes.map( node => {
+     *      const stats = node.stats;
      *      return { node, stats };
      *  });
      *

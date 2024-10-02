@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Player = void 0;
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable max-lines, @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unsafe-declaration-merging, no-sequences, @typescript-eslint/naming-convention */
 const events_1 = require("events");
 // Classes
@@ -330,10 +331,7 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async skip() {
-        if (!this.queue.length || this.queue.length === 0)
-            return this; // TODO: Emit an event here for queue empty?
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Skipping track for player ${this.guildId}`);
-        // TODO: Emit an event here for track skipped
         this.position = 0;
         this.isPlaying = false;
         this.isPaused = true;
@@ -551,6 +549,12 @@ class Player extends events_1.EventEmitter {
                                 this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Track ended for player ${this.guildId}`);
                                 this.manager.emit("trackEnd", this, this.queue.previousTrack);
                                 return this.play();
+                            }
+                            ;
+                        default:
+                            {
+                                this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Unknown Loop Mode ${this.loop}. These are all of the valid loops: "NONE", "TRACK", "QUEUE", PlayerLoop.TRACK, PlayerLoop.QUEUE, PlayerLoop.NONE`);
+                                return this.loop = player_1.PlayerLoop.NONE;
                             }
                             ;
                     }
