@@ -49,7 +49,7 @@ class Player extends events_1.EventEmitter {
         this.state = player_1.PlayerConnectionState.DESTROYED;
         this.isConnected = false;
         this.isPlaying = false;
-        this.isPaused = false;
+        this.isPaused = true;
         this.position = 0;
         this.isAutoplay = false;
         this.ping = -1;
