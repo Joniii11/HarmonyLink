@@ -1,6 +1,6 @@
 {
   "name": "harmonylink",
-  "version": "1.1.3",
+  "version": "1.2.1",
   "description": "HarmonyLink: Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.",
   "main": "./dist/index.js",
   "scripts": {
@@ -60,7 +60,7 @@
   },
   "homepage": "https://github.com/Joniii11/HarmonyLink#readme",
   "dependencies": {
-    "ws": "^8.17.0"
+    "ws": "^8.18.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
