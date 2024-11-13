@@ -107,6 +107,15 @@ export interface HarmonyLinkConfiguration {
     nodeResolver?: (nodes: NodeManager) => Promise<Node | void>;
 
     /**
+     * A custom resolver for adding Nodes.
+     *
+     * @default
+     *  ```ts
+     * 
+     */
+    nodeAdder?: (nodeManager: NodeManager, node: NodeGroup) => Promise<Node | void | unknown>
+
+    /**
      * A custom autoplay function to use for autoplaying tracks
      * 
      * @default
