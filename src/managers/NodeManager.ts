@@ -13,9 +13,9 @@ export default class NodeManager extends Map<string, Node> {
 
     public async addNode(node: NodeGroup): Promise<Node> {
         if (this.manager.options.nodeAdder) {
-								const resolvedNode = await this.manager.options.nodeAdder(this, node);
+            const resolvedNode = await this.manager.options.nodeAdder(this, node);
 
-           if (resolvedNode && resolvedNode instanceof Node) return resolvedNode;
+            if (resolvedNode && resolvedNode instanceof Node) return resolvedNode;
         };
 
         const addedNode = new Node(this.manager, node);
