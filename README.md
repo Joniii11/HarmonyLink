@@ -98,7 +98,7 @@ yarn add harmonylink
 
 ```ts
 // With Discord.js Version 14
-import { DJSLibrary } from "HarmonyLink";
+import { DJSLibrary, HarmonyLinkConfiguration, HarmonyLink } from "HarmonyLink";
 import { Client } from "discord.js"
 
 // Initialize your client
@@ -117,10 +117,10 @@ const config: HarmonyLinkConfiguration = {
   library: new DJSLibrary(client),
 };
 
-const HarmonyLink = new HarmonyLink(config)
+const musicClient = new HarmonyLink(config)
 
 // Creating a player
-await HarmonyLink.createPlayer()
+await musicClient.createPlayer()
 ```
 
 _For more examples, please refer to the [Documentation](https://github.com/Joniii11/HarmonyLink)_
