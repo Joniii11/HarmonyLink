@@ -35,7 +35,7 @@
 
 <br>
   <a href="https://nodei.co/npm/harmonylink/">
-    <img src="https://nodei.co/npm/harmonylink.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
+    <img src="https://nodei.co/npm/harmonylink.png?downloads=true&downloadRank=true&stars=true" alt="HarmonyLink NPM Package"/>
     </a> 
 </div>
 
