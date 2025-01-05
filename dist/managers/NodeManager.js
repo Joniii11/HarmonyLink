@@ -9,6 +9,12 @@ class NodeManager extends Map {
     }
     ;
     async addNode(node) {
+        if (this.manager.options.nodeAdder) {
+            const resolvedNode = await this.manager.options.nodeAdder(this, node);
+            if (resolvedNode && resolvedNode instanceof Node_1.Node)
+                return resolvedNode;
+        }
+        ;
         const addedNode = new Node_1.Node(this.manager, node);
         this.set(node.name, addedNode);
         if (this.manager.isReady)

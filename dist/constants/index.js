@@ -53,6 +53,7 @@ const parseHarmonyLinkConfig = (harmonylinkConfig) => {
         voiceConnectionTimeout: harmonylinkConfig.voiceConnectionTimeout ?? 10000,
         additionalDriver: harmonylinkConfig.additionalDriver ?? [],
         resumeTimeout: harmonylinkConfig.resumeTimeout ?? 10000,
+        nodeAdder: harmonylinkConfig.nodeAdder ?? undefined,
         nodeResolver: harmonylinkConfig.nodeResolver ?? undefined,
         customAutoplay: harmonylinkConfig.customAutoplay ?? undefined,
         resume: harmonylinkConfig.resume ?? true,

@@ -109,11 +109,9 @@ export interface HarmonyLinkConfiguration {
     /**
      * A custom resolver for adding Nodes.
      *
-     * @default
-     *  ```ts
-     * 
+     * @default undefined
      */
-    nodeAdder?: (nodeManager: NodeManager, node: NodeGroup) => Promise<Node | void | unknown>
+    nodeAdder?: (nodeManager: NodeManager, node: NodeGroup) => Promise<Node | void>;
 
     /**
      * A custom autoplay function to use for autoplaying tracks
@@ -185,7 +183,12 @@ export interface HarmonyLinkConfiguration {
     reconnectVoiceConnection?: boolean;
 };
 
-export type RequiredHarmonyLinkConfiguration = Omit<Required<HarmonyLinkConfiguration>, "customAutoplay" | "nodeResolver" | "nodes"> & { nodes?: NodeGroup[]; customAutoplay: ((player: Player) => Promise<Player | void>) | undefined; nodeResolver: ((nodes: NodeManager) => Promise<Node | void>) | undefined; };
+export type RequiredHarmonyLinkConfiguration = Omit<Required<HarmonyLinkConfiguration>, "customAutoplay" | "nodeAdder" | "nodeResolver" | "nodes"> & {
+    nodes?: NodeGroup[];
+    customAutoplay: ((player: Player) => Promise<Player | void>) | undefined;
+    nodeResolver: ((nodes: NodeManager) => Promise<Node | void>) | undefined;
+    nodeAdder: ((nodeManager: NodeManager, node: NodeGroup) => Promise<Node | void>) | undefined;
+};
 
 export interface HarmonyLinkEvents {
     /**
@@ -268,7 +271,7 @@ export interface HarmonyLinkEvents {
      * Emitted when a track has errored.
      * @param {Player} player The player that the track errored on.
      * @param {Track} track The track that errored.
-     * @param {{ op: "event"; guildId: string; } & (TrackExceptionEvent | TrackStuckEvent)} error The error that was sent.
+     * @param {{ op: "event"; guildId: string; } & (TrackStuckEvent | TrackExceptionEvent)} error The error that was sent.
      * @returns {void}
      */
     trackError: (player: Player, track: Track, error: { op: "event"; guildId: string; } & (TrackExceptionEvent | TrackStuckEvent)) => void;
