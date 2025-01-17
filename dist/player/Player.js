@@ -136,7 +136,7 @@ class Player extends events_1.EventEmitter {
         // Disconnect the player and not clean up the queue
         await this.disconnect(false);
         // Reconnect
-        await this.connect();
+        await this.connect().catch(() => this.destroy());
         // Restart the music if it was playing
         if (currentTrack && restartSong) {
             this.queue.unshift(currentTrack);
@@ -581,7 +581,7 @@ class Player extends events_1.EventEmitter {
                 {
                     // ! EXPERIMENTAL WITH 4006 CODE
                     if ([4015, 4009, 4006].includes(data.code)) {
-                        return this.reconnect(!this.isPaused);
+                        return this.reconnect(!this.isPaused).catch(() => this.destroy());
                     }
                     ;
                     this.manager.emit("socketClose", this, this.queue.currentTrack, data);

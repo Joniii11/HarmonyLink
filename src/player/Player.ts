@@ -167,7 +167,7 @@ export class Player extends EventEmitter {
         await this.disconnect(false)
 
         // Reconnect
-        await this.connect();
+        await this.connect().catch(() => this.destroy());
 
         // Restart the music if it was playing
         if (currentTrack && restartSong) {
@@ -628,7 +628,7 @@ export class Player extends EventEmitter {
             case "WebSocketClosedEvent": {
                 // ! EXPERIMENTAL WITH 4006 CODE
                 if ([4015, 4009, 4006].includes(data.code)) {
-                    return this.reconnect(!this.isPaused)
+                    return this.reconnect(!this.isPaused).catch(() => this.destroy())
                 };
 
                 this.manager.emit("socketClose", this, this.queue.currentTrack!, data);
