@@ -161,13 +161,14 @@ export class Player extends EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     public async reconnect(restartSong: boolean = true): Promise<Player> {
+        try {
         const currentTrack = this.queue.currentTrack;
         
         // Disconnect the player and not clean up the queue
         await this.disconnect(false)
 
         // Reconnect
-        await this.connect().catch(() => this.destroy());
+        await this.connect()
 
         // Restart the music if it was playing
         if (currentTrack && restartSong) {
@@ -187,6 +188,14 @@ export class Player extends EventEmitter {
         };
 
         return this;
+        } catch (err) {
+            this.manager.emit("debug", "[HarmonyLink] [Player] Failed to reconnect: " + err)
+            
+            this.isConnected = false;
+            this.state = PlayerConnectionState.DISCONNECTED;
+            this.voiceState = VoiceConnectionState.DISCONNECTED
+            return this;
+        }
     };
 
     /**
