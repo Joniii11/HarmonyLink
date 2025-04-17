@@ -158,10 +158,12 @@ class Player extends events_1.EventEmitter {
         }
         catch (err) {
             this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Reconnect failed for player ${this.guildId} because of ${err}`);
+            this.isConnected = false;
+            this.state = player_1.PlayerConnectionState.DISCONNECTED;
+            this.voiceState = player_1.VoiceConnectionState.DISCONNECTED;
             await this.destroy();
             return this;
         }
-        ;
     }
     ;
     /**
