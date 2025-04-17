@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { HarmonyLink } from "../HarmonyLink";
 import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
 import ws from "ws";

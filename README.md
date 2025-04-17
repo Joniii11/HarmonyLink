@@ -14,7 +14,7 @@
   <p align="center">
     Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. 
     <br />
-    <a href="https://github.com/Joniii11/HarmonyLink"><strong>Explore the docs »</strong></a>
+    <a href="https://joniii.dev/docs/harmonylink"><strong>Explore the docs »</strong></a>
     <br />
   <br />
     <a href="#demo">View Demo</a>
@@ -123,7 +123,7 @@ const musicClient = new HarmonyLink(config)
 await musicClient.createPlayer()
 ```
 
-_For more examples, please refer to the [Documentation](https://github.com/Joniii11/HarmonyLink)_
+_For more examples, please refer to the [Documentation](https://joniii.dev/docs/harmonylink)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

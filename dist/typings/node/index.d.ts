@@ -1,6 +1,7 @@
 /// <reference types="node" />
 /// <reference types="node" />
 /// <reference types="node" />
+/// <reference types="node" />
 import { EventData } from "./playerEvents";
 export interface NodeEvents {
     /**

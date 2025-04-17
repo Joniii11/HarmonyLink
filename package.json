@@ -1,14 +1,12 @@
 {
   "name": "harmonylink",
-  "version": "1.2.5",
+  "version": "1.3.1",
   "description": "HarmonyLink: Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tspc && npm run build:esm",
     "build:esm": "gen-esm-wrapper dist/index.js dist/index.mjs",
-    "prepublishOnly": "npm run prepare && npm run build && npm run lint",
-    "lint": "eslint . --cache --cache-file .eslintcache --ignore-path .gitignore --ext .ts",
-    "lint:fix": "eslint . --cache --cache-file .eslintcache --ignore-path .gitignore --ext .ts --fix",
+    "prepublishOnly": "npm run prepare && npm run build",
     "prepare": "ts-patch install -s"
   },
   "repository": {

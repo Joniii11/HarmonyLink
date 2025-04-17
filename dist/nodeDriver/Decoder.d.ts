@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { TrackData } from "../typings/track";
 import { NodeType } from "../typings/node";
 export default class Decoder {

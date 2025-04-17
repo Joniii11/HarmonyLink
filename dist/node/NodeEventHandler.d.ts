@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { HarmonyLink } from "../HarmonyLink";
 import { Node } from "./Node";
 import { LavalinkPackets } from "../typings/node";
