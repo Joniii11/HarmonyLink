@@ -308,3 +308,93 @@ export interface HarmonyLinkEvents {
      */
     queueEmpty: (player: Player) => void;
 };
+
+export interface HarmonyLinkEventsOtherFormat {
+  /**
+   * Emitted for useful debugging information.
+   * @param message The debug message.
+   */
+  debug: [message: string];
+
+  /**
+   * Emitted when a node has reconnected and is ready to be used.
+   * @param node The node that reconnected.
+   */
+  nodeReconnect: [node: Node];
+
+  /**
+   * Emitted when a node has disconnected and is no longer available.
+   * @param node The node that disconnected.
+   * @param code The disconnection code.
+   */
+  nodeDisconnect: [node: Node, code: number];
+
+  /**
+   * Emitted when a node has connected and is ready to be used.
+   * @param node The node that connected.
+   */
+  nodeConnect: [node: Node];
+
+  /**
+   * Emitted when a node throws an error.
+   * @param node The node that encountered an error.
+   * @param error The error that was thrown.
+   */
+  nodeError: [node: Node, error: Error];
+
+  /**
+   * Emitted when a player has been created.
+   * @param player The player that was created.
+   */
+  playerCreate: [player: Player];
+
+  /**
+   * Emitted when a player has been destroyed.
+   * @param player The player that was destroyed.
+   */
+  playerDestroy: [player: Player];
+
+  /**
+   * Emitted when a player is updated.
+   * @param player The player that was updated.
+   * @param packet The update packet.
+   */
+  playerUpdate: [player: Player, packet: LavalinkPlayerUpdatePacket];
+
+  /**
+   * Emitted when a track has ended.
+   * @param player The player on which the track ended.
+   * @param previousTrack The track that ended.
+   * @param packet Optional packet with event details.
+   */
+  trackEnd: [player: Player, previousTrack: Track, packet?: TrackEndEvent & { op: "event"; guildId: string }];
+
+  /**
+   * Emitted when a track has started.
+   * @param player The player on which the track started.
+   * @param track The track that started.
+   */
+  trackStart: [player: Player, track: Track];
+
+  /**
+   * Emitted when a track encounters an error.
+   * @param player The player on which the error occurred.
+   * @param track The track that errored.
+   * @param error The error details.
+   */
+  trackError: [player: Player, track: Track, error: { op: "event"; guildId: string } & (TrackExceptionEvent | TrackStuckEvent)];
+
+  /**
+   * Emitted when the socket disconnects.
+   * @param player The player affected by the disconnection.
+   * @param track The track that was playing during disconnection.
+   * @param wsCloseData The WebSocket close data.
+   */
+  socketClose: [player: Player, track: Track, wsCloseData: WebSocketClosedEvent & { op: "event"; guildId: string }];
+
+  /**
+   * Emitted when the queue becomes empty.
+   * @param player The player on which the queue emptied.
+   */
+  queueEmpty: [player: Player];
+}
