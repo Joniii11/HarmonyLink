@@ -132,28 +132,36 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async reconnect(restartSong = true) {
-        const currentTrack = this.queue.currentTrack;
-        // Disconnect the player and not clean up the queue
-        await this.disconnect(false);
-        // Reconnect
-        await this.connect().catch(() => this.destroy());
-        // Restart the music if it was playing
-        if (currentTrack && restartSong) {
-            this.queue.unshift(currentTrack);
-            await this.node.rest.updatePlayer({
-                guildId: this.guildId,
-                playerOptions: {
-                    track: {
-                        encoded: currentTrack.track,
-                    },
-                    position: this.position,
-                }
-            });
-            this.isPlaying = true;
-            this.isPaused = false;
+        try {
+            const currentTrack = this.queue.currentTrack;
+            // Disconnect the player and not clean up the queue
+            await this.disconnect(false);
+            // Reconnect
+            await this.connect();
+            // Restart the music if it was playing
+            if (currentTrack && restartSong) {
+                this.queue.unshift(currentTrack);
+                await this.node.rest.updatePlayer({
+                    guildId: this.guildId,
+                    playerOptions: {
+                        track: {
+                            encoded: currentTrack.track,
+                        },
+                        position: this.position,
+                    }
+                });
+                this.isPlaying = true;
+                this.isPaused = false;
+            }
+            ;
+            return this;
+        }
+        catch (err) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Reconnect failed for player ${this.guildId} because of ${err}`);
+            await this.destroy();
+            return this;
         }
         ;
-        return this;
     }
     ;
     /**
@@ -227,7 +235,7 @@ class Player extends events_1.EventEmitter {
     async setVoiceChannel(channelId) {
         await this.disconnect(false);
         this.voiceChannelId = channelId;
-        await this.connect();
+        await this.connect().catch(() => this.destroy());
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] New Voice channel set for player ${this.guildId}`);
         return this;
     }

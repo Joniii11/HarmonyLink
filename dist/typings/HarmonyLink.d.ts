@@ -171,6 +171,30 @@ export type RequiredHarmonyLinkConfiguration = Omit<Required<HarmonyLinkConfigur
     nodeResolver: ((nodes: NodeManager) => Promise<Node | void>) | undefined;
     nodeAdder: ((nodeManager: NodeManager, node: NodeGroup) => Promise<Node | void>) | undefined;
 };
+export interface HarmonyLinkTupledEvents {
+    debug: [args: unknown[]];
+    nodeReconnect: [node: Node];
+    nodeDisconnect: [node: Node, code: number];
+    nodeConnect: [node: Node];
+    nodeError: [node: Node, error: Error];
+    playerCreate: [player: Player];
+    playerDestroy: [player: Player];
+    playerUpdate: [player: Player, packet: LavalinkPlayerUpdatePacket];
+    trackEnd: [player: Player, previousTrack: Track, packet?: TrackEndEvent & {
+        op: "event";
+        guildId: string;
+    }];
+    trackStart: [player: Player, track: Track];
+    trackError: [player: Player, track: Track, error: {
+        op: "event";
+        guildId: string;
+    } & (TrackExceptionEvent | TrackStuckEvent)];
+    socketClose: [player: Player, track: Track, wsCloseData: WebSocketClosedEvent & {
+        op: "event";
+        guildId: string;
+    }];
+    queueEmpty: [player: Player];
+}
 export interface HarmonyLinkEvents {
     /**
      * Emitted for useful debugging information.
