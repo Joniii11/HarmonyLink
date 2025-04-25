@@ -54,8 +54,8 @@ class LavalinkV4 extends AbstractNodeDriver_1.default {
     ;
     wsClose(withoutEmit = false) {
         if (withoutEmit) {
-            this.wsClient?.close(1006, "Self Closed");
-            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
+            this.wsClient?.close(1000, "Self Closed"); // 4000 is a valid custom code
+            this.node ? this.manager?.emit("nodeDisconnect", this.node, 4000) : null;
         }
         ;
         this.wsClient?.removeAllListeners();

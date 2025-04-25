@@ -160,7 +160,7 @@ class NodeLink extends AbstractNodeDriver_1.default {
     ;
     wsClose(withoutEmit = false) {
         if (withoutEmit) {
-            this.wsClient?.close(1006, "Self Closed");
+            this.wsClient?.close(1000, "Self Closed");
             this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
         }
         ;
