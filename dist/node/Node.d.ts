@@ -8,6 +8,7 @@ import AbstractNodeDriver from "../nodeDriver/AbstractNodeDriver";
 import { WebSocket } from "ws";
 import { Player } from "../player/Player";
 import { ErrorResponses, RoutePlannerStatus } from "../typings/exporter";
+import { Result } from "neverthrow";
 export declare interface Node {
     on: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;
     once: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;
@@ -37,12 +38,12 @@ export declare class Node extends EventEmitter {
      * This method is used to connect to the node.
      * @returns {Promise<WebSocket>} The websocket connection.
      */
-    connect(): Promise<WebSocket>;
+    connect(): Promise<Result<WebSocket, Error>>;
     /**
      * This method is used to disconnect from the node.
-     * @returns {Promise<void>} Resolves once the node is disconnected.
+     * @returns {void} Resolves once the node is disconnected.
      */
-    disconnect(): Promise<void>;
+    disconnect(): void;
     /**
      * This method is used to reconnect to the node.
      * @returns {Promise<void>} Resolves once the node is reconnected.
@@ -62,17 +63,17 @@ export declare class Node extends EventEmitter {
     getRoutePlannerStatus(): Promise<RoutePlannerStatus>;
     /**
      * This method is used to unmark all failed addresses.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      *
      * @see https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
-    unmarkAllFailingAddresses(): Promise<ErrorResponses | void>;
+    unmarkAllFailingAddresses(): Promise<Result<undefined, Error | ErrorResponses>>;
     /**
      * This method is used to unmark a failed address.
      * @param {string} address The address to unmark.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      *
      * @see https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
-    unmarkFailingAddress(address: string): Promise<ErrorResponses | void>;
+    unmarkFailingAddress(address: string): Promise<Result<undefined, Error | ErrorResponses>>;
 }

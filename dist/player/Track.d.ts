@@ -1,5 +1,6 @@
 import { HarmonyLink } from "../HarmonyLink";
 import { TrackData, TrackDataInfo } from "../typings/track";
+import { Result } from "neverthrow";
 export declare class Track {
     track: string;
     info: (TrackDataInfo & {
@@ -18,6 +19,6 @@ export declare class Track {
      * @param {HarmonyLink} manager The HarmonyLink instance
      * @returns {Promise<Track | null>} The resolved track
      */
-    resolve(manager: HarmonyLink): Promise<Track>;
+    resolve(manager: HarmonyLink): Promise<Result<Track, Error>>;
     private escapeRegExp;
 }

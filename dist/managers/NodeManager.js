@@ -12,9 +12,10 @@ class NodeManager extends Map {
     async addNode(node) {
         try {
             if (this.manager.options.nodeAdder) {
-                const resolvedNode = await (0, neverthrow_1.fromPromise)(this.manager.options.nodeAdder(this, node), (err) => null);
-                if (resolvedNode.isOk() && resolvedNode.value instanceof Node_1.Node)
-                    return (0, neverthrow_1.ok)(resolvedNode.value);
+                const resolvedNodeResult = await (0, neverthrow_1.fromPromise)(this.manager.options.nodeAdder(this, node), (_err) => new Error("Node adder failed"));
+                const resolvedNode = resolvedNodeResult.unwrapOr(null);
+                if (resolvedNode instanceof Node_1.Node)
+                    return (0, neverthrow_1.ok)(resolvedNode);
             }
             ;
             const addedNode = new Node_1.Node(this.manager, node);
@@ -24,21 +25,22 @@ class NodeManager extends Map {
             return (0, neverthrow_1.ok)(addedNode);
         }
         catch (error) {
-            return (0, neverthrow_1.err)(new Error(`[HarmonyLink] [NodeManager] Failed to add node: ${node.name}. Error: ${neverthrow_1.err}`));
+            return (0, neverthrow_1.err)(new Error(`[HarmonyLink] [NodeManager] Failed to add node: ${node.name}. Error: ${error}`));
         }
     }
     ;
     async getLeastUsedNode() {
         if (this.manager.options.nodeResolver) {
-            const resolvedData = await this.manager.options.nodeResolver(this);
-            if (resolvedData && resolvedData instanceof Node_1.Node)
-                return resolvedData;
+            const resolvedDataResult = await (0, neverthrow_1.fromPromise)(this.manager.options.nodeResolver(this), () => new Error("Node resolver failed"));
+            const resolvedData = resolvedDataResult.unwrapOr(null);
+            if (resolvedData instanceof Node_1.Node)
+                return (0, neverthrow_1.ok)(resolvedData);
         }
         ;
         const nodes = this.allNodes;
         const onlineNodes = nodes.filter(node => node.isConnected);
         if (onlineNodes.length === 0) {
-            throw new Error("[HarmonyLink] [NodeManager] No nodes are online.");
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] No nodes are online."));
         }
         ;
         const promises = onlineNodes.map(node => {
@@ -46,17 +48,17 @@ class NodeManager extends Map {
             return { node, stats };
         });
         const results = await Promise.all(promises);
-        const sorted = results.sort((a, b) => (a.stats.players || 0) - (b.stats.players || 0));
-        return sorted[0].node;
+        const sorted = results.sort((a, b) => (a.stats.playingPlayers || 0) - (b.stats.playingPlayers || 0));
+        return (0, neverthrow_1.ok)(sorted[0].node);
     }
     ;
-    async removeNode(name) {
+    removeNode(name) {
         const node = this.get(name);
         if (!node)
-            return null;
-        await node.disconnect();
+            return (0, neverthrow_1.err)(new Error(`[HarmonyLink] [NodeManager] Node with name ${name} does not exist.`));
+        node.disconnect();
         this.delete(name);
-        return node;
+        return (0, neverthrow_1.ok)(node);
     }
     ;
     get allNodes() {

@@ -22,6 +22,7 @@ const neverthrow_1 = require("neverthrow");
 class HarmonyLink extends events_1.default {
     botID = "";
     isReady = false;
+    version = constants_1.config.version;
     config = constants_1.config;
     library;
     nodes;
@@ -56,11 +57,11 @@ class HarmonyLink extends events_1.default {
      */
     async resolve({ query, source, requester }, node) {
         if (!node)
-            node = await this.nodeManager.getLeastUsedNode();
+            node = (await this.nodeManager.getLeastUsedNode()).unwrapOr(undefined);
         if (!node)
             throw new Error("No nodes available to resolve from");
         const result = await node.rest.loadTrack(query, source);
-        return new Response_1.Response(result, requester);
+        return result.match((data) => data ? (0, neverthrow_1.ok)(new Response_1.Response(data, requester)) : (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] No tracks found for the given query.")), (error) => (0, neverthrow_1.err)(new Error(`[HarmonyLink] [NodeManager] Failed to resolve track: ${error.message}`)));
     }
     ;
     /**
@@ -69,7 +70,7 @@ class HarmonyLink extends events_1.default {
      * @param {Node} [node] - Node to use for the player.
      * @returns {Promise<Player>} The created player.
      */
-    async createPlayer(playerOptions, node) {
+    createPlayer(playerOptions, node) {
         return this.playerManager.createPlayer({ ...playerOptions, node });
     }
     ;
@@ -79,12 +80,13 @@ class HarmonyLink extends events_1.default {
      * @returns {Promise<Player | null>} The destroyed player.
      */
     async destroyPlayer(guildId) {
-        return this.playerManager.removePlayer(guildId);
+        return await this.playerManager.removePlayer(guildId);
     }
-    ; /**
-     * Adds a node to the node manager.
-     * @param {NodeGroup} node - The node to add.
-     * @returns {Promise<Result<Node, Error>>} The added node or error.
+    ;
+    /**
+     * Adds a node or multiple nodes to the node manager.
+     * @param {NodeGroup[] | NodeGroup} node - The node or nodes to add. Can be a single NodeGroup or an array of NodeGroups.
+     * @returns {Promise<Result<Node[] | Node, Error>>} The added node(s).
      */
     async addNode(node) {
         if (!this.isReady)
@@ -92,28 +94,13 @@ class HarmonyLink extends events_1.default {
         if (Array.isArray(node)) {
             if (node.length === 0)
                 return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] No nodes provided to add."));
-            try {
-                const nodeResults = await Promise.all(node.map(async (n) => {
-                    return await this.nodeManager.addNode(n);
-                }));
-                const nodes = [];
-                for (const result of nodeResults) {
-                    if (result.isErr()) {
-                        return (0, neverthrow_1.err)(result.error);
-                    }
-                    nodes.push(result.value);
-                }
-                return (0, neverthrow_1.ok)(nodes);
-            }
-            catch (error) {
-                return (0, neverthrow_1.err)(error);
-            }
+            const nodePromises = node.map((n) => this.nodeManager.addNode(n));
+            const nodeResults = neverthrow_1.Result.combineWithAllErrors(await Promise.all(nodePromises));
+            return nodeResults.match((nodes) => (0, neverthrow_1.ok)(nodes), (errors) => (0, neverthrow_1.err)(errors));
         }
+        ;
         const result = await this.nodeManager.addNode(node);
-        if (result.isErr()) {
-            return (0, neverthrow_1.err)(result.error);
-        }
-        return (0, neverthrow_1.ok)(result.value);
+        return result.match((returnedNode) => (0, neverthrow_1.ok)(returnedNode), (error) => (0, neverthrow_1.err)(error));
     }
     ;
     /**
@@ -123,8 +110,8 @@ class HarmonyLink extends events_1.default {
      */
     async removeNode(nodeName) {
         if (!this.isReady)
-            throw new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet.");
-        return this.nodeManager.removeNode(nodeName);
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet."));
+        return await this.nodeManager.removeNode(nodeName);
     }
     ;
     /**
@@ -135,12 +122,9 @@ class HarmonyLink extends events_1.default {
     async decodeTracks(tracks, node) {
         if (!Array.isArray(tracks))
             tracks = [tracks];
-        node ??= await this.nodeManager.getLeastUsedNode();
-        if (!node) {
-            this.emit("debug", "[HarmonyLink] [PlayerManager] No nodes available to decode tracks.");
-            return null;
-        }
-        ;
+        node ??= (await this.nodeManager.getLeastUsedNode()).unwrapOr(undefined);
+        if (!node)
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] No nodes available to decode tracks."));
         return node.rest.decodeTracks(tracks);
     }
     ;

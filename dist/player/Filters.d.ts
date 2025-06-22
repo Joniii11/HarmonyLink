@@ -1,5 +1,7 @@
 import { Band, karaokeOptions, tremoloOptions, vibratoOptions, rotationOptions, distortionOptions, channelMixOptions, lowPassOptions, timescaleOptions, FiltersOptions } from "../typings/player/filters";
 import { Player } from "./Player";
+import { FilterBuilder } from "./FilterBuilder";
+import { Result } from "neverthrow";
 /**
  * The Filters class that is used to apply filters to the currently playing track
  */
@@ -15,7 +17,31 @@ export declare class Filters {
     channelMix: channelMixOptions | undefined;
     lowPass: lowPassOptions | undefined;
     timescale: timescaleOptions | undefined;
+    private _builder;
     constructor(player: Player, options?: Partial<FiltersOptions>);
+    /**
+     * Create a new FilterBuilder instance with current filter state
+     * @private
+     */
+    private _createBuilder;
+    /**
+     * Get a new FilterBuilder instance for advanced filter configuration
+     * @returns {FilterBuilder<FiltersOptions>} A new FilterBuilder instance
+     */
+    builder(): FilterBuilder<FiltersOptions>;
+    private _internalBuildFilters;
+    /**
+     * Apply filters using a FilterBuilder configuration function
+     * @param builderFn - Function that configures the FilterBuilder
+     * @returns {Promise<Filters>} The updated filter instance
+     */
+    buildFilters(builderFn: (builder: FilterBuilder<FiltersOptions>) => FilterBuilder<FiltersOptions>): Promise<Result<Filters, Error>>;
+    /**
+     * Apply a preset filter configuration
+     * @param presetName - Name of the preset to apply
+     * @returns {Promise<Filters>} The updated filter instance
+     */
+    applyPreset(presetName: string): Promise<Result<Filters, Error>>;
     /**
      * Set equalizer bands for the currently playing track
      * @param {Band[]} bands - An array of bands to set the equalizer to
@@ -85,5 +111,5 @@ export declare class Filters {
      * Updates all the filters applied to the currently playing track
      * @returns {Promise<Filters>} the updated filters applied to the currently playing track
      */
-    updateFilters(): Promise<Filters>;
+    updateFilters(): Promise<Result<Filters, Error>>;
 }

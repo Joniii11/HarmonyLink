@@ -2,13 +2,14 @@
 /// <reference types="node" />
 import { TrackData } from "../typings/track";
 import { NodeType } from "../typings/node";
+import { Result } from 'neverthrow';
 export default class Decoder {
     protected buffer: Buffer;
     protected position: number;
     protected type: NodeType;
     protected track: string;
     constructor(track: string, type: NodeType);
-    get getTrack(): TrackData | null;
+    get getTrack(): Result<TrackData, Error>;
     private get NodeLinkDecoder();
     private get FrequenCDecoder();
     private changeBytes;

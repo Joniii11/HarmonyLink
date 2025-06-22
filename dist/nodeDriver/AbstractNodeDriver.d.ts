@@ -5,6 +5,7 @@ import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
 import ws from "ws";
 import { Node } from "../node/Node";
 import { TrackData } from "../typings/track";
+import { Result } from 'neverthrow';
 export default abstract class AbstractNodeDriver {
     abstract clientId: string;
     abstract type: NodeType;
@@ -17,14 +18,14 @@ export default abstract class AbstractNodeDriver {
     abstract get isRegistered(): boolean;
     get defaultHeaders(): Record<string, string>;
     setSessionId(sessionId: string): void;
-    protected eventHandler(data: string): Promise<boolean>;
-    protected openHandler(): Promise<boolean>;
-    protected closeHandler(code: number, reason: Buffer): Promise<boolean>;
-    protected errorHandler(data: Error): Promise<boolean>;
-    protected decoder: (base64EncodedTrack: string) => TrackData | null;
+    protected eventHandler(data: string): Result<boolean, Error>;
+    protected openHandler(): Result<boolean, Error>;
+    protected closeHandler(code: number, reason: Buffer): Result<boolean, Error>;
+    protected errorHandler(data: Error): Result<boolean, Error>;
+    protected decoder: (base64EncodedTrack: string) => Result<TrackData, Error>;
     abstract init(manager: HarmonyLink, node: Node): void;
-    abstract connect(): Promise<ws>;
+    abstract connect(): Promise<Result<ws, Error>>;
     abstract wsClose(withoutEmit?: boolean): void;
-    abstract updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<void>;
-    abstract request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined>;
+    abstract updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<Result<void, Error>>;
+    abstract request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<Result<T | undefined, Error>>;
 }

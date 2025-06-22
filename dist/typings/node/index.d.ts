@@ -1,34 +1,7 @@
 /// <reference types="node" />
 /// <reference types="node" />
 /// <reference types="node" />
-/// <reference types="node" />
 import { EventData } from "./playerEvents";
-export interface NodeEvents {
-    /**
-     * Dispatched when the node gives via the WebSocket a message to the client
-     * @param data The data that the node sends
-     * @returns {void} void
-     */
-    lavalinkEvent: (data: string, interceptor?: (data: any) => LavalinkPackets) => void;
-    /**
-     * Dispatched when the WebSocket connection is opened
-     * @returns {void} void
-     */
-    lavalinkWSOpen: () => void;
-    /**
-     * Dispatched when the WebSocket connection is closed
-     * @param {number} code The event code of the WebSocket
-     * @param {Buffer} reason The reason of the WebSocket
-     * @returns {void} void
-     */
-    lavalinkWSClose: (code: number, reason: Buffer) => void;
-    /**
-     * Dispatched when the WebSocket connection has an error
-     * @param {Error} event The event of the WebSocket
-     * @returns {void} void
-     */
-    lavalinkWSError: (event: Error) => void;
-}
 export interface HarmonyLinkRequesterOptions extends RequestInit {
     params?: Record<string, string> | string;
     data?: any;
@@ -341,3 +314,29 @@ export type LavalinkEventPacket = EventData & {
     guildId: string;
 };
 export type LavalinkPackets = LavalinkEventPacket | LavalinkNodeStatsPacket | LavalinkPlayerUpdatePacket | LavalinkReadyPacket;
+export interface NodeEvents {
+    /**
+     * Dispatched when the node gives via the WebSocket a message to the client
+     * @param data The data that the node sends
+     * @returns {void} void
+     */
+    lavalinkEvent: (data: string, interceptor?: (d: any) => LavalinkPackets) => void;
+    /**
+     * Dispatched when the WebSocket connection is opened
+     * @returns {void} void
+     */
+    lavalinkWSOpen: () => void;
+    /**
+     * Dispatched when the WebSocket connection is closed
+     * @param {number} code The event code of the WebSocket
+     * @param {Buffer} reason The reason of the WebSocket
+     * @returns {void} void
+     */
+    lavalinkWSClose: (code: number, reason: Buffer) => void;
+    /**
+     * Dispatched when the WebSocket connection has an error
+     * @param {Error} event The event of the WebSocket
+     * @returns {void} void
+     */
+    lavalinkWSError: (event: Error) => void;
+}

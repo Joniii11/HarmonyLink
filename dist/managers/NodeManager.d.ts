@@ -6,7 +6,7 @@ export default class NodeManager extends Map<string, Node> {
     readonly manager: HarmonyLink;
     constructor(manager: HarmonyLink);
     addNode(node: NodeGroup): Promise<Result<Node, Error>>;
-    getLeastUsedNode(): Promise<Node | undefined>;
-    removeNode(name: string): Promise<Node | null>;
+    getLeastUsedNode(): Promise<Result<Node, Error>>;
+    removeNode(name: string): Result<Node, Error>;
     get allNodes(): Node[];
 }

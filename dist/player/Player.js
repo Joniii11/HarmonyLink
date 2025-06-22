@@ -11,6 +11,7 @@ const Connection_1 = require("./Connection");
 const player_1 = require("../typings/player");
 const connection_1 = require("../typings/player/connection");
 const Filters_1 = require("./Filters");
+const neverthrow_1 = require("neverthrow");
 class Player extends events_1.EventEmitter {
     node;
     manager;
@@ -40,8 +41,8 @@ class Player extends events_1.EventEmitter {
         super();
         this.node = node;
         this.manager = manager;
-        this.voiceChannelId = options.voiceId,
-            this.guildId = options.guildId;
+        this.voiceChannelId = options.voiceId;
+        this.guildId = options.guildId;
         this.shardId = options.shardId ?? String(manager.library.shardID(this.guildId)) ?? "0";
         this.textChannelId = options.textId;
         // States
@@ -73,6 +74,15 @@ class Player extends events_1.EventEmitter {
         this.on("event", this._eventHandler.bind(this));
     }
     ;
+    handleConnnectionError(e) {
+        if (!(e instanceof Error))
+            return new Error(`[HarmonyLink] [Player] [Connection] An unknown error occurred while connecting the player ${this.guildId} in the voice channel ${this.voiceChannelId}`);
+        this.manager.emit("debug", "[HarmonyLink] [Player] [Connection] Request Connection Failed");
+        if (e.name === "AbortError")
+            return new Error(`[HarmonyLink] [Player] [Connection] The voice connection is not established in ${this.manager.options.voiceConnectionTimeout}ms`);
+        return new Error(`[HarmonyLink] [Player] [Connection] Failed to connect player ${this.guildId} in the voice channel ${this.voiceChannelId} because of ${e.message}`);
+    }
+    ;
     /**
      * Connects the player to the voice channel.
      *
@@ -80,50 +90,51 @@ class Player extends events_1.EventEmitter {
      */
     async connect() {
         if (this.state === player_1.PlayerConnectionState.CONNECTED || !this.voiceChannelId)
-            return this;
+            return (0, neverthrow_1.ok)(this);
         if (this.voiceState === player_1.VoiceConnectionState.CONNECTING || this.voiceState === player_1.VoiceConnectionState.CONNECTED)
-            return this;
+            return (0, neverthrow_1.ok)(this);
         // Sending a voice update to discord
         this.voiceState = player_1.VoiceConnectionState.CONNECTING;
-        this.sendVoiceUpdate();
+        // eslint-disable-next-line neverthrow/must-use-result
+        const voiceUpdateResult = await this.sendVoiceUpdate();
+        if (voiceUpdateResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to send voice update for player ${this.guildId} in the voice channel ${this.voiceChannelId} because of ${voiceUpdateResult.error.message}`);
+            return (0, neverthrow_1.err)(voiceUpdateResult.error);
+        }
+        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Voice update sent for player ${this.guildId} in the voice channel ${this.voiceChannelId}.`);
         // Requesting a voice connection
         this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Requesting voice connection for player ${this.guildId} in the region ${this.ConnectionHandler.options.voiceRegion}.`);
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), this.manager.options.voiceConnectionTimeout);
-        try {
-            const [status] = await Player.once(this, 'connectionUpdate', { signal: controller.signal });
-            if (status !== connection_1.DiscordVoiceStates.SESSION_READY) {
-                switch (status) {
-                    case connection_1.DiscordVoiceStates.SESSION_ID_MISSING:
-                        {
-                            throw new Error('[HarmonyLink] [Player] [Connection] The voice connection is not established due to missing session id');
-                        }
-                        ;
-                    case connection_1.DiscordVoiceStates.SESSION_ENDPOINT_MISSING:
-                        {
-                            throw new Error('[HarmonyLink] [Player] [Connection] The voice connection is not established due to missing connection endpoint');
-                        }
-                        ;
-                }
-                ;
+        // eslint-disable-next-line neverthrow/must-use-result
+        const connectionResult = await (0, neverthrow_1.fromPromise)(Player.once(this, 'connectionUpdate', { signal: controller.signal }), (e) => this.handleConnnectionError(e));
+        clearTimeout(timeout);
+        if (connectionResult.isErr()) {
+            this.manager.emit("debug", "[HarmonyLink] [Player] [Connection] Request Connection Failed");
+            return (0, neverthrow_1.err)(connectionResult.error);
+        }
+        const [status] = connectionResult.value;
+        if (status !== connection_1.DiscordVoiceStates.SESSION_READY) {
+            switch (status) {
+                case connection_1.DiscordVoiceStates.SESSION_ID_MISSING:
+                    {
+                        return (0, neverthrow_1.err)(new Error('[HarmonyLink] [Player] [Connection] The voice connection is not established due to missing session id'));
+                    }
+                    ;
+                case connection_1.DiscordVoiceStates.SESSION_ENDPOINT_MISSING:
+                    {
+                        return (0, neverthrow_1.err)(new Error('[HarmonyLink] [Player] [Connection] The voice connection is not established due to missing connection endpoint'));
+                    }
+                    ;
             }
             ;
-            this.voiceState = player_1.VoiceConnectionState.CONNECTED;
-        }
-        catch (error) {
-            this.manager.emit("debug", "[HarmonyLink] [Player] [Connection] Request Connection Failed");
-            if (error.name === 'AbortError')
-                throw new Error(`[HarmonyLink] [Player] [Connection] The voice connection is not established in ${this.manager.options.voiceConnectionTimeout}ms`);
-            throw error;
-        }
-        finally {
-            clearTimeout(timeout);
-            this.state = player_1.PlayerConnectionState.CONNECTED;
-            this.manager.emit('debug', '[HarmonyLink] [Player] [Connection] Player connected');
-            this.node.players.set(this.guildId, this);
         }
         ;
-        return this;
+        this.voiceState = player_1.VoiceConnectionState.CONNECTED;
+        this.state = player_1.PlayerConnectionState.CONNECTED;
+        this.manager.emit('debug', '[HarmonyLink] [Player] [Connection] Player connected');
+        this.node.players.set(this.guildId, this);
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
@@ -132,46 +143,48 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async reconnect(restartSong = true) {
-        try {
-            const currentTrack = this.queue.currentTrack;
-            // Disconnect the player and not clean up the queue
-            await this.disconnect(false);
-            // Reconnect
-            await this.connect();
-            // Restart the music if it was playing
-            if (currentTrack && restartSong) {
-                this.queue.unshift(currentTrack);
-                await this.node.rest.updatePlayer({
-                    guildId: this.guildId,
-                    playerOptions: {
-                        track: {
-                            encoded: currentTrack.track,
-                        },
-                        position: this.position,
-                    }
-                });
-                this.isPlaying = true;
-                this.isPaused = false;
-            }
-            ;
-            return this;
-        }
-        catch (err) {
-            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Reconnect failed for player ${this.guildId} because of ${err}`);
+        const currentTrack = this.queue.currentTrack;
+        const savedPosition = this.position;
+        // Disconnect the player and not clean up the queue
+        await this.disconnect(false); // Reconnect
+        const reconnectResult = await this.connect();
+        if (reconnectResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to reconnect player ${this.guildId} because of ${reconnectResult.error.message}`);
             this.isConnected = false;
             this.state = player_1.PlayerConnectionState.DISCONNECTED;
             this.voiceState = player_1.VoiceConnectionState.DISCONNECTED;
             await this.destroy();
-            return this;
+            return (0, neverthrow_1.err)(reconnectResult.error);
         }
+        ;
+        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Player ${this.guildId} reconnected successfully`);
+        // Restart the music if it was playing
+        if (currentTrack && restartSong) {
+            this.queue.unshift(currentTrack);
+            return (await this.node.rest.updatePlayer({
+                guildId: this.guildId,
+                playerOptions: {
+                    track: {
+                        encoded: currentTrack.track,
+                    },
+                    position: savedPosition,
+                }
+            })).match(() => {
+                this.isPlaying = true;
+                this.isPaused = false;
+                return (0, neverthrow_1.ok)(this);
+            }, (e) => (0, neverthrow_1.err)(e));
+        }
+        ;
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
      * Decodes a or multiple encoded tracks.
      * @param {string | string[]} tracks - The track to decode.
-     * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
+     * @returns {Promise<Result<TrackData[], Error>>} - A Promise that resolves to the decoded track.
      */
-    async decodeTracks(tracks) {
+    decodeTracks(tracks) {
         if (!Array.isArray(tracks))
             tracks = [tracks];
         return this.node.rest.decodeTracks(tracks);
@@ -182,39 +195,37 @@ class Player extends events_1.EventEmitter {
      * @param {PlayerLoop | "NONE" | "QUEUE" | "TRACK"} mode - The loop mode to set.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
-    async setLoop(mode) {
-        return new Promise((resolve) => {
-            if (mode)
-                this.loop = mode;
-            else {
-                switch (this.loop) {
-                    case "NONE":
-                    case player_1.PlayerLoop.NONE:
-                        {
-                            this.loop = player_1.PlayerLoop.TRACK;
-                            break;
-                        }
-                        ;
-                    case "TRACK":
-                    case player_1.PlayerLoop.TRACK:
-                        {
-                            this.loop = player_1.PlayerLoop.QUEUE;
-                            break;
-                        }
-                        ;
-                    case "QUEUE":
-                    case player_1.PlayerLoop.QUEUE:
-                        {
-                            this.loop = player_1.PlayerLoop.NONE;
-                            break;
-                        }
-                        ;
+    setLoop(mode) {
+        if (mode) {
+            this.loop = mode;
+            return this;
+        }
+        ;
+        switch (this.loop) {
+            case "NONE":
+            case player_1.PlayerLoop.NONE:
+                {
+                    this.loop = player_1.PlayerLoop.TRACK;
+                    break;
                 }
                 ;
-            }
-            ;
-            return resolve(this);
-        });
+            case "TRACK":
+            case player_1.PlayerLoop.TRACK:
+                {
+                    this.loop = player_1.PlayerLoop.QUEUE;
+                    break;
+                }
+                ;
+            case "QUEUE":
+            case player_1.PlayerLoop.QUEUE:
+                {
+                    this.loop = player_1.PlayerLoop.NONE;
+                    break;
+                }
+                ;
+        }
+        ;
+        return this;
     }
     ;
     /**
@@ -222,11 +233,9 @@ class Player extends events_1.EventEmitter {
      * @param {string} channelId - The channel ID to set for the player.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
-    async setTextChannel(channelId) {
-        return new Promise((resolve) => {
-            this.textChannelId = channelId;
-            return resolve(this);
-        });
+    setTextChannel(channelId) {
+        this.textChannelId = channelId;
+        return this;
     }
     ;
     /**
@@ -237,23 +246,23 @@ class Player extends events_1.EventEmitter {
     async setVoiceChannel(channelId) {
         await this.disconnect(false);
         this.voiceChannelId = channelId;
-        await this.connect().catch(() => this.destroy());
-        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] New Voice channel set for player ${this.guildId}`);
-        return this;
+        return (await this.connect()).match((t) => (0, neverthrow_1.ok)(t), (e) => {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to set voice channel for player ${this.guildId} because of ${e.message}`);
+            return (0, neverthrow_1.err)(e);
+        });
     }
+    ;
     /**
      * Sets the autoplay mode for the player.
      * @param {boolean} [toggle] - Whether to enable or disable autoplay.
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
-    async setAutoplay(toggle) {
-        return new Promise((resolve) => {
-            if (toggle)
-                this.isAutoplay = toggle;
-            else
-                this.isAutoplay = !this.isAutoplay;
-            return resolve(this);
-        });
+    setAutoplay(toggle) {
+        if (toggle)
+            this.isAutoplay = toggle;
+        else
+            this.isAutoplay = !this.isAutoplay;
+        return this;
     }
     ;
     /**
@@ -263,15 +272,20 @@ class Player extends events_1.EventEmitter {
      */
     async setVolume(volume) {
         if (volume < 0 || volume > 1000)
-            throw new RangeError("[HarmonyLink] [Player] [Connection] Volume must be between 0 and 1000");
-        await this.node.rest.updatePlayer({
+            return (0, neverthrow_1.err)(new RangeError("[HarmonyLink] [Player] [Connection] Volume must be between 0 and 1000"));
+        const playerResult = await this.node.rest.updatePlayer({
             guildId: this.guildId,
             playerOptions: {
                 volume,
             }
         });
+        if (playerResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to set volume for player ${this.guildId} because of ${playerResult.error.message}`);
+            return (0, neverthrow_1.err)(playerResult.error);
+        }
+        ;
         this.volume = volume;
-        return this;
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
@@ -281,22 +295,27 @@ class Player extends events_1.EventEmitter {
      */
     async seekTo(position) {
         if (!this.queue.currentTrack)
-            throw new Error("[HarmonyLink] [Player] [Connection] No track is currently playing");
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [Player] [Connection] No track is currently playing"));
         if (!this.queue.currentTrack.info.isSeekable)
-            throw new Error("[HarmonyLink] [Player] [Connection] The current track is not seekable");
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [Player] [Connection] The current track is not seekable"));
         position = Number(position);
         if (isNaN(position))
-            throw new TypeError("[HarmonyLink] [Player] [Connection] Position must be a number");
+            return (0, neverthrow_1.err)(new TypeError("[HarmonyLink] [Player] [Connection] Position must be a number"));
         if (position < 0 || position > this.queue.currentTrack.info.length)
             position = Math.max(Math.min(position, this.queue.currentTrack.info.length), 0);
-        await this.node.rest.updatePlayer({
+        const playerResult = await this.node.rest.updatePlayer({
             guildId: this.guildId,
             playerOptions: {
                 position,
             }
         });
+        if (playerResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to seek to position ${position} for player ${this.guildId} because of ${playerResult.error.message}`);
+            return (0, neverthrow_1.err)(playerResult.error);
+        }
+        ;
         this.position = position;
-        return this;
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
@@ -305,11 +324,11 @@ class Player extends events_1.EventEmitter {
      */
     async play() {
         if (!this.queue.length || this.queue.length === 0)
-            return this;
+            return (0, neverthrow_1.ok)(this);
         this.queue.currentTrack = this.queue.shift() ?? null;
         if (this.queue.currentTrack && !this.queue.currentTrack.track)
-            this.queue.currentTrack = await this.queue.currentTrack.resolve(this.manager);
-        await this.node.rest.updatePlayer({
+            this.queue.currentTrack = (await this.queue.currentTrack.resolve(this.manager)).unwrapOr(null);
+        const playResult = await this.node.rest.updatePlayer({
             guildId: this.guildId,
             playerOptions: {
                 track: {
@@ -317,10 +336,15 @@ class Player extends events_1.EventEmitter {
                 }
             }
         });
+        if (playResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to play track for player ${this.guildId} because of ${playResult.error.message}`);
+            return (0, neverthrow_1.err)(playResult.error);
+        }
+        ;
         this.isPlaying = true;
         this.position = 0;
         this.isPaused = false;
-        return this;
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
@@ -333,7 +357,7 @@ class Player extends events_1.EventEmitter {
         this.manager.emit("debug", this.guildId, "[HarmonyLink] [Player] [Connection] Player destroyed");
         this.manager.emit("playerDestroy", this);
         this.node.players.delete(this.guildId);
-        return this.manager.playerManager.delete(this.guildId);
+        return (0, neverthrow_1.ok)(this.manager.playerManager.delete(this.guildId));
     }
     ;
     /**
@@ -345,15 +369,17 @@ class Player extends events_1.EventEmitter {
         this.position = 0;
         this.isPlaying = false;
         this.isPaused = true;
-        await this.node.rest.updatePlayer({
+        return (await this.node.rest.updatePlayer({
             guildId: this.guildId,
             playerOptions: {
                 track: {
                     encoded: null,
                 }
             }
+        })).match(() => (0, neverthrow_1.ok)(this), (e) => {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to skip track for player ${this.guildId} because of ${e.message}`);
+            return (0, neverthrow_1.err)(e);
         });
-        return this;
     }
     ;
     /**
@@ -362,15 +388,17 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async pause(toggle = true) {
-        await this.node.rest.updatePlayer({
+        this.isPaused = toggle;
+        this.isPlaying = !toggle;
+        return (await this.node.rest.updatePlayer({
             guildId: this.guildId,
             playerOptions: {
                 paused: toggle,
             }
+        })).match(() => (0, neverthrow_1.ok)(this), (e) => {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to pause player ${this.guildId} because of ${e.message}`);
+            return (0, neverthrow_1.err)(e);
         });
-        this.isPaused = toggle;
-        this.isPlaying = !toggle;
-        return this;
     }
     ;
     /**
@@ -379,7 +407,7 @@ class Player extends events_1.EventEmitter {
      * @param {Node} [node] - Node to use for resolution.
      * @returns {Promise<Response>} The response containing resolved tracks.
      */
-    async resolve({ query, source, requester }, node) {
+    resolve({ query, source, requester }, node) {
         if (!node)
             node = this.node;
         return this.manager.resolve({ query, source, requester }, node);
@@ -395,19 +423,21 @@ class Player extends events_1.EventEmitter {
             if (this.manager.options.customAutoplay) {
                 const resolvedData = await this.manager.options.customAutoplay(this);
                 if (resolvedData && resolvedData instanceof Player)
-                    return resolvedData;
+                    return (0, neverthrow_1.ok)(resolvedData);
             }
             ;
             const prevTrack = previousTrack ?? this.queue.previousTrack;
             if (!prevTrack)
-                return this;
+                return (0, neverthrow_1.ok)(this);
             switch (prevTrack.info.sourceName) {
                 case "soundcloud":
                     {
                         const response = await this.resolve({ query: `${prevTrack.info.title}`, requester: prevTrack.info.requester, source: "scsearch" });
-                        if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType))
-                            return await this.skip();
-                        this.queue.add(response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))]);
+                        if (response.isErr())
+                            return this.skip();
+                        if (!response.value.tracks.length || response.value.tracks.length === 0 || ["error", "empty"].includes(response.value.loadType))
+                            return this.skip();
+                        this.queue.add(response.value.tracks[Math.floor(Math.random() * Math.floor(response.value.tracks.length))]);
                         return await this.play();
                     }
                     ;
@@ -416,10 +446,12 @@ class Player extends events_1.EventEmitter {
                     {
                         const searchedURL = `https://www.youtube.com/watch?v=${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}&list=RD${prevTrack.info.identifier || this.queue.currentTrack?.info.identifier}`;
                         const response = await this.resolve({ query: searchedURL, requester: prevTrack.info.requester, source: "ytmsearch" });
-                        if (!response.tracks.length || response.tracks.length === 0 || ["error", "empty"].includes(response.loadType))
-                            return await this.skip();
-                        response.tracks.shift();
-                        const track = response.tracks[Math.floor(Math.random() * Math.floor(response.tracks.length))];
+                        if (response.isErr())
+                            return this.skip();
+                        if (!response.value.tracks.length || response.value.tracks.length === 0 || ["error", "empty"].includes(response.value.loadType))
+                            return this.skip();
+                        response.value.tracks.shift();
+                        const track = response.value.tracks[Math.floor(Math.random() * Math.floor(response.value.tracks.length))];
                         this.queue.add(track);
                         return await this.play();
                     }
@@ -437,11 +469,16 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async setMute(mute) {
-        return new Promise((resolve) => {
-            this.ConnectionHandler.options.selfMute = mute;
-            this.sendVoiceUpdate();
-            return resolve(this);
-        });
+        this.ConnectionHandler.options.selfMute = mute;
+        // 
+        // eslint-disable-next-line neverthrow/must-use-result
+        const voiceUpdateResult = await this.sendVoiceUpdate();
+        if (voiceUpdateResult.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to update mute state for player ${this.guildId} because of ${voiceUpdateResult.error.message}`);
+            return (0, neverthrow_1.err)(voiceUpdateResult.error);
+        }
+        this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Player ${this.guildId} mute state updated to ${mute}`);
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     /**
@@ -450,34 +487,37 @@ class Player extends events_1.EventEmitter {
      * @returns {Promise<Player>} - A Promise that resolves to the Player instance.
      */
     async setDeaf(deaf) {
-        return new Promise((resolve) => {
-            this.ConnectionHandler.options.selfDeaf = deaf;
-            this.sendVoiceUpdate();
-            return resolve(this);
+        this.ConnectionHandler.options.selfDeaf = deaf;
+        return await this.sendVoiceUpdate().match(() => (0, neverthrow_1.ok)(this), (e) => {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to update deaf state for player ${this.guildId} because of ${e.message}`);
+            return (0, neverthrow_1.err)(e);
         });
     }
     ;
     async disconnect(cleanQueue = false) {
         if (!this.voiceChannelId || this.voiceState === player_1.VoiceConnectionState.DISCONNECTED)
-            return this;
+            return (0, neverthrow_1.ok)(this);
         if (cleanQueue)
             this.queue._cleanUp();
         await this.skip();
         this.isConnected = false;
         this.state = player_1.PlayerConnectionState.DISCONNECTED;
         this.voiceState = player_1.VoiceConnectionState.DISCONNECTED;
-        this.sendToDiscord({
+        return await this.sendToDiscord({
             guild_id: this.guildId,
             channel_id: null,
             self_deaf: false,
             self_mute: false,
+        }).match(() => (0, neverthrow_1.ok)(this), (e) => {
+            this.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Failed to disconnect player ${this.guildId} from voice channel ${this.voiceChannelId} because of ${e.message}`);
+            return (0, neverthrow_1.err)(e);
         });
-        return this;
     }
     ;
     checkDestroyed() {
         if (this.state === player_1.PlayerConnectionState.DESTROYED)
-            throw new Error('[HarmonyLink] [Player] [Connection] Player is already destroyed');
+            return (0, neverthrow_1.err)(new Error('[HarmonyLink] [Player] [Connection] Player is already destroyed'));
+        return (0, neverthrow_1.ok)();
     }
     ;
     sendVoiceUpdate() {
@@ -490,7 +530,7 @@ class Player extends events_1.EventEmitter {
     }
     ;
     sendToDiscord(data) {
-        return this.manager.library.sendPacket(Number(this.shardId), { op: 4, d: data }, false);
+        return (0, neverthrow_1.fromThrowable)(() => this.manager.library.sendPacket(Number(this.shardId), { op: 4, d: data }, false), (e) => e)();
     }
     ;
     async _eventHandler(data) {
@@ -569,8 +609,6 @@ class Player extends events_1.EventEmitter {
                             ;
                     }
                     ;
-                    // Because ESLint would cry for no-fallthrough.
-                    break;
                 }
                 ;
             case "TrackStuckEvent":

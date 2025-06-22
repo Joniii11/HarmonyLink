@@ -4,6 +4,7 @@ exports.ConnectionHandler = void 0;
 const connection_1 = require("../typings/player/connection");
 const player_1 = require("../constants/player");
 const player_2 = require("../typings/player");
+const neverthrow_1 = require("neverthrow");
 class ConnectionHandler {
     player;
     options;
@@ -19,13 +20,13 @@ class ConnectionHandler {
     async setServersUpdate(data) {
         if (!data.endpoint) {
             this.player.emit('connectionUpdate', connection_1.DiscordVoiceStates.SESSION_ENDPOINT_MISSING);
-            return;
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [Player] [Connection] Voice server endpoint is missing."));
         }
         ;
         this.options.voice.endpoint = data.endpoint;
         this.options.voice.token = data.token;
         this.options.voiceRegion = data.endpoint.split(".").shift()?.replace(/[0-9]/g, "") ?? null;
-        await this.player.node.rest.updatePlayer({
+        const playerResult = await this.player.node.rest.updatePlayer({
             guildId: this.player.guildId,
             playerOptions: {
                 voice: {
@@ -35,6 +36,11 @@ class ConnectionHandler {
                 },
             },
         });
+        if (playerResult.isErr()) {
+            this.player.emit("connectionUpdate", connection_1.DiscordVoiceStates.SESSION_FAILED_UPDATE);
+            return (0, neverthrow_1.err)(playerResult.error);
+        }
+        ;
         setTimeout(async () => {
             await this.player.node.rest.updatePlayer({
                 guildId: this.player.guildId,
@@ -45,6 +51,7 @@ class ConnectionHandler {
         }, 1000);
         this.player.emit("connectionUpdate", connection_1.DiscordVoiceStates.SESSION_READY);
         this.player.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Updated voice server for player ${this.player.guildId} in the region ${this.options.voiceRegion}.`);
+        return (0, neverthrow_1.ok)();
     }
     ;
     /**
@@ -52,18 +59,19 @@ class ConnectionHandler {
      * @param {SetStateUpdate} data The incoming data from the voice server from discord.
      */
     setStateUpdate(data) {
-        const { session_id, channel_id, self_deaf, self_mute } = data;
-        if (this.player.voiceChannelId && channel_id && this.player.voiceChannelId !== channel_id) {
-            this.player.voiceChannelId = channel_id;
+        // eslint-disable-next-line camelcase
+        const { session_id: sessionId, channel_id: channelId, self_deaf: selfDeaf, self_mute: selfMute } = data;
+        if (this.player.voiceChannelId && channelId && this.player.voiceChannelId !== channelId) {
+            this.player.voiceChannelId = channelId;
         }
         ;
-        if (!session_id) {
+        if (!sessionId) {
             this.player.voiceState = player_2.VoiceConnectionState.DISCONNECTED;
         }
         ;
-        this.options.selfDeaf = self_deaf;
-        this.options.selfMute = self_mute;
-        this.options.voice.sessionId = session_id || null;
+        this.options.selfDeaf = selfDeaf;
+        this.options.selfMute = selfMute;
+        this.options.voice.sessionId = sessionId || null;
     }
     ;
 }

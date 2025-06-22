@@ -11,7 +11,7 @@ class DJSLibrary extends AbstractLibraryClass_1.default {
     }
     ;
     shardID(guildId) {
-        return this.client.guilds.cache.get(guildId)?.shardId;
+        return this.client.guilds.cache.get(guildId)?.shardId ?? 0;
     }
     ;
     sendPacket(shardId, payload, important = false) {
@@ -19,7 +19,7 @@ class DJSLibrary extends AbstractLibraryClass_1.default {
     }
     ;
     listen(nodes) {
-        this.client.once("ready", async () => this.ready(nodes));
+        this.client.once("ready", async () => await this.ready(nodes));
         // Getting the raw data from the gateway
         this.client.on("raw", this.raw.bind(this));
     }

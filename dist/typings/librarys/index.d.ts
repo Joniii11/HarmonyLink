@@ -1,5 +1,4 @@
 import { VoiceServer, SetStateUpdate } from "../player/connection";
-export type Packet = AnyOtherPacket | PacketVoiceServerUpdate | PacketVoiceStateUpdate;
 export interface PacketVoiceStateUpdate {
     op: number;
     d: SetStateUpdate;
@@ -17,3 +16,4 @@ export interface AnyOtherPacket {
     d: any;
     t?: "";
 }
+export type Packet = AnyOtherPacket | PacketVoiceServerUpdate | PacketVoiceStateUpdate;

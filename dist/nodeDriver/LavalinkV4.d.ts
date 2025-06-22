@@ -3,6 +3,7 @@ import { WebSocket } from "ws";
 import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
 import { HarmonyLink } from "../HarmonyLink";
 import { Node } from "../node/Node";
+import { Result } from 'neverthrow';
 export default class LavalinkV4 extends AbstractNodeDriver {
     clientId: string;
     type: NodeType;
@@ -14,8 +15,8 @@ export default class LavalinkV4 extends AbstractNodeDriver {
     protected wsClient: WebSocket | undefined;
     get isRegistered(): boolean;
     init(manager: HarmonyLink, node: Node): void;
-    connect(): Promise<WebSocket>;
+    connect(): Promise<Result<WebSocket, Error>>;
     wsClose(withoutEmit?: boolean): void;
-    request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined>;
-    updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<void>;
+    request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<Result<T | undefined, Error>>;
+    updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<Result<void, Error>>;
 }

@@ -4,6 +4,7 @@ import { Node } from "./Node";
 import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "../typings/node/rest";
 import { NodeInfo, NodeStats } from "../typings/node";
 import { TrackData } from "../typings/track";
+import { Result } from "neverthrow";
 export default class Rest {
     manager: HarmonyLink;
     node: Node;
@@ -22,7 +23,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#get-players
      */
-    getAllPlayers(): Promise<PlayerObjectFromAPI[]>;
+    getAllPlayers(): Promise<Result<PlayerObjectFromAPI[], Error>>;
     /**
      * Get a player by the guild id
      * @param {string} guildId The guild id to get the player from
@@ -35,7 +36,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#get-player
      */
-    getPlayer(guildId: string): Promise<PlayerObjectFromAPI | null>;
+    getPlayer(guildId: string): Promise<Result<PlayerObjectFromAPI | null, Error>>;
     /**
      * Destroy a player by the guild id
      * @param {UpdatePlayerInfo} data The guild id to destroy the player from
@@ -48,21 +49,20 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#update-player
      */
-    updatePlayer(data: UpdatePlayerInfo): Promise<PlayerObjectFromAPI | undefined>;
+    updatePlayer(data: UpdatePlayerInfo): Promise<Result<PlayerObjectFromAPI | undefined, Error>>;
     /**
      * Destroy a player by the guild id
      * @param {string} guildId The guild id to destroy the player from
      * @returns {undefined} 204 - No Content
      */
-    destroyPlayer(guildId: string): Promise<undefined>;
+    destroyPlayer(guildId: string): Promise<Result<undefined, Error>>;
     /**
      * Load a track by the identifier
      * @param identifier The identifier of the track to load
      * @returns {LoadTrackResult} The result of the track
      *
      * @docs https://lavalink.dev/api/rest.html#track-loading
-     */
-    loadTrack(identifier: string, source?: string): Promise<LoadTrackResult>;
+     */ loadTrack(identifier: string, source?: string): Promise<Result<LoadTrackResult | undefined, Error>>;
     /**
      * Decode a track from the base64 encoded track
      * @param {string} encodedBase64Track The base64 encoded track to decode
@@ -70,7 +70,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#track-decoding
      */
-    decodeTrack(encodedBase64Track: string): Promise<TrackData | null>;
+    decodeTrack(encodedBase64Track: string): Promise<Result<TrackData | null, Error>>;
     /**
      * Decode multiple tracks from the base64 encoded tracks
      * @param {string[]} encodedBase64Tracks The base64 encoded tracks to decode
@@ -78,7 +78,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#track-decoding
      */
-    decodeTracks(encodedBase64Tracks: string[]): Promise<TrackData[]>;
+    decodeTracks(encodedBase64Tracks: string[]): Promise<Result<TrackData[], Error>>;
     /**
      * Unmark a failed address
      * @param {string} address The address to unmark as failed. This address must be in the same ip block.
@@ -91,7 +91,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
-    unmarkFailedAddress(address: string): Promise<ErrorResponses | void>;
+    unmarkFailedAddress(address: string): Promise<Result<undefined, Error | ErrorResponses>>;
     /**
      * Unmark all failed addresses
      * @returns {void} 204 - No Content
@@ -103,7 +103,7 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
-    unmarkAllFailedAddresses(): Promise<ErrorResponses | void>;
+    unmarkAllFailedAddresses(): Promise<Result<undefined, Error | ErrorResponses>>;
     /**
      *
      * @returns {RoutePlannerStatus} The status of the routeplanner
@@ -115,28 +115,28 @@ export default class Rest {
      *
      * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
      */
-    getRoutePlannerStatus(): Promise<RoutePlannerStatus>;
+    getRoutePlannerStatus(): Promise<Result<RoutePlannerStatus, ErrorResponses | Error>>;
     /**
      * Get the node information
      * @returns {NodeInfo} The information of the node
      *
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-info
      */
-    getInfo(): Promise<NodeInfo | undefined>;
+    getInfo(): Promise<Result<NodeInfo, Error>>;
     /**
      * Get the version of the node
      * @returns {string} The version of the node
      *
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-version
      */
-    getVersion(): Promise<string>;
+    getVersion(): Promise<Result<string, Error>>;
     /**
      * Get the stats of the node
      * @returns {NodeStats} The stats of the node
      *
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-stats ||
      */
-    getStats(): Promise<NodeStats>;
+    getStats(): Promise<Result<NodeStats, Error>>;
     /**
      * Check if a string starts with any of the words
      * @param {string} s The string to check

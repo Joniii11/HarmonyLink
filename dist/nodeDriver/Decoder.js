@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = require("../typings/node");
+const neverthrow_1 = require("neverthrow");
 class Decoder {
     buffer;
     position;
@@ -18,119 +19,103 @@ class Decoder {
             case node_1.NodeType.FrequenC: return this.FrequenCDecoder;
             case node_1.NodeType.LavaLinkV4:
             case node_1.NodeType.NodeLink: return this.NodeLinkDecoder;
-            default: return null;
+            default: return (0, neverthrow_1.err)(new Error(`Unsupported node type: ${this.type}`));
         }
     }
     ;
     get NodeLinkDecoder() {
-        try {
+        return (0, neverthrow_1.fromThrowable)(() => {
             const isVersioned = (((this.readInt() & 0xc0000000) >> 30) & 1) !== 0;
             const version = isVersioned ? Number(this.readByte()) : 1;
             switch (version) {
-                case 1:
-                    {
-                        return {
-                            encoded: this.track,
-                            info: {
-                                title: this.readUTF(),
-                                author: this.readUTF(),
-                                length: Number(this.readLong()),
-                                identifier: this.readUTF(),
-                                isSeekable: true,
-                                isStream: Boolean(this.readByte()),
-                                uri: null,
-                                artworkUrl: null,
-                                isrc: null,
-                                sourceName: this.readUTF().toLowerCase(),
-                                position: Number(this.readLong())
-                            },
-                            pluginInfo: {},
-                            userData: {}
-                        };
-                    }
-                    ;
-                case 2:
-                    {
-                        return {
-                            encoded: this.track,
-                            info: {
-                                title: this.readUTF(),
-                                author: this.readUTF(),
-                                length: Number(this.readLong()),
-                                identifier: this.readUTF(),
-                                isSeekable: true,
-                                isStream: Boolean(this.readByte()),
-                                uri: this.readByte() ? this.readUTF() : null,
-                                artworkUrl: null,
-                                isrc: null,
-                                sourceName: this.readUTF().toLowerCase(),
-                                position: Number(this.readLong())
-                            },
-                            pluginInfo: {},
-                            userData: {}
-                        };
-                    }
-                    ;
-                case 3:
-                    {
-                        return {
-                            encoded: this.track,
-                            info: {
-                                title: this.readUTF(),
-                                author: this.readUTF(),
-                                length: Number(this.readLong()),
-                                identifier: this.readUTF(),
-                                isSeekable: true,
-                                isStream: Boolean(this.readByte()),
-                                uri: this.readByte() ? this.readUTF() : null,
-                                artworkUrl: this.readByte() ? this.readUTF() : null,
-                                isrc: this.readByte() ? this.readUTF() : null,
-                                sourceName: this.readUTF().toLowerCase(),
-                                position: Number(this.readLong())
-                            },
-                            pluginInfo: {},
-                            userData: {}
-                        };
-                    }
-                    ;
+                case 1: {
+                    return {
+                        encoded: this.track,
+                        info: {
+                            title: this.readUTF(),
+                            author: this.readUTF(),
+                            length: Number(this.readLong()),
+                            identifier: this.readUTF(),
+                            isSeekable: true,
+                            isStream: Boolean(this.readByte()),
+                            uri: null,
+                            artworkUrl: null,
+                            isrc: null,
+                            sourceName: this.readUTF().toLowerCase(),
+                            position: Number(this.readLong())
+                        },
+                        pluginInfo: {},
+                        userData: {}
+                    };
+                }
+                case 2: {
+                    return {
+                        encoded: this.track,
+                        info: {
+                            title: this.readUTF(),
+                            author: this.readUTF(),
+                            length: Number(this.readLong()),
+                            identifier: this.readUTF(),
+                            isSeekable: true,
+                            isStream: Boolean(this.readByte()),
+                            uri: this.readByte() ? this.readUTF() : null,
+                            artworkUrl: null,
+                            isrc: null,
+                            sourceName: this.readUTF().toLowerCase(),
+                            position: Number(this.readLong())
+                        },
+                        pluginInfo: {},
+                        userData: {}
+                    };
+                }
+                case 3: {
+                    return {
+                        encoded: this.track,
+                        info: {
+                            title: this.readUTF(),
+                            author: this.readUTF(),
+                            length: Number(this.readLong()),
+                            identifier: this.readUTF(),
+                            isSeekable: true,
+                            isStream: Boolean(this.readByte()),
+                            uri: this.readByte() ? this.readUTF() : null,
+                            artworkUrl: this.readByte() ? this.readUTF() : null,
+                            isrc: this.readByte() ? this.readUTF() : null,
+                            sourceName: this.readUTF().toLowerCase(),
+                            position: Number(this.readLong())
+                        },
+                        pluginInfo: {},
+                        userData: {}
+                    };
+                }
                 default: {
-                    return null;
+                    throw new Error(`Unsupported track version: ${version}`);
                 }
             }
-            ;
-        }
-        catch {
-            return null;
-        }
-        ;
+        }, (error) => error instanceof Error ? error : new Error(String(error)))();
     }
     ;
     get FrequenCDecoder() {
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-negated-condition
-            (((this.readInt() & 0xc0000000) >> 30) & 1) !== 0 ? this.readByte() : 1;
-            return {
-                encoded: this.track,
-                info: {
-                    title: this.readUTF(),
-                    author: this.readUTF(),
-                    length: Number(this.readLongFrequenC()),
-                    identifier: this.readUTF(),
-                    isSeekable: true,
-                    isStream: this.readByte() === 1,
-                    uri: this.readUTF(),
-                    artworkUrl: this.readByte() === 1 ? this.readUTF() : null,
-                    isrc: this.readByte() === 1 ? this.readUTF() : null,
-                    sourceName: this.readUTF().toLowerCase(),
-                    position: 0,
-                },
-                pluginInfo: {},
-                userData: {}
-            };
-        }
-        catch {
-            return null;
-        }
+        // eslint-disable-next-line no-unused-expressions, no-negated-condition
+        (((this.readInt() & 0xc0000000) >> 30) & 1) !== 0 ? this.readByte() : 1;
+        return (0, neverthrow_1.ok)({
+            encoded: this.track,
+            info: {
+                title: this.readUTF(),
+                author: this.readUTF(),
+                length: Number(this.readLongFrequenC()),
+                identifier: this.readUTF(),
+                isSeekable: true,
+                isStream: this.readByte() === 1,
+                uri: this.readUTF(),
+                artworkUrl: this.readByte() === 1 ? this.readUTF() : null,
+                isrc: this.readByte() === 1 ? this.readUTF() : null,
+                sourceName: this.readUTF().toLowerCase(),
+                position: 0,
+            },
+            pluginInfo: {},
+            userData: {}
+        });
     }
     ;
     changeBytes(bytes) {

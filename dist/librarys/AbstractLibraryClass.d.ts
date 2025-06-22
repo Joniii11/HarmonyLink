@@ -9,10 +9,10 @@ import { Result } from "neverthrow";
  * @note This class is not meant to be instantiated, but to be extended by other classes.
  * @note We currenty only support OceanicJs and Discord.js, however if you want to add support for other libraries, you can extend this class and implement the methods.
  */
-export default abstract class AbstractLibraryClass {
-    protected readonly client: any;
+export default abstract class AbstractLibraryClass<TClient = any> {
+    protected readonly client: TClient;
     protected manager: HarmonyLink | null;
-    constructor(client: any);
+    constructor(client: TClient);
     /**
      * Initialize the library class
      * @param {HarmonyLink} manager The HarmonyLink instance

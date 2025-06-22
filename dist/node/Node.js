@@ -61,6 +61,10 @@ class Node extends events_1.default {
      */
     async connect() {
         const ws = await this.driver.connect();
+        if (ws.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.options.name}] Failed to connect to the node. Error: ${ws.error.message}`);
+            throw ws.error;
+        }
         this.isConnected = true;
         this.options.currentAttempts = 0;
         return ws;
@@ -68,16 +72,14 @@ class Node extends events_1.default {
     ;
     /**
      * This method is used to disconnect from the node.
-     * @returns {Promise<void>} Resolves once the node is disconnected.
+     * @returns {void} Resolves once the node is disconnected.
      */
-    async disconnect() {
-        return new Promise((resolve) => {
-            if (!this.isConnected)
-                return resolve();
-            this.isConnected = false;
-            this.driver.wsClose(true);
-            resolve();
-        });
+    disconnect() {
+        if (!this.isConnected)
+            return;
+        this.manager.emit("debug", `[HarmonyLink] [Node ${this.options.name}] Disconnecting from the node.`);
+        this.isConnected = false;
+        this.driver.wsClose(true);
     }
     ;
     /**
@@ -125,7 +127,7 @@ class Node extends events_1.default {
     ;
     /**
      * This method is used to unmark all failed addresses.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      *
      * @see https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
@@ -136,7 +138,7 @@ class Node extends events_1.default {
     /**
      * This method is used to unmark a failed address.
      * @param {string} address The address to unmark.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      *
      * @see https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */

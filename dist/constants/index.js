@@ -18,7 +18,7 @@ exports.parseHarmonyLinkConfig = exports.getDefaultNodeStats = exports.config = 
 exports.config = {
     name: "HarmonyLink",
     author: "Joniii11",
-    version: "1.0.0",
+    version: "2.0.0",
     github: "https://github.com/Joniii11/HarmonyLink"
 };
 const getDefaultNodeStats = () => ({

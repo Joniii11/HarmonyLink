@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Constants
 const constants_1 = require("../constants");
 const node_1 = require("../typings/node");
+const neverthrow_1 = require("neverthrow");
 class Rest {
     manager;
     node;
@@ -41,7 +42,8 @@ class Rest {
             method: "GET",
             path: `/sessions/${this.sessionId}/players`
         };
-        return await this.node.driver.request(options) ?? [];
+        const result = await this.node.driver.request(options);
+        return result.match((players) => (0, neverthrow_1.ok)(players ?? []), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     /**
@@ -61,7 +63,8 @@ class Rest {
             method: "GET",
             path: `/sessions/${this.sessionId}/players/${guildId}`
         };
-        return await this.node.driver.request(options) ?? null;
+        const result = await this.node.driver.request(options);
+        return result.match((player) => (0, neverthrow_1.ok)(player ?? null), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     /**
@@ -107,13 +110,13 @@ class Rest {
      * @returns {LoadTrackResult} The result of the track
      *
      * @docs https://lavalink.dev/api/rest.html#track-loading
-     */
-    async loadTrack(identifier, source) {
+     */ async loadTrack(identifier, source) {
         const options = {
             method: "GET",
             path: `/loadtracks?identifier=${encodeURIComponent((this.startsWithMultiple(identifier, ["https://", "http://"]) ? '' : `${source ?? this.manager.options.defaultPlatform ?? 'ytsearch'}:`) + identifier)}`,
         };
-        return await this.node.driver.request(options) ?? { loadType: "empty", data: {} };
+        const result = await this.node.driver.request(options);
+        return result.map((data) => data ?? { loadType: "empty", data: {} });
     }
     ;
     /**
@@ -129,7 +132,8 @@ class Rest {
             path: "/decodetrack",
             params: { encodedTrack: encodedBase64Track }
         };
-        return await this.node.driver.request(options) ?? null;
+        const result = await this.node.driver.request(options);
+        return result.match((track) => (0, neverthrow_1.ok)(track ?? null), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     /**
@@ -145,7 +149,8 @@ class Rest {
             path: "/decodetracks",
             data: encodedBase64Tracks
         };
-        return await this.node.driver.request(options) ?? [];
+        const result = await this.node.driver.request(options);
+        return result.match((tracks) => (0, neverthrow_1.ok)(tracks ?? []), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     // ? ----- Track API End ----- ?//
@@ -164,20 +169,20 @@ class Rest {
      */
     async unmarkFailedAddress(address) {
         if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
-            return {
+            return (0, neverthrow_1.err)({
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
                 message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/free/address",
                 trace: new Error().stack
-            };
+            });
         const options = {
             method: "POST",
             path: "/routeplanner/free/address",
             data: { address }
         };
-        await this.node.driver.request(options);
+        return await this.node.driver.request(options);
     }
     ;
     /**
@@ -193,19 +198,19 @@ class Rest {
      */
     async unmarkAllFailedAddresses() {
         if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
-            return {
+            return (0, neverthrow_1.err)({
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
                 message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/free/all",
                 trace: new Error().stack
-            };
+            });
         const options = {
             method: "POST",
             path: "/routeplanner/free/all",
         };
-        await this.node.driver.request(options);
+        return await this.node.driver.request(options);
     }
     ;
     /**
@@ -221,19 +226,20 @@ class Rest {
      */
     async getRoutePlannerStatus() {
         if ([node_1.NodeType.NodeLink, node_1.NodeType.FrequenC].includes(this.node.driver.type))
-            return {
+            return (0, neverthrow_1.err)({
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
                 message: `The specified node is a ${this.node.driver.type === node_1.NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
                 path: "/v4/routeplanner/status",
                 trace: new Error().stack
-            };
+            });
         const options = {
             method: "GET",
             path: "/routeplanner/status"
         };
-        return await this.node.driver.request(options) ?? {};
+        const result = await this.node.driver.request(options);
+        return result.match((status) => (0, neverthrow_1.ok)(status ?? {}), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     // ? ----- Route Planer End ----- ?//
@@ -250,29 +256,31 @@ class Rest {
             path: "/info"
         };
         const result = await this.node.driver.request(options);
+        if (result.isErr())
+            return (0, neverthrow_1.err)(result.error);
         if (this.node.driver.type === node_1.NodeType.FrequenC) {
-            return {
+            return (0, neverthrow_1.ok)({
                 version: {
-                    major: result?.version.major ?? 0,
-                    minor: result?.version.minor ?? 0,
-                    patch: result?.version.patch ?? 0,
+                    major: result.value?.version.major ?? 0,
+                    minor: result.value?.version.minor ?? 0,
+                    patch: result.value?.version.patch ?? 0,
                     semver: "0.0.0"
                 },
                 jvm: "GNU Libgcj 7.3.0",
-                lavaplayer: `${(result?.version.major ?? 0)}.${(result?.version.minor ?? 0)}.${(result?.version.patch ?? 0)}`,
-                sourceManagers: result.source_managers || [],
-                filters: result.filters || [],
+                lavaplayer: `${(result.value?.version.major ?? 0)}.${(result.value?.version.minor ?? 0)}.${(result.value?.version.patch ?? 0)}`,
+                sourceManagers: result.value.source_managers || [],
+                filters: result.value.filters || [],
                 plugins: [],
                 git: {
-                    commit: result?.git.commit ?? "Unknown",
-                    branch: result?.git.branch ?? "main",
+                    commit: result.value?.git.commit ?? "Unknown",
+                    branch: result.value?.git.branch ?? "main",
                     commitTime: 0
                 },
                 buildTime: 0
-            };
+            });
         }
         ;
-        return result;
+        return (0, neverthrow_1.ok)(result.value);
     }
     ;
     /**
@@ -289,7 +297,8 @@ class Rest {
                 "Accept": "text/plain"
             }
         };
-        return await this.node.driver.request(options) ?? "Unknown";
+        const result = await this.node.driver.request(options);
+        return result.match((version) => (0, neverthrow_1.ok)(version ?? "Unknown"), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     /**
@@ -303,7 +312,8 @@ class Rest {
             method: "GET",
             path: "/stats",
         };
-        return await this.node.driver.request(options) ?? (0, constants_1.getDefaultNodeStats)();
+        const result = await this.node.driver.request(options);
+        return result.match((stats) => (0, neverthrow_1.ok)(stats ?? (0, constants_1.getDefaultNodeStats)()), (error) => (0, neverthrow_1.err)(error instanceof Error ? error : new Error(String(error))));
     }
     ;
     // ? ----- Node End ----- ?//

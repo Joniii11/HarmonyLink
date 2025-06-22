@@ -3,6 +3,7 @@ import WebSocket from "ws";
 import { HarmonyLinkRequesterOptions, NodeType } from "../typings/node";
 import { HarmonyLink } from "../HarmonyLink";
 import { Node } from "../node/Node";
+import { Result } from 'neverthrow';
 export default class FrequenC extends AbstractNodeDriver {
     clientId: string;
     type: NodeType;
@@ -14,9 +15,9 @@ export default class FrequenC extends AbstractNodeDriver {
     protected wsClient: WebSocket | undefined;
     get isRegistered(): boolean;
     init(manager: HarmonyLink, node: Node): void;
-    connect(): Promise<WebSocket>;
-    request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined>;
-    updateSessions(): Promise<void>;
+    connect(): Promise<Result<WebSocket, Error>>;
+    request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<Result<T | undefined, Error>>;
+    updateSessions(_sessionId: string, _mode: boolean, _timeout: number): Promise<Result<void, Error>>;
     wsClose(withoutEmit?: boolean): void;
-    protected eventHandler(data: string): Promise<boolean>;
+    protected eventHandler(data: string): Result<boolean, Error>;
 }

@@ -22,6 +22,7 @@ export declare interface HarmonyLink {
 export declare class HarmonyLink extends EventEmitter {
     botID: string;
     isReady: boolean;
+    readonly version: string;
     readonly config: Config;
     readonly library: AbstractLibraryClass;
     readonly nodes: NodeGroup[];
@@ -36,37 +37,42 @@ export declare class HarmonyLink extends EventEmitter {
      * @param {Node} [node] - Node to use for resolution.
      * @returns {Promise<Response>} The response containing resolved tracks.
      */
-    resolve({ query, source, requester }: ResolveOptions, node?: Node): Promise<Response>;
+    resolve({ query, source, requester }: ResolveOptions, node?: Node): Promise<Result<Response, Error>>;
     /**
      * Creates a player.
      * @param {PlayerOptions} playerOptions - Options for the player.
      * @param {Node} [node] - Node to use for the player.
      * @returns {Promise<Player>} The created player.
      */
-    createPlayer(playerOptions: Omit<PlayerOptions, "node">, node?: Node): Promise<Player>;
+    createPlayer(playerOptions: Omit<PlayerOptions, "node">, node?: Node): Promise<Result<Player, Error>>;
     /**
      * Destroys a player.
      * @param {string} guildId - The guild ID of the player to destroy.
      * @returns {Promise<Player | null>} The destroyed player.
      */
-    destroyPlayer(guildId: string): Promise<Player | null>;
-    addNode(node: NodeGroup): Promise<Result<Node, Error>>;
+    destroyPlayer(guildId: string): Promise<Result<Player, Error>>;
     /**
-     * Adds nodes to the node manager.
+     * Adds a node to the node manager.
      * @param {NodeGroup[]} nodes - The nodes to add.
-     * @returns {Promise<Result<Node[], Error>>} The added nodes or error.
+     * @returns {Promise<Result<Node[], Error>>} The added nodes.
      */
-    addNode(nodes: NodeGroup[]): Promise<Result<Node[], Error>>;
+    addNode(nodes: NodeGroup[]): Promise<Result<Node[], Error[]>>;
+    /**
+     * Adds a node to the node manager.
+     * @param {NodeGroup} node - The node to add.
+     * @returns {Promise<Result<Node, Error>>} The added node.
+     */
+    addNode(node: NodeGroup): Promise<Result<Node, Error>>;
     /**
      * Removes a node from the node manager.
      * @param {string} nodeName - The name of the node to remove.
      * @returns {Promise<Node | null>} The removed node.
      */
-    removeNode(nodeName: string): Promise<Node | null>;
+    removeNode(nodeName: string): Promise<Result<Node, Error>>;
     /**
      * Decodes a or multiple encoded tracks.
      * @param {string | string[]} tracks - The track to decode.
      * @returns {Promise<TrackData[]>} - A Promise that resolves to the decoded track.
      */
-    decodeTracks(tracks: string[] | string, node?: Node): Promise<TrackData[] | null>;
+    decodeTracks(tracks: string[] | string, node?: Node): Promise<Result<TrackData[], Error>>;
 }

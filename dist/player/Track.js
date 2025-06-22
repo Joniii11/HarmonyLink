@@ -2,6 +2,7 @@
 /* eslint-disable class-methods-use-this */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Track = void 0;
+const neverthrow_1 = require("neverthrow");
 class Track {
     track;
     info;
@@ -33,30 +34,32 @@ class Track {
     async resolve(manager) {
         const query = [this.info.author, this.info.title].filter((x) => Boolean(x)).join(" - ");
         const result = await manager.resolve({ query, requester: this.info.requester });
+        if (result.isErr())
+            return (0, neverthrow_1.err)(result.error);
         if (this.info.author) {
             const author = [this.info.author, `${this.info.author} - Topic`];
-            const officialAudio = result.tracks.find((track) => author.some((name) => new RegExp(`^${this.escapeRegExp(name)}$`, "i").test(track.info.author)) ||
+            const officialAudio = result.value.tracks.find((track) => author.some((name) => new RegExp(`^${this.escapeRegExp(name)}$`, "i").test(track.info.author)) ||
                 new RegExp(`^${this.escapeRegExp(this.info.title)}$`, "i").test(track.info.title));
             if (officialAudio) {
                 this.track = officialAudio.track;
-                return this;
+                return (0, neverthrow_1.ok)(this);
             }
             ;
         }
         ;
         if (this.info.length) {
-            const sameDuration = result.tracks.find((track) => track.info.length >= (this.info.length ? this.info.length : 0) - 2000 &&
+            const sameDuration = result.value.tracks.find((track) => track.info.length >= (this.info.length ? this.info.length : 0) - 2000 &&
                 track.info.length <= (this.info.length ? this.info.length : 0) + 2000);
             if (sameDuration) {
                 this.track = sameDuration.track;
-                return this;
+                return (0, neverthrow_1.ok)(this);
             }
             ;
         }
         ;
-        this.info.identifier = result.tracks[0].info.identifier;
-        this.track = result.tracks[0].track;
-        return this;
+        this.info.identifier = result.value.tracks[0].info.identifier;
+        this.track = result.value.tracks[0].track;
+        return (0, neverthrow_1.ok)(this);
     }
     ;
     escapeRegExp(str) {
