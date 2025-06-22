@@ -1,4 +1,4 @@
-**harmonylink** • [**Docs**](globals.md)
+**HarmonyLink v2.0.0** • [**Docs**](globals.md)
 
 ***
 
@@ -12,11 +12,10 @@
   </a>
 
 <h3 align="center">HarmonyLink</h3>
-
   <p align="center">
-    Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. 
+    Seamlessly connect to Lavalink, NodeLink, and FrequenC nodes for high-quality audio streaming in your Discord bots. Supports Discord.js, Eris, Oceanic.js, and a powerful plugin system.
     <br />
-    <a href="https://github.com/Joniii11/HarmonyLink"><strong>Explore the docs »</strong></a>
+    <a href="https://joniii.dev/docs/harmonylink"><strong>Explore the docs »</strong></a>
     <br />
   <br />
     <a href="#demo">View Demo</a>
@@ -25,6 +24,13 @@
     ·
     <a href="https://github.com/Joniii11/HarmonyLink/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/harmonylink"><img src="https://img.shields.io/npm/v/harmonylink.svg" alt="npm version"></a>
+  <a href="https://github.com/Joniii11/HarmonyLink/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Joniii11/HarmonyLink.svg" alt="MIT License"></a>
+  <a href="https://joniii.dev/docs/harmonylink"><img src="https://img.shields.io/badge/docs-online-blue.svg" alt="Docs"></a>
+</p>
+
    <h4>Built With</h4>
 
   [![TypeScript][ts]][ts-url]
@@ -37,42 +43,41 @@
 
 <br>
   <a href="https://nodei.co/npm/harmonylink/">
-    <img src="https://nodei.co/npm/harmonylink.png?downloads=true&downloadRank=true&stars=true" alt="Poru NPM Package"/>
+    <img src="https://nodei.co/npm/harmonylink.png?downloads=true&downloadRank=true&stars=true" alt="HarmonyLink NPM Package"/>
     </a> 
 </div>
 
+> [!NOTE]
+> **HarmonyLink v2.0+** introduces advanced type safety with Result types, generic filter builders and a better plugin system cause the old one was not good enough ig. See [Migration Guide](#migration-guide) for upgrading from older versions.
+
 > [!WARNING]  
-> Support for Lavalink Version 3 is planned, but not confirmed to be done.</a>
+> Support for Lavalink Version 3 is planned, but not confirmed to be done.
 
 <details>
   <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about">About</a>
-      <ul>
-        <li><a href="#demo">Demo</a></li>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#example-usage">Example Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-  </ol>
+
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Quick Start](#quick-start-discordjs-v14)
+- [Documentation](#documentation)
+- [Plugins](#plugins)
+- [Migration Guide](#migration-guide)
+- [Contributing](#contributing)
+- [License](#license)
+
 </details>
 
-## About
+## Features
 
-Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.
+- **Multi-library support:** Discord.js v14, Eris, Oceanic.js
+- **Plugin system:** Extensible with lifecycle management
+- **Type safety:** Full TypeScript support, neverthrow Result types
+- **Advanced filters:** Type-safe audio filter builder
+- **Robust node/player management**
+- **Modern, well-documented API**
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Demo:
+## Demo
 
 | URL | Features | Additional Information |
 |-----|----------|------------------------|
@@ -81,51 +86,167 @@ Seamlessly connect to LavaLink nodes for high-quality audio streaming in your ap
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Getting Started
-
-Here is how to install HarmonyLink on your project.
-
-### Installation
+## Installation
 ```sh
-# Using npm
 npm install harmonylink
-
-# Using yarn
-yarn add harmonylink
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Example Usage
+## Quick Start (Discord.js v14)
 
 ```ts
-// With Discord.js Version 14
-import { DJSLibrary } from "HarmonyLink";
-import { Client } from "discord.js"
+import { DJSLibrary, HarmonyLink } from "harmonylink";
+import { Client, GatewayIntentBits } from "discord.js";
 
-// Initialize your client
-const client = new Client();
+const client = new Client({ 
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] 
+});
 
-const config: HarmonyLinkConfiguration = {
-  nodes: [
-    {
-      name: "Example Node",
-      host: "example.com",
-      port: 2333,
-      password: "youshallnotpass",
-      secure: false
-    }
-  ] // Your nodes. 
+const music = new HarmonyLink({
+  nodes: [{
+    name: "Example Node",
+    host: "localhost",
+    port: 2333,
+    password: "youshallnotpass",
+    secure: false
+  }],
   library: new DJSLibrary(client),
-};
+});
 
-const HarmonyLink = new HarmonyLink(config)
+client.on("ready", async () => {
+  // Create a player - using unwrapOr for cleaner code
+  const player = (await music.createPlayer({
+    guildId: "YOUR_GUILD_ID",
+    voiceId: "VOICE_CHANNEL_ID",
+    textId: "TEXT_CHANNEL_ID"
+  })).unwrapOr(null);
 
-// Creating a player
-await HarmonyLink.createPlayer()
+  if (player) {
+    // Search and play a track
+    const response = (await music.resolve({ 
+      query: "Rick Astley - Never Gonna Give You Up", 
+      requester: client.user 
+    })).unwrapOr(null);
+    
+    if (response && response.tracks.length > 0) {
+      player.queue.add(response.tracks[0]);
+      await player.play();
+      console.log("Now playing!");
+    }
+  }
+});
+
+client.login("YOUR_BOT_TOKEN");
 ```
 
-_For more examples, please refer to the [Documentation](https://github.com/Joniii11/HarmonyLink)_
+**Result Types:**
+HarmonyLink uses [neverthrow](https://github.com/supermacro/neverthrow) Result types instead of throwing errors. You can handle them in three ways:
+
+```ts
+// Option 1: Check with .isOk() (explicit)
+if (result.isOk()) {
+  console.log(result.value); // Safe access
+} else {
+  console.error(result.error); // Handle error
+}
+
+// Option 2: Use .unwrapOr() (cleaner)
+const value = result.unwrapOr(null); // Returns null if error
+if (value) {
+  console.log(value); // Use the value
+}
+
+// Option 3: Use .match() (pattern matching)
+result.match(
+  (value) => console.log(value),
+  (error) => console.error(error)
+);
+
+// So it would look something like this:
+const tracks = await <Player>.resolve({ query: "Rick Astley - Never Gonna Give You Up", requester: client.user })
+
+tracks.match(
+    (tracks) => <Player>.queue.add(tracks[0]),
+    (error) => console.error("Failed to resolve track:", error.message)
+);
+
+```
+_For more examples, please refer to the [Documentation](https://joniii.dev/docs/harmonylink)_
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Documentation
+- [API Reference & Guides](https://joniii.dev/docs/harmonylink)
+- [Class Docs](https://joniii.dev/docs/harmonylink/classes/)
+- [Function Docs](https://joniii.dev/docs/harmonylink/functions/)
+- [Plugin System](https://joniii.dev/docs/harmonylink/classes/AbstractPlugin)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Plugins
+HarmonyLink supports plugins for custom features and integrations. See the [Plugin Guide](https://joniii.dev/docs/harmonylink/classes/AbstractPlugin) and [loadPlugins](https://joniii.dev/docs/harmonylink/functions/loadPlugins) for details.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Migration Guide
+
+### From v1.x to v2.x
+
+**Breaking Changes:**
+
+1. **Result Types:** All async methods now return `Result<T, E>` instead of throwing errors
+   ```ts
+   // v1.x (old)
+   try {
+     const player = await music.createPlayer(options);
+   } catch (error) {
+     console.error(error);
+   }
+   
+   // v2.x (new)
+   const playerResult = await music.createPlayer(options);
+   if (playerResult.isOk()) {
+     const player = playerResult.value;
+   } else {
+     console.error(playerResult.error);
+   }
+   
+   // Or use unwrapOr for cleaner code
+   const player = (await music.createPlayer(options)).unwrapOr(null);
+   ```
+
+2. **Plugin System:** New lifecycle-based plugin architecture
+   ```ts
+   // v1.x (old)
+   class MyPlugin extends Plugin {
+     load() { /* ... */ }
+   }
+   
+   // v2.x (new)
+   class MyPlugin extends AbstractPlugin {
+     async initialize(manager: HarmonyLink): Promise<Result<void, Error>> {
+       // Plugin initialization logic
+       return ok();
+     }
+   }
+   ```
+
+3. **Import Changes:** Package exports have been reorganized
+   ```ts
+   // v1.x (old)
+   import { HarmonyLink } from "harmonylink/dist/HarmonyLink";
+   
+   // v2.x (new)
+   import { HarmonyLink } from "harmonylink";
+   ```
+
+**New Features in v2.x:**
+- **Type-safe filters:** Enhanced audio filter system with better TypeScript support
+- **Improved error handling:** Comprehensive Result types throughout the API
+- **Better plugin lifecycle:** More robust plugin loading and management
+
+For detailed migration assistance, see the [full documentation](https://joniii.dev/docs/harmonylink).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

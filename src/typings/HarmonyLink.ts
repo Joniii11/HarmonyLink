@@ -10,6 +10,8 @@ import { AbstractPlugin } from "@/plugin";
 import { Track } from "@/player";
 import { TrackEndEvent, TrackExceptionEvent, TrackStuckEvent, WebSocketClosedEvent } from "./exporter";
 
+export type FromSingleToArray<T, K> = T extends any[] ? K[] : K;
+
 export interface HarmonyLinkConfiguration {
     /**
      * The library instance used for interacting with the Discord client.

@@ -1,12 +1,22 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackLoadResultPlaylist
+[HarmonyLink v2.0.0](../globals.md) / TrackLoadResultPlaylist
 
 # Interface: TrackLoadResultPlaylist
 
 ## Properties
+
+### loadType
+
+> **loadType**: `"playlist"`
+
+#### Defined in
+
+[typings/node/rest.ts:42](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L42)
+
+***
 
 ### data
 
@@ -44,14 +54,4 @@ The tracks of the playlist
 
 #### Defined in
 
-src/typings/node/rest.ts:43
-
-***
-
-### loadType
-
-> **loadType**: `"playlist"`
-
-#### Defined in
-
-src/typings/node/rest.ts:42
+[typings/node/rest.ts:43](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L43)

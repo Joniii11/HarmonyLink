@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / HarmonyLinkRequesterOptions
+[HarmonyLink v2.0.0](../globals.md) / HarmonyLinkRequesterOptions
 
 # Interface: HarmonyLinkRequesterOptions
 
@@ -12,31 +12,13 @@
 
 ## Properties
 
-### body?
+### params?
 
-> `optional` **body**: `BodyInit`
-
-#### Inherited from
-
-`RequestInit.body`
+> `optional` **params**: `string` \| `Record`\<`string`, `string`\>
 
 #### Defined in
 
-node\_modules/undici-types/fetch.d.ts:108
-
-***
-
-### credentials?
-
-> `optional` **credentials**: `RequestCredentials`
-
-#### Inherited from
-
-`RequestInit.credentials`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:112
+[typings/node/index.ts:4](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L4)
 
 ***
 
@@ -46,115 +28,7 @@ node\_modules/undici-types/fetch.d.ts:112
 
 #### Defined in
 
-src/typings/node/index.ts:35
-
-***
-
-### dispatcher?
-
-> `optional` **dispatcher**: `Dispatcher`
-
-#### Inherited from
-
-`RequestInit.dispatcher`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:117
-
-***
-
-### duplex?
-
-> `optional` **duplex**: `"half"`
-
-#### Inherited from
-
-`RequestInit.duplex`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:118
-
-***
-
-### headers?
-
-> `optional` **headers**: `HeadersInit`
-
-#### Inherited from
-
-`RequestInit.headers`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:107
-
-***
-
-### integrity?
-
-> `optional` **integrity**: `string`
-
-#### Inherited from
-
-`RequestInit.integrity`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:110
-
-***
-
-### keepalive?
-
-> `optional` **keepalive**: `boolean`
-
-#### Inherited from
-
-`RequestInit.keepalive`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:106
-
-***
-
-### method
-
-> **method**: `"DELETE"` \| `"GET"` \| `"PATCH"` \| `"POST"` \| `"PUT"`
-
-#### Overrides
-
-`RequestInit.method`
-
-#### Defined in
-
-src/typings/node/index.ts:37
-
-***
-
-### mode?
-
-> `optional` **mode**: `RequestMode`
-
-#### Inherited from
-
-`RequestInit.mode`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:113
-
-***
-
-### params?
-
-> `optional` **params**: `string` \| `Record`\<`string`, `string`\>
-
-#### Defined in
-
-src/typings/node/index.ts:34
+[typings/node/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L5)
 
 ***
 
@@ -164,74 +38,20 @@ src/typings/node/index.ts:34
 
 #### Defined in
 
-src/typings/node/index.ts:36
+[typings/node/index.ts:6](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L6)
 
 ***
 
-### redirect?
+### method
 
-> `optional` **redirect**: `RequestRedirect`
+> **method**: `"DELETE"` \| `"GET"` \| `"PATCH"` \| `"POST"` \| `"PUT"`
 
-#### Inherited from
+A string to set request's method.
 
-`RequestInit.redirect`
+#### Overrides
 
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:109
-
-***
-
-### referrer?
-
-> `optional` **referrer**: `string`
-
-#### Inherited from
-
-`RequestInit.referrer`
+`RequestInit.method`
 
 #### Defined in
 
-node\_modules/undici-types/fetch.d.ts:114
-
-***
-
-### referrerPolicy?
-
-> `optional` **referrerPolicy**: `ReferrerPolicy`
-
-#### Inherited from
-
-`RequestInit.referrerPolicy`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:115
-
-***
-
-### signal?
-
-> `optional` **signal**: `AbortSignal`
-
-#### Inherited from
-
-`RequestInit.signal`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:111
-
-***
-
-### window?
-
-> `optional` **window**: `null`
-
-#### Inherited from
-
-`RequestInit.window`
-
-#### Defined in
-
-node\_modules/undici-types/fetch.d.ts:116
+[typings/node/index.ts:7](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L7)

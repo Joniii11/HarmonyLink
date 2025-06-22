@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TDateISOTime
+[HarmonyLink v2.0.0](../globals.md) / TDateISOTime
 
 # Type Alias: TDateISOTime
 
@@ -12,4 +12,4 @@ Represent a string like `14:42:34.678`
 
 ## Defined in
 
-src/typings/index.ts:19
+[typings/index.ts:19](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L19)

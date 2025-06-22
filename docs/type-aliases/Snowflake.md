@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Snowflake
+[HarmonyLink v2.0.0](../globals.md) / Snowflake
 
 # Type Alias: Snowflake
 
@@ -14,4 +14,4 @@ https://discord.com/developers/docs/reference#snowflakes
 
 ## Defined in
 
-src/typings/index.ts:35
+[typings/index.ts:35](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L35)

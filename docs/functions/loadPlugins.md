@@ -1,14 +1,14 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / loadPlugins
+[HarmonyLink v2.0.0](../globals.md) / loadPlugins
 
 # Function: loadPlugins()
 
-> **loadPlugins**(`manager`): `Promise`\<`boolean`\>
+> **loadPlugins**(`manager`): `Promise`\<`Result`\<[`PluginLoadResult`](../interfaces/PluginLoadResult.md)[], `string`\>\>
 
-This function will load all the plugins that are in the HarmonyLink instance.
+This function will load all the plugins that are in the HarmonyLink instance with Result types.
 
 ## Parameters
 
@@ -18,10 +18,10 @@ The HarmonyLink instance
 
 ## Returns
 
-`Promise`\<`boolean`\>
+`Promise`\<`Result`\<[`PluginLoadResult`](../interfaces/PluginLoadResult.md)[], `string`\>\>
 
-If the plugins were loaded successfully.
+Result containing plugin load results or error message
 
 ## Defined in
 
-src/plugin/index.ts:12
+[plugin/index.ts:25](https://github.com/Joniii11/HarmonyLink/blob/master/src/plugin/index.ts#L25)

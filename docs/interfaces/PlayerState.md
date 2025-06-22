@@ -1,34 +1,22 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerState
+[HarmonyLink v2.0.0](../globals.md) / PlayerState
 
 # Interface: PlayerState
 
 ## Properties
 
-### connected
+### time
 
-> **connected**: `boolean`
+> **time**: `number`
 
-Whether Lavalink is connected to the voice gateway
-
-#### Defined in
-
-src/typings/player/index.ts:40
-
-***
-
-### ping
-
-> **ping**: `number`
-
-The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
+Unix timestamp in milliseconds
 
 #### Defined in
 
-src/typings/player/index.ts:45
+[typings/player/index.ts:30](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L30)
 
 ***
 
@@ -40,16 +28,28 @@ The position of the track in milliseconds
 
 #### Defined in
 
-src/typings/player/index.ts:35
+[typings/player/index.ts:35](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L35)
 
 ***
 
-### time
+### connected
 
-> **time**: `number`
+> **connected**: `boolean`
 
-Unix timestamp in milliseconds
+Whether Lavalink is connected to the voice gateway
 
 #### Defined in
 
-src/typings/player/index.ts:30
+[typings/player/index.ts:40](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L40)
+
+***
+
+### ping
+
+> **ping**: `number`
+
+The ping of the node to the Discord voice server in milliseconds (-1 if not connected)
+
+#### Defined in
+
+[typings/player/index.ts:45](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L45)

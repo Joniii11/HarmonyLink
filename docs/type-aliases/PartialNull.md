@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PartialNull
+[HarmonyLink v2.0.0](../globals.md) / PartialNull
 
 # Type Alias: PartialNull\<T\>
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-src/typings/index.ts:1
+[typings/index.ts:1](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L1)

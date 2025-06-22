@@ -1,14 +1,14 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / OceanicJS
+[HarmonyLink v2.0.0](../globals.md) / OceanicJS
 
 # Class: OceanicJS
 
 ## Extends
 
-- `default`
+- `default`\<`OceanicJSLikeClient`\>
 
 ## Constructors
 
@@ -18,7 +18,7 @@
 
 #### Parameters
 
-• **client**: `any`
+• **client**: `OceanicJSLikeClient`
 
 #### Returns
 
@@ -26,17 +26,17 @@
 
 #### Inherited from
 
-`AbstractLibraryClass.constructor`
+`AbstractLibraryClass<OceanicJSLikeClient>.constructor`
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:17
+[librarys/AbstractLibraryClass.ts:19](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L19)
 
 ## Properties
 
 ### client
 
-> `protected` `readonly` **client**: `any`
+> `protected` `readonly` **client**: `OceanicJSLikeClient`
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ src/librarys/AbstractLibraryClass.ts:17
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:14
+[librarys/AbstractLibraryClass.ts:16](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L16)
 
 ***
 
@@ -58,7 +58,7 @@ src/librarys/AbstractLibraryClass.ts:14
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:15
+[librarys/AbstractLibraryClass.ts:17](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L17)
 
 ## Accessors
 
@@ -82,7 +82,7 @@ getter method for the user ID of the bot
 
 #### Defined in
 
-src/librarys/OceanicJS.ts:7
+[librarys/OceanicJS.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/OceanicJS.ts#L8)
 
 ## Methods
 
@@ -110,35 +110,7 @@ the instance of the class
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:27
-
-***
-
-### listen()
-
-> **listen**(`nodes`): `void`
-
-Listen for events from the discord gateway that are arriving on the library
-
-#### Parameters
-
-• **nodes**: [`NodeGroup`](../interfaces/NodeGroup.md)[]
-
-#### Returns
-
-`void`
-
-#### Abstract
-
-method to listen for events from the discord gateway that are arriving on the library
-
-#### Overrides
-
-`AbstractLibraryClass.listen`
-
-#### Defined in
-
-src/librarys/OceanicJS.ts:19
+[librarys/AbstractLibraryClass.ts:29](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L29)
 
 ***
 
@@ -164,13 +136,13 @@ The packet to handle
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:36
+[librarys/AbstractLibraryClass.ts:38](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L38)
 
 ***
 
 ### ready()
 
-> `protected` **ready**(`nodes`): `Promise`\<`void`\>
+> `protected` **ready**(`nodes`): `Promise`\<`Result`\<`boolean`, `Error`\>\>
 
 #### Parameters
 
@@ -178,7 +150,7 @@ src/librarys/AbstractLibraryClass.ts:36
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`Result`\<`boolean`, `Error`\>\>
 
 #### Inherited from
 
@@ -186,7 +158,29 @@ src/librarys/AbstractLibraryClass.ts:36
 
 #### Defined in
 
-src/librarys/AbstractLibraryClass.ts:72
+[librarys/AbstractLibraryClass.ts:74](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/AbstractLibraryClass.ts#L74)
+
+***
+
+### shardID()
+
+> **shardID**(`guildId`): `number`
+
+#### Parameters
+
+• **guildId**: `string`
+
+#### Returns
+
+`number`
+
+#### Overrides
+
+`AbstractLibraryClass.shardID`
+
+#### Defined in
+
+[librarys/OceanicJS.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/OceanicJS.ts#L12)
 
 ***
 
@@ -224,26 +218,32 @@ method to send packets to the gateway
 
 #### Defined in
 
-src/librarys/OceanicJS.ts:15
+[librarys/OceanicJS.ts:16](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/OceanicJS.ts#L16)
 
 ***
 
-### shardID()
+### listen()
 
-> **shardID**(`guildId`): `number`
+> **listen**(`nodes`): `void`
+
+Listen for events from the discord gateway that are arriving on the library
 
 #### Parameters
 
-• **guildId**: `string`
+• **nodes**: [`NodeGroup`](../interfaces/NodeGroup.md)[]
 
 #### Returns
 
-`number`
+`void`
+
+#### Abstract
+
+method to listen for events from the discord gateway that are arriving on the library
 
 #### Overrides
 
-`AbstractLibraryClass.shardID`
+`AbstractLibraryClass.listen`
 
 #### Defined in
 
-src/librarys/OceanicJS.ts:11
+[librarys/OceanicJS.ts:20](https://github.com/Joniii11/HarmonyLink/blob/master/src/librarys/OceanicJS.ts#L20)

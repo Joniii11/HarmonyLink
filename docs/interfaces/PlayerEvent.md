@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerEvent
+[HarmonyLink v2.0.0](../globals.md) / PlayerEvent
 
 # Interface: PlayerEvent
 
@@ -18,23 +18,13 @@ Represents an event related to a player.
 
 ## Properties
 
-### guildId
-
-> **guildId**: `string`
-
-#### Defined in
-
-src/typings/node/playerEvents.ts:16
-
-***
-
 ### op
 
 > **op**: `"event"`
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:14
+[typings/node/playerEvents.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L8)
 
 ***
 
@@ -44,4 +34,14 @@ src/typings/node/playerEvents.ts:14
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:15
+[typings/node/playerEvents.ts:9](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L9)
+
+***
+
+### guildId
+
+> **guildId**: `string`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L10)

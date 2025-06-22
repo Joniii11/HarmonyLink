@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / LavalinkReadyPacket
+[HarmonyLink v2.0.0](../globals.md) / LavalinkReadyPacket
 
 # Interface: LavalinkReadyPacket
 
@@ -16,7 +16,7 @@ Dispatched when you successfully connect to the Lavalink node
 
 #### Defined in
 
-src/typings/node/index.ts:348
+[typings/node/index.ts:319](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L319)
 
 ***
 
@@ -26,7 +26,7 @@ src/typings/node/index.ts:348
 
 #### Defined in
 
-src/typings/node/index.ts:349
+[typings/node/index.ts:320](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L320)
 
 ***
 
@@ -36,4 +36,4 @@ src/typings/node/index.ts:349
 
 #### Defined in
 
-src/typings/node/index.ts:350
+[typings/node/index.ts:321](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L321)

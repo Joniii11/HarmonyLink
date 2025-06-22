@@ -1,26 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerOptions
+[HarmonyLink v2.0.0](../globals.md) / PlayerOptions
 
 # Interface: PlayerOptions
 
 ## Properties
-
-### deaf?
-
-> `optional` **deaf**: `boolean`
-
-If the player should be deafened
-
-#### Optional
-
-#### Defined in
-
-src/typings/player/index.ts:80
-
-***
 
 ### guildId
 
@@ -30,35 +16,31 @@ The guild id to create the player for
 
 #### Defined in
 
-src/typings/player/index.ts:52
+[typings/player/index.ts:52](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L52)
 
 ***
 
-### mute?
+### voiceId
 
-> `optional` **mute**: `boolean`
+> **voiceId**: `string`
 
-If the player should be muted
-
-#### Optional
+The voice channel id to connect to
 
 #### Defined in
 
-src/typings/player/index.ts:74
+[typings/player/index.ts:57](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L57)
 
 ***
 
-### node?
+### textId
 
-> `optional` **node**: [`Node`](../classes/Node.md)
+> **textId**: `string`
 
-The node to connect to
-
-#### Optional
+The text channel id to send messages to
 
 #### Defined in
 
-src/typings/player/index.ts:86
+[typings/player/index.ts:62](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L62)
 
 ***
 
@@ -72,28 +54,46 @@ The shard id this player's guild is on
 
 #### Defined in
 
-src/typings/player/index.ts:68
+[typings/player/index.ts:68](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L68)
 
 ***
 
-### textId
+### mute?
 
-> **textId**: `string`
+> `optional` **mute**: `boolean`
 
-The text channel id to send messages to
+If the player should be muted
+
+#### Optional
 
 #### Defined in
 
-src/typings/player/index.ts:62
+[typings/player/index.ts:74](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L74)
 
 ***
 
-### voiceId
+### deaf?
 
-> **voiceId**: `string`
+> `optional` **deaf**: `boolean`
 
-The voice channel id to connect to
+If the player should be deafened
+
+#### Optional
 
 #### Defined in
 
-src/typings/player/index.ts:57
+[typings/player/index.ts:80](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L80)
+
+***
+
+### node?
+
+> `optional` **node**: [`Node`](../classes/Node.md)
+
+The node to connect to
+
+#### Optional
+
+#### Defined in
+
+[typings/player/index.ts:86](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L86)

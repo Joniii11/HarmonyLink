@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / ErrorResponses
+[HarmonyLink v2.0.0](../globals.md) / ErrorResponses
 
 # Interface: ErrorResponses
 
@@ -14,39 +14,15 @@ https://lavalink.dev/api/rest.html#error-responses
 
 ## Properties
 
-### error
+### timestamp
 
-> **error**: `string`
+> **timestamp**: `number`
 
-The HTTP status code message
-
-#### Defined in
-
-src/typings/node/rest.ts:133
-
-***
-
-### message
-
-> **message**: `string`
-
-The error message
+The timestamp of the error in milliseconds since the Unix epoch
 
 #### Defined in
 
-src/typings/node/rest.ts:144
-
-***
-
-### path
-
-> **path**: `string`
-
-The path of the request
-
-#### Defined in
-
-src/typings/node/rest.ts:149
+[typings/node/rest.ts:123](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L123)
 
 ***
 
@@ -58,19 +34,19 @@ The HTTP status code
 
 #### Defined in
 
-src/typings/node/rest.ts:128
+[typings/node/rest.ts:128](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L128)
 
 ***
 
-### timestamp
+### error
 
-> **timestamp**: `number`
+> **error**: `string`
 
-The timestamp of the error in milliseconds since the Unix epoch
+The HTTP status code message
 
 #### Defined in
 
-src/typings/node/rest.ts:123
+[typings/node/rest.ts:133](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L133)
 
 ***
 
@@ -84,4 +60,28 @@ The stack trace of the error when trace=true as query param has been sent
 
 #### Defined in
 
-src/typings/node/rest.ts:139
+[typings/node/rest.ts:139](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L139)
+
+***
+
+### message
+
+> **message**: `string`
+
+The error message
+
+#### Defined in
+
+[typings/node/rest.ts:144](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L144)
+
+***
+
+### path
+
+> **path**: `string`
+
+The path of the request
+
+#### Defined in
+
+[typings/node/rest.ts:149](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L149)

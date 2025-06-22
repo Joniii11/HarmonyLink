@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / LavalinkPackets
+[HarmonyLink v2.0.0](../globals.md) / LavalinkPackets
 
 # Type Alias: LavalinkPackets
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/node/index.ts:402
+[typings/node/index.ts:373](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L373)

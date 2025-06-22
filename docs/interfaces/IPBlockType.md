@@ -1,24 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / IPBlockType
+[HarmonyLink v2.0.0](../globals.md) / IPBlockType
 
 # Interface: IPBlockType
 
 ## Properties
-
-### size
-
-> **size**: `string`
-
-The size of the ip block
-
-#### Defined in
-
-src/typings/node/rest.ts:232
-
-***
 
 ### type
 
@@ -28,4 +16,16 @@ The type of the ip block
 
 #### Defined in
 
-src/typings/node/rest.ts:227
+[typings/node/rest.ts:227](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L227)
+
+***
+
+### size
+
+> **size**: `string`
+
+The size of the ip block
+
+#### Defined in
+
+[typings/node/rest.ts:232](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L232)

@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / FiltersOptions
+[HarmonyLink v2.0.0](../globals.md) / FiltersOptions
 
 # Interface: FiltersOptions
 
@@ -10,27 +10,15 @@ The FiltersOptions interface that is used to define the filters options to apply
 
 ## Properties
 
-### channelMix
+### volume
 
-> **channelMix**: [`channelMixOptions`](channelMixOptions.md)
+> **volume**: `number`
 
-The channelMix of the filters effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:149
-
-***
-
-### distortion
-
-> **distortion**: [`distortionOptions`](distortionOptions.md)
-
-The distortion of the filters effect to apply
+The volume of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:148
+[typings/player/filters.ts:142](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L142)
 
 ***
 
@@ -42,7 +30,7 @@ The equalizer of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:143
+[typings/player/filters.ts:143](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L143)
 
 ***
 
@@ -54,43 +42,7 @@ The karaoke of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:144
-
-***
-
-### lowPass
-
-> **lowPass**: [`lowPassOptions`](lowPassOptions.md)
-
-The lowPass of the filters effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:150
-
-***
-
-### rotation
-
-> **rotation**: [`rotationOptions`](rotationOptions.md)
-
-The rotation of the filters effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:147
-
-***
-
-### timescale
-
-> **timescale**: [`timescaleOptions`](timescaleOptions.md)
-
-The timescale of the filters effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:151
+[typings/player/filters.ts:144](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L144)
 
 ***
 
@@ -102,7 +54,7 @@ The tremolo of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:145
+[typings/player/filters.ts:145](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L145)
 
 ***
 
@@ -114,16 +66,64 @@ The vibrato of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:146
+[typings/player/filters.ts:146](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L146)
 
 ***
 
-### volume
+### rotation
 
-> **volume**: `number`
+> **rotation**: [`rotationOptions`](rotationOptions.md)
 
-The volume of the filters effect to apply
+The rotation of the filters effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:142
+[typings/player/filters.ts:147](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L147)
+
+***
+
+### distortion
+
+> **distortion**: [`distortionOptions`](distortionOptions.md)
+
+The distortion of the filters effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:148](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L148)
+
+***
+
+### channelMix
+
+> **channelMix**: [`channelMixOptions`](channelMixOptions.md)
+
+The channelMix of the filters effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:149](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L149)
+
+***
+
+### lowPass
+
+> **lowPass**: [`lowPassOptions`](lowPassOptions.md)
+
+The lowPass of the filters effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:150](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L150)
+
+***
+
+### timescale
+
+> **timescale**: [`timescaleOptions`](timescaleOptions.md)
+
+The timescale of the filters effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:151](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L151)

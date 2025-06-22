@@ -12,6 +12,7 @@ import { Node } from "./node/Node";
 import { PlayerOptions, ResolveOptions } from "./typings/player";
 import { Player } from "./player";
 import { TrackData } from "./typings/track";
+import { Result } from 'neverthrow';
 export declare interface HarmonyLink {
     on: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
     once: <K extends keyof HarmonyLinkEvents>(event: K, listener: HarmonyLinkEvents[K]) => this;
@@ -49,12 +50,13 @@ export declare class HarmonyLink extends EventEmitter {
      * @returns {Promise<Player | null>} The destroyed player.
      */
     destroyPlayer(guildId: string): Promise<Player | null>;
+    addNode(node: NodeGroup): Promise<Result<Node, Error>>;
     /**
-     * Adds a node to the node manager.
-     * @param {NodeGroup | NodeGroup[]} node - The node to add.
-     * @returns {Promise<Node | Node[]>} The added node.
+     * Adds nodes to the node manager.
+     * @param {NodeGroup[]} nodes - The nodes to add.
+     * @returns {Promise<Result<Node[], Error>>} The added nodes or error.
      */
-    addNode(node: NodeGroup | NodeGroup[]): Promise<Node | Node[]>;
+    addNode(nodes: NodeGroup[]): Promise<Result<Node[], Error>>;
     /**
      * Removes a node from the node manager.
      * @param {string} nodeName - The name of the node to remove.

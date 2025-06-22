@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / getDefaultConnectionOptions
+[HarmonyLink v2.0.0](../globals.md) / getDefaultConnectionOptions
 
 # Function: getDefaultConnectionOptions()
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-src/constants/player.ts:4
+[constants/player.ts:4](https://github.com/Joniii11/HarmonyLink/blob/master/src/constants/player.ts#L4)

@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Band
+[HarmonyLink v2.0.0](../globals.md) / Band
 
 # Interface: Band
 
@@ -18,7 +18,7 @@ The band to set the gain of
 
 #### Defined in
 
-src/typings/player/filters.ts:9
+[typings/player/filters.ts:9](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L9)
 
 ***
 
@@ -30,4 +30,4 @@ The gain to set the band to
 
 #### Defined in
 
-src/typings/player/filters.ts:10
+[typings/player/filters.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L10)

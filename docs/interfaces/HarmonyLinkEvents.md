@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / HarmonyLinkEvents
+[HarmonyLink v2.0.0](../globals.md) / HarmonyLinkEvents
 
 # Interface: HarmonyLinkEvents
 
@@ -24,19 +24,19 @@ The arguments to log.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:187
+[typings/HarmonyLink.ts:217](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L217)
 
 ***
 
-### nodeConnect()
+### nodeReconnect()
 
-> **nodeConnect**: (`node`) => `void`
+> **nodeReconnect**: (`node`) => `void`
 
 #### Parameters
 
 • **node**: [`Node`](../classes/Node.md)
 
-The node that connected.
+The node that reconnected.
 
 #### Returns
 
@@ -44,7 +44,7 @@ The node that connected.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:209
+[typings/HarmonyLink.ts:224](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L224)
 
 ***
 
@@ -68,7 +68,27 @@ The code for the disconnection.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:202
+[typings/HarmonyLink.ts:232](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L232)
+
+***
+
+### nodeConnect()
+
+> **nodeConnect**: (`node`) => `void`
+
+#### Parameters
+
+• **node**: [`Node`](../classes/Node.md)
+
+The node that connected.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[typings/HarmonyLink.ts:239](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L239)
 
 ***
 
@@ -92,27 +112,7 @@ The error that was thrown.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:217
-
-***
-
-### nodeReconnect()
-
-> **nodeReconnect**: (`node`) => `void`
-
-#### Parameters
-
-• **node**: [`Node`](../classes/Node.md)
-
-The node that reconnected.
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-src/typings/HarmonyLink.ts:194
+[typings/HarmonyLink.ts:247](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L247)
 
 ***
 
@@ -132,7 +132,7 @@ The player that was created.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:224
+[typings/HarmonyLink.ts:254](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L254)
 
 ***
 
@@ -152,7 +152,7 @@ The player that was destroyed.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:231
+[typings/HarmonyLink.ts:261](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L261)
 
 ***
 
@@ -176,53 +176,7 @@ The packet that was sent.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:239
-
-***
-
-### queueEmpty()
-
-> **queueEmpty**: (`player`) => `void`
-
-#### Parameters
-
-• **player**: [`Player`](../classes/Player.md)
-
-The player that the queue emptied on.
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-src/typings/HarmonyLink.ts:281
-
-***
-
-### socketClose()
-
-> **socketClose**: (`player`, `track`, `wsCloseData`) => `void`
-
-#### Parameters
-
-• **player**: [`Player`](../classes/Player.md)
-
-The player that the socket disconnection occured on
-
-• **track**: [`Track`](../classes/Track.md)
-
-The track that was playing during the socket disconnection.
-
-• **wsCloseData**: [`WebSocketClosedEvent`](WebSocketClosedEvent.md) & `object`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-src/typings/HarmonyLink.ts:274
+[typings/HarmonyLink.ts:269](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L269)
 
 ***
 
@@ -250,35 +204,7 @@ The packet that was sent.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:248
-
-***
-
-### trackError()
-
-> **trackError**: (`player`, `track`, `error`) => `void`
-
-#### Parameters
-
-• **player**: [`Player`](../classes/Player.md)
-
-The player that the track errored on.
-
-• **track**: [`Track`](../classes/Track.md)
-
-The track that errored.
-
-• **error**: `object` & [`TrackExceptionEvent`](TrackExceptionEvent.md) \| [`TrackStuckEvent`](TrackStuckEvent.md)
-
-The error that was sent.
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-src/typings/HarmonyLink.ts:265
+[typings/HarmonyLink.ts:278](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L278)
 
 ***
 
@@ -302,4 +228,78 @@ The track that started.
 
 #### Defined in
 
-src/typings/HarmonyLink.ts:256
+[typings/HarmonyLink.ts:286](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L286)
+
+***
+
+### trackError()
+
+> **trackError**: (`player`, `track`, `error`) => `void`
+
+#### Parameters
+
+• **player**: [`Player`](../classes/Player.md)
+
+The player that the track errored on.
+
+• **track**: [`Track`](../classes/Track.md)
+
+The track that errored.
+
+• **error**: `object` & [`TrackStuckEvent`](TrackStuckEvent.md) \| [`TrackExceptionEvent`](TrackExceptionEvent.md)
+
+The error that was sent.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[typings/HarmonyLink.ts:295](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L295)
+
+***
+
+### socketClose()
+
+> **socketClose**: (`player`, `track`, `wsCloseData`) => `void`
+
+#### Parameters
+
+• **player**: [`Player`](../classes/Player.md)
+
+The player that the socket disconnection occured on
+
+• **track**: [`Track`](../classes/Track.md)
+
+The track that was playing during the socket disconnection.
+
+• **wsCloseData**: [`WebSocketClosedEvent`](WebSocketClosedEvent.md) & `object`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[typings/HarmonyLink.ts:304](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L304)
+
+***
+
+### queueEmpty()
+
+> **queueEmpty**: (`player`) => `void`
+
+#### Parameters
+
+• **player**: [`Player`](../classes/Player.md)
+
+The player that the queue emptied on.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[typings/HarmonyLink.ts:311](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L311)

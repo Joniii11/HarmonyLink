@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / RoutePlannerStatus
+[HarmonyLink v2.0.0](../globals.md) / RoutePlannerStatus
 
 # Type Alias: RoutePlannerStatus
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/node/rest.ts:343
+[typings/node/rest.ts:343](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L343)

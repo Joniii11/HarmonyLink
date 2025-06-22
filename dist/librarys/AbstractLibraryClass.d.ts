@@ -1,6 +1,7 @@
 import { HarmonyLink } from "../HarmonyLink";
 import { NodeGroup } from "../typings/node";
 import { Packet, AnyOtherPacket } from "../typings/librarys";
+import { Result } from "neverthrow";
 /**
  * Abstract class for library classes
  * @abstract
@@ -24,7 +25,7 @@ export default abstract class AbstractLibraryClass {
      * @param {Packet} incomingData The packet to handle
      */
     protected raw(incomingData: Packet): Promise<this>;
-    protected ready(nodes: NodeGroup[]): Promise<void>;
+    protected ready(nodes: NodeGroup[]): Promise<Result<boolean, Error>>;
     /**
      * Get the user ID of the bot
      *

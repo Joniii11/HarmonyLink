@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / EventData
+[HarmonyLink v2.0.0](../globals.md) / EventData
 
 # Type Alias: EventData
 
@@ -12,4 +12,4 @@ The event data
 
 ## Defined in
 
-src/typings/node/playerEvents.ts:8
+[typings/node/playerEvents.ts:61](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L61)

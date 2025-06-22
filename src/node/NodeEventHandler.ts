@@ -25,7 +25,7 @@ export default class PlayerEvent {
         this.node.removeAllListeners();
     }
 
-    protected async onLavalinkEvent(data: string, interceptor?: (data: any) => LavalinkPackets): Promise<void> {
+    protected async onLavalinkEvent(data: string, interceptor?: (d: any) => LavalinkPackets): Promise<void> {
         try {
             const packet = interceptor ? interceptor(JSON.parse(data)) : JSON.parse(data) as LavalinkPackets | undefined;
 
@@ -51,14 +51,23 @@ export default class PlayerEvent {
                     break;
                 };
 
-                case "event":
+                case "event": {
+                    if (!packet.guildId) return;
+
+                    const player = this.manager.playerManager.get(packet.guildId);
+                    if (!player) break;
+
+                    player.emit(packet.op, packet);
+                    break;
+                };
+
                 case "playerUpdate": {
                     if (!packet.guildId) return;
 
                     const player = this.manager.playerManager.get(packet.guildId);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                    if (player) packet.op === "event" ? player.emit(packet.op, packet) : player.emit(packet.op, packet)
+                    if (!player) break;
 
+                    player.emit(packet.op, packet)
                     break;
                 };
 
@@ -75,7 +84,7 @@ export default class PlayerEvent {
                 clearTimeout(this.node.options.reconnectAttemptTimeout);
                 this.node.options.reconnectAttemptTimeout = null;
 
-                this.manager.options.reconnectVoiceConnection ? this.node.players.forEach(async (player) => player.reconnect(true)) : null
+                if (this.manager.options.reconnectVoiceConnection) this.node.players.forEach((player) => player.reconnect(true));
             };
 
             this.manager.emit("nodeConnect", this.node);
@@ -90,7 +99,7 @@ export default class PlayerEvent {
 
     protected async onWSCloseEvent(code: number, reason: Buffer): Promise<void> {
         try {
-            await this.node.disconnect();
+            this.node.disconnect();
 
             this.manager.emit("nodeDisconnect", this.node, code);
             this.manager.emit("debug", `[HarmonyLink] [Node ${this.node.options.name}] [Web Socket] Disconnected from the node. [${code}] [${reason.toString("utf-8")}]`)

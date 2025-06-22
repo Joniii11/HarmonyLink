@@ -1,30 +1,20 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / DiscordVoiceStates
+[HarmonyLink v2.0.0](../globals.md) / DiscordVoiceStates
 
 # Enumeration: DiscordVoiceStates
 
 ## Enumeration Members
 
-### SESSION\_ENDPOINT\_MISSING
+### SESSION\_READY
 
-> **SESSION\_ENDPOINT\_MISSING**: `2`
-
-#### Defined in
-
-src/typings/player/connection.ts:139
-
-***
-
-### SESSION\_FAILED\_UPDATE
-
-> **SESSION\_FAILED\_UPDATE**: `3`
+> **SESSION\_READY**: `0`
 
 #### Defined in
 
-src/typings/player/connection.ts:140
+[typings/player/connection.ts:137](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L137)
 
 ***
 
@@ -34,14 +24,24 @@ src/typings/player/connection.ts:140
 
 #### Defined in
 
-src/typings/player/connection.ts:138
+[typings/player/connection.ts:138](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L138)
 
 ***
 
-### SESSION\_READY
+### SESSION\_ENDPOINT\_MISSING
 
-> **SESSION\_READY**: `0`
+> **SESSION\_ENDPOINT\_MISSING**: `2`
 
 #### Defined in
 
-src/typings/player/connection.ts:137
+[typings/player/connection.ts:139](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L139)
+
+***
+
+### SESSION\_FAILED\_UPDATE
+
+> **SESSION\_FAILED\_UPDATE**: `3`
+
+#### Defined in
+
+[typings/player/connection.ts:140](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L140)

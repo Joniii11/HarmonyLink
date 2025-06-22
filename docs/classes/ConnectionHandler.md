@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / ConnectionHandler
+[HarmonyLink v2.0.0](../globals.md) / ConnectionHandler
 
 # Class: ConnectionHandler
 
@@ -24,19 +24,9 @@
 
 #### Defined in
 
-src/player/Connection.ts:10
+[player/Connection.ts:11](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Connection.ts#L11)
 
 ## Properties
-
-### options
-
-> **options**: [`ConnectionOptions`](../interfaces/ConnectionOptions.md)
-
-#### Defined in
-
-src/player/Connection.ts:8
-
-***
 
 ### player
 
@@ -44,13 +34,23 @@ src/player/Connection.ts:8
 
 #### Defined in
 
-src/player/Connection.ts:7
+[player/Connection.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Connection.ts#L8)
+
+***
+
+### options
+
+> **options**: [`ConnectionOptions`](../interfaces/ConnectionOptions.md)
+
+#### Defined in
+
+[player/Connection.ts:9](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Connection.ts#L9)
 
 ## Methods
 
 ### setServersUpdate()
 
-> **setServersUpdate**(`data`): `Promise`\<`void`\>
+> **setServersUpdate**(`data`): `Promise`\<`Result`\<`void`, `Error`\>\>
 
 Updates the voice server of the player.
 
@@ -62,11 +62,11 @@ The incoming data from the voice server from discord.
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`Result`\<`void`, `Error`\>\>
 
 #### Defined in
 
-src/player/Connection.ts:19
+[player/Connection.ts:20](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Connection.ts#L20)
 
 ***
 
@@ -88,4 +88,4 @@ The incoming data from the voice server from discord.
 
 #### Defined in
 
-src/player/Connection.ts:48
+[player/Connection.ts:65](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Connection.ts#L65)

@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / lowPassOptions
+[HarmonyLink v2.0.0](../globals.md) / lowPassOptions
 
 # Interface: lowPassOptions
 
@@ -18,4 +18,4 @@ The smoothing of the lowPass effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:123
+[typings/player/filters.ts:123](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L123)

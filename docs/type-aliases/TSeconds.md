@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TSeconds
+[HarmonyLink v2.0.0](../globals.md) / TSeconds
 
 # Type Alias: TSeconds
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/index.ts:8
+[typings/index.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L8)

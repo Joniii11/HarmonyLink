@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / getDefaultNodeStats
+[HarmonyLink v2.0.0](../globals.md) / getDefaultNodeStats
 
 # Function: getDefaultNodeStats()
 
@@ -14,4 +14,4 @@
 
 ## Defined in
 
-src/constants/index.ts:12
+[constants/index.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/constants/index.ts#L12)

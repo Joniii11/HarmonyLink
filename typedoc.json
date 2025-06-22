@@ -1,0 +1,81 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "./docs",
+  "theme": "default",
+  "name": "HarmonyLink",
+  "includeVersion": true,
+  "readme": "./README.md",
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/test/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "hideGenerator": false,
+  "disableSources": false,
+  "sourceLinkTemplate": "https://github.com/Joniii11/HarmonyLink/blob/{gitRevision}/{path}#L{line}",
+  "gitRevision": "master",
+  "gitRemote": "origin",
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ],
+  "githubPages": false,
+  "hidePageTitle": false,
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": true,
+    "external": false,
+    "@alpha": false,
+    "@beta": false
+  },
+  "searchInComments": true,
+  "cleanOutputDir": true,
+  "titleLink": "https://github.com/Joniii11/HarmonyLink",
+  "navigationLinks": {
+    "GitHub": "https://github.com/Joniii11/HarmonyLink",
+    "NPM": "https://www.npmjs.com/package/harmonylink"
+  },
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Classes",
+    "Interfaces", 
+    "Type Aliases",
+    "Functions",
+    "Variables",
+    "Enums"
+  ],
+  "sort": [
+    "source-order"
+  ],
+  "kindSortOrder": [
+    "Reference",
+    "Project", 
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Variable",
+    "Function",
+    "Accessor",
+    "Method"
+  ],
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatWarningsAsErrors": false,
+  "commentStyle": "jsdoc"
+}

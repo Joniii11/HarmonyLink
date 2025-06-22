@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../node/Node");
+const neverthrow_1 = require("neverthrow");
 class NodeManager extends Map {
     manager;
     constructor(manager) {
@@ -9,17 +10,22 @@ class NodeManager extends Map {
     }
     ;
     async addNode(node) {
-        if (this.manager.options.nodeAdder) {
-            const resolvedNode = await this.manager.options.nodeAdder(this, node);
-            if (resolvedNode && resolvedNode instanceof Node_1.Node)
-                return resolvedNode;
+        try {
+            if (this.manager.options.nodeAdder) {
+                const resolvedNode = await (0, neverthrow_1.fromPromise)(this.manager.options.nodeAdder(this, node), (err) => null);
+                if (resolvedNode.isOk() && resolvedNode.value instanceof Node_1.Node)
+                    return (0, neverthrow_1.ok)(resolvedNode.value);
+            }
+            ;
+            const addedNode = new Node_1.Node(this.manager, node);
+            this.set(node.name, addedNode);
+            if (this.manager.isReady)
+                await addedNode.connect();
+            return (0, neverthrow_1.ok)(addedNode);
         }
-        ;
-        const addedNode = new Node_1.Node(this.manager, node);
-        this.set(node.name, addedNode);
-        if (this.manager.isReady)
-            await addedNode.connect();
-        return addedNode;
+        catch (error) {
+            return (0, neverthrow_1.err)(new Error(`[HarmonyLink] [NodeManager] Failed to add node: ${node.name}. Error: ${neverthrow_1.err}`));
+        }
     }
     ;
     async getLeastUsedNode() {

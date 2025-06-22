@@ -1,32 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Config
+[HarmonyLink v2.0.0](../globals.md) / Config
 
 # Interface: Config
 
 ## Properties
-
-### author
-
-> **author**: `string`
-
-#### Defined in
-
-src/typings/constants/index.ts:3
-
-***
-
-### github
-
-> **github**: `string`
-
-#### Defined in
-
-src/typings/constants/index.ts:5
-
-***
 
 ### name
 
@@ -34,7 +14,17 @@ src/typings/constants/index.ts:5
 
 #### Defined in
 
-src/typings/constants/index.ts:2
+[typings/constants/index.ts:2](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/constants/index.ts#L2)
+
+***
+
+### author
+
+> **author**: `string`
+
+#### Defined in
+
+[typings/constants/index.ts:3](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/constants/index.ts#L3)
 
 ***
 
@@ -44,4 +34,14 @@ src/typings/constants/index.ts:2
 
 #### Defined in
 
-src/typings/constants/index.ts:4
+[typings/constants/index.ts:4](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/constants/index.ts#L4)
+
+***
+
+### github
+
+> **github**: `string`
+
+#### Defined in
+
+[typings/constants/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/constants/index.ts#L5)

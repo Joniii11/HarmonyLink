@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TDay
+[HarmonyLink v2.0.0](../globals.md) / TDay
 
 # Type Alias: TDay
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/index.ts:5
+[typings/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L5)

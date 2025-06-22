@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackStuckEvent
+[HarmonyLink v2.0.0](../globals.md) / TrackStuckEvent
 
 # Interface: TrackStuckEvent
 
@@ -14,20 +14,6 @@ Represents an event indicating that a track got stuck while playing.
 
 ## Properties
 
-### guildId
-
-> **guildId**: `string`
-
-#### Inherited from
-
-[`PlayerEvent`](PlayerEvent.md).[`guildId`](PlayerEvent.md#guildid)
-
-#### Defined in
-
-src/typings/node/playerEvents.ts:16
-
-***
-
 ### op
 
 > **op**: `"event"`
@@ -38,27 +24,21 @@ src/typings/node/playerEvents.ts:16
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:14
+[typings/node/playerEvents.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L8)
 
 ***
 
-### thresholdMs
+### guildId
 
-> **thresholdMs**: `number`
+> **guildId**: `string`
 
-#### Defined in
+#### Inherited from
 
-src/typings/node/playerEvents.ts:42
-
-***
-
-### track
-
-> **track**: `any`
+[`PlayerEvent`](PlayerEvent.md).[`guildId`](PlayerEvent.md#guildid)
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:41
+[typings/node/playerEvents.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L10)
 
 ***
 
@@ -72,4 +52,24 @@ src/typings/node/playerEvents.ts:41
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:40
+[typings/node/playerEvents.ts:34](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L34)
+
+***
+
+### track
+
+> **track**: `any`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:35](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L35)
+
+***
+
+### thresholdMs
+
+> **thresholdMs**: `number`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:36](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L36)

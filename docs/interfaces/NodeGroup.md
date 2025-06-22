@@ -1,24 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeGroup
+[HarmonyLink v2.0.0](../globals.md) / NodeGroup
 
 # Interface: NodeGroup
 
 ## Properties
-
-### host
-
-> **host**: `string`
-
-The URL or IP address of the node to connect to
-
-#### Defined in
-
-src/typings/node/index.ts:284
-
-***
 
 ### name
 
@@ -28,7 +16,19 @@ The name of the node group
 
 #### Defined in
 
-src/typings/node/index.ts:279
+[typings/node/index.ts:249](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L249)
+
+***
+
+### host
+
+> **host**: `string`
+
+The URL or IP address of the node to connect to
+
+#### Defined in
+
+[typings/node/index.ts:254](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L254)
 
 ***
 
@@ -46,7 +46,7 @@ The password for authenticating with the node.
 
 #### Defined in
 
-src/typings/node/index.ts:291
+[typings/node/index.ts:261](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L261)
 
 ***
 
@@ -64,7 +64,7 @@ The port number of the node.
 
 #### Defined in
 
-src/typings/node/index.ts:298
+[typings/node/index.ts:268](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L268)
 
 ***
 
@@ -82,7 +82,7 @@ false
 
 #### Defined in
 
-src/typings/node/index.ts:305
+[typings/node/index.ts:275](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L275)
 
 ***
 
@@ -100,4 +100,4 @@ NodeType.LavaLinkV4
 
 #### Defined in
 
-src/typings/node/index.ts:312
+[typings/node/index.ts:282](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L282)

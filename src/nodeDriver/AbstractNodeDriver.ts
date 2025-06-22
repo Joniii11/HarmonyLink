@@ -5,6 +5,7 @@ import { HarmonyLinkRequesterOptions, NodeType } from "@t/node";
 import ws from "ws"
 import { Node } from "@/node/Node";
 import { TrackData } from "@/typings/track";
+import { Result, ok } from 'neverthrow';
 
 export default abstract class AbstractNodeDriver {
     public abstract clientId: string;
@@ -24,10 +25,10 @@ export default abstract class AbstractNodeDriver {
             Authorization: this.node!.options.password,
             "User-Agent": this.clientId,
             "Content-Type": "application/json"
-        };
-
+        };        
+        
         if (this.type === NodeType.NodeLink) {
-            headers["Accept-Encoding"] = ((process as NodeJS.Process & { isBun: boolean}).isBun) ? "gzip, deflate" : "br, gzip, deflate";
+            headers["Accept-Encoding"] = ((process as any).isBun) ? "gzip, deflate" : "br, gzip, deflate";
         };
 
         return headers;
@@ -35,49 +36,43 @@ export default abstract class AbstractNodeDriver {
 
     public setSessionId(sessionId: string): void{
         this.sessionId = sessionId;
+    };    
+    
+    protected eventHandler(data: string): Result<boolean, Error> {
+        if (!this.node) return ok(false);
+
+        return ok(this.node.emit("lavalinkEvent", data.toString()));
     };
 
-    protected async eventHandler(data: string): Promise<boolean> {
-        return new Promise((resolve) => {
-            if (!this.node) return resolve(false);
+    protected openHandler(): Result<boolean, Error> {
+        if (!this.node) return ok(false);
 
-            return resolve(this.node.emit("lavalinkEvent", data.toString()))
-        });
+        return ok(this.node.emit("lavalinkWSOpen"));
     };
 
-    protected async openHandler(): Promise<boolean> {
-        return new Promise((resolve) => {
-            if (!this.node) return resolve(false);
+    protected closeHandler(code: number, reason: Buffer): Result<boolean, Error> {
+        if (!this.node) return ok(false);
 
-            return resolve(this.node.emit("lavalinkWSOpen"))
-        });
+        return ok(this.node.emit("lavalinkWSClose", code, reason));
     };
 
-    protected async closeHandler(code: number, reason: Buffer): Promise<boolean> {
-        return new Promise((resolve) => {
-            if (!this.node) return resolve(false);
+    protected errorHandler(data: Error): Result<boolean, Error> {
+        if (!this.node) return ok(false);
 
-            return resolve(this.node.emit("lavalinkWSClose", code, reason))
-        });
+        return ok(this.node.emit("lavalinkWSError", data));
+    }
+
+    protected decoder: (base64EncodedTrack: string) => Result<TrackData, Error> = (base64EncodedTrack: string) => {
+        const decoderInstance = new Decoder(base64EncodedTrack, this.type);
+        return decoderInstance.getTrack;
     };
 
-    protected async errorHandler(data: Error): Promise<boolean> {
-        return new Promise((resolve) => {
-            if (!this.node) return resolve(false);
+    public abstract init(manager: HarmonyLink, node: Node): void;    
+    public abstract connect(): Promise<Result<ws, Error>>;
 
-            return resolve(this.node.emit("lavalinkWSError", data))
-        });
-    };
+    public abstract wsClose(withoutEmit?: boolean): void;
 
-    protected decoder: (base64EncodedTrack: string) => TrackData | null = (base64EncodedTrack: string) => new Decoder(base64EncodedTrack, this.type).getTrack ?? null;
+    public abstract updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<Result<void, Error>>;
 
-    public abstract init(manager: HarmonyLink, node: Node): void;
-
-    public abstract connect(): Promise<ws>;
-
-    public abstract wsClose(withoutEmit?: boolean): void
-
-    public abstract updateSessions(sessionId: string, mode: boolean, timeout: number): Promise<void>
-
-    public abstract request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined>
+    public abstract request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<Result<T | undefined, Error>>;
 };

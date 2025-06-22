@@ -18,6 +18,7 @@ const Response_1 = require("./player/Response");
 // Constants
 const constants_1 = require("./constants");
 const plugin_1 = require("./plugin");
+const neverthrow_1 = require("neverthrow");
 class HarmonyLink extends events_1.default {
     botID = "";
     isReady = false;
@@ -80,21 +81,39 @@ class HarmonyLink extends events_1.default {
     async destroyPlayer(guildId) {
         return this.playerManager.removePlayer(guildId);
     }
-    ;
-    /**
+    ; /**
      * Adds a node to the node manager.
-     * @param {NodeGroup | NodeGroup[]} node - The node to add.
-     * @returns {Promise<Node | Node[]>} The added node.
+     * @param {NodeGroup} node - The node to add.
+     * @returns {Promise<Result<Node, Error>>} The added node or error.
      */
     async addNode(node) {
         if (!this.isReady)
-            throw new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet.");
+            return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] HarmonyLink is not ready yet."));
         if (Array.isArray(node)) {
-            const nodes = await Promise.all(node.map(n => this.nodeManager.addNode(n))).catch((error) => this.emit("debug", "[HarmonyLink] [NodeManager] Error while adding nodes.", error));
-            return typeof nodes === "boolean" ? [] : nodes;
+            if (node.length === 0)
+                return (0, neverthrow_1.err)(new Error("[HarmonyLink] [NodeManager] No nodes provided to add."));
+            try {
+                const nodeResults = await Promise.all(node.map(async (n) => {
+                    return await this.nodeManager.addNode(n);
+                }));
+                const nodes = [];
+                for (const result of nodeResults) {
+                    if (result.isErr()) {
+                        return (0, neverthrow_1.err)(result.error);
+                    }
+                    nodes.push(result.value);
+                }
+                return (0, neverthrow_1.ok)(nodes);
+            }
+            catch (error) {
+                return (0, neverthrow_1.err)(error);
+            }
         }
-        ;
-        return this.nodeManager.addNode(node);
+        const result = await this.nodeManager.addNode(node);
+        if (result.isErr()) {
+            return (0, neverthrow_1.err)(result.error);
+        }
+        return (0, neverthrow_1.ok)(result.value);
     }
     ;
     /**

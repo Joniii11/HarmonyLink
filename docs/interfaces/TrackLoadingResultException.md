@@ -1,22 +1,26 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackLoadingResultException
+[HarmonyLink v2.0.0](../globals.md) / TrackLoadingResultException
 
 # Interface: TrackLoadingResultException
 
 ## Properties
 
+### loadType
+
+> **loadType**: `"error"`
+
+#### Defined in
+
+[typings/node/rest.ts:11](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L11)
+
+***
+
 ### data
 
 > **data**: `object`
-
-#### cause
-
-> **cause**: `string`
-
-The cause of the exception
 
 #### message?
 
@@ -30,16 +34,12 @@ The message of the exception
 
 The severity of the exception
 
-#### Defined in
+#### cause
 
-src/typings/node/rest.ts:12
+> **cause**: `string`
 
-***
-
-### loadType
-
-> **loadType**: `"error"`
+The cause of the exception
 
 #### Defined in
 
-src/typings/node/rest.ts:11
+[typings/node/rest.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L12)

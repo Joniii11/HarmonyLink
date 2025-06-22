@@ -1,46 +1,22 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / UpdatePlayerOptions
+[HarmonyLink v2.0.0](../globals.md) / UpdatePlayerOptions
 
 # Interface: UpdatePlayerOptions
 
 ## Properties
 
-### endTime?
+### track?
 
-> `optional` **endTime**: `number`
+> `optional` **track**: [`UpdatePlayerTrack`](UpdatePlayerTrack.md)
 
-The track end time in milliseconds (must be > 0). null resets this if it was set previously
-
-#### Defined in
-
-src/typings/node/rest.ts:183
-
-***
-
-### filters?
-
-> `optional` **filters**: `Partial`\<[`FiltersOptions`](FiltersOptions.md)\>
-
-The new filters to apply. This will override all previously applied filters
+Specification for a new track to load, as well as user data to set
 
 #### Defined in
 
-src/typings/node/rest.ts:198
-
-***
-
-### paused?
-
-> `optional` **paused**: `boolean`
-
-Whether the player is paused
-
-#### Defined in
-
-src/typings/node/rest.ts:193
+[typings/node/rest.ts:173](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L173)
 
 ***
 
@@ -52,31 +28,19 @@ The track position in milliseconds
 
 #### Defined in
 
-src/typings/node/rest.ts:178
+[typings/node/rest.ts:178](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L178)
 
 ***
 
-### track?
+### endTime?
 
-> `optional` **track**: [`UpdatePlayerTrack`](UpdatePlayerTrack.md)
+> `optional` **endTime**: `number`
 
-Specification for a new track to load, as well as user data to set
-
-#### Defined in
-
-src/typings/node/rest.ts:173
-
-***
-
-### voice?
-
-> `optional` **voice**: `Required`\<[`VoiceServer`](VoiceServer.md)\>
-
-Information required for connecting to Discord
+The track end time in milliseconds (must be > 0). null resets this if it was set previously
 
 #### Defined in
 
-src/typings/node/rest.ts:203
+[typings/node/rest.ts:183](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L183)
 
 ***
 
@@ -88,4 +52,40 @@ The player volume, in percentage, from 0 to 1000
 
 #### Defined in
 
-src/typings/node/rest.ts:188
+[typings/node/rest.ts:188](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L188)
+
+***
+
+### paused?
+
+> `optional` **paused**: `boolean`
+
+Whether the player is paused
+
+#### Defined in
+
+[typings/node/rest.ts:193](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L193)
+
+***
+
+### filters?
+
+> `optional` **filters**: `Partial`\<[`FiltersOptions`](FiltersOptions.md)\>
+
+The new filters to apply. This will override all previously applied filters
+
+#### Defined in
+
+[typings/node/rest.ts:198](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L198)
+
+***
+
+### voice?
+
+> `optional` **voice**: `Required`\<[`VoiceServer`](VoiceServer.md)\>
+
+Information required for connecting to Discord
+
+#### Defined in
+
+[typings/node/rest.ts:203](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L203)

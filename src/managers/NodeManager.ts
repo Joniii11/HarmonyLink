@@ -2,6 +2,7 @@ import { Node } from "@/node/Node";
 
 import { HarmonyLink } from "@/HarmonyLink";
 import { NodeGroup } from "@t/node";
+import { ok, err, Result, fromPromise } from 'neverthrow';
 
 export default class NodeManager extends Map<string, Node> {
     public readonly manager: HarmonyLink;
@@ -11,26 +12,32 @@ export default class NodeManager extends Map<string, Node> {
         this.manager = manager;
     };
 
-    public async addNode(node: NodeGroup): Promise<Node> {
-        if (this.manager.options.nodeAdder) {
-            const resolvedNode = await this.manager.options.nodeAdder(this, node);
+    public async addNode(node: NodeGroup): Promise<Result<Node, Error>> {        
+        try {
+            if (this.manager.options.nodeAdder) {
+                const resolvedNodeResult = await fromPromise(this.manager.options.nodeAdder(this, node), (_err) => new Error("Node adder failed"));
+                const resolvedNode = resolvedNodeResult.unwrapOr(null);
 
-            if (resolvedNode && resolvedNode instanceof Node) return resolvedNode;
-        };
+                if (resolvedNode instanceof Node) return ok(resolvedNode);
+            };
 
-        const addedNode = new Node(this.manager, node);
+            const addedNode = new Node(this.manager, node);
 
-        this.set(node.name, addedNode);
+            this.set(node.name, addedNode);
 
-        if (this.manager.isReady) await addedNode.connect();
-        return addedNode;
+            if (this.manager.isReady) await addedNode.connect();
+            return ok(addedNode);   
+        } catch (error) {
+            return err(new Error(`[HarmonyLink] [NodeManager] Failed to add node: ${node.name}. Error: ${error}`));
+        }
     };
 
-    public async getLeastUsedNode(): Promise<Node | undefined> {
+    public async getLeastUsedNode(): Promise<Result<Node, Error>> {        
         if (this.manager.options.nodeResolver) {
-            const resolvedData = await this.manager.options.nodeResolver(this);
+            const resolvedDataResult = await fromPromise(this.manager.options.nodeResolver(this), () => new Error("Node resolver failed"));
+            const resolvedData = resolvedDataResult.unwrapOr(null);
 
-            if (resolvedData && resolvedData instanceof Node) return resolvedData;
+            if (resolvedData instanceof Node) return ok(resolvedData);
         };
 
         const nodes = this.allNodes;
@@ -38,7 +45,7 @@ export default class NodeManager extends Map<string, Node> {
         const onlineNodes = nodes.filter(node => node.isConnected);
 
         if (onlineNodes.length === 0) {
-            throw new Error("[HarmonyLink] [NodeManager] No nodes are online.");
+            return err(new Error("[HarmonyLink] [NodeManager] No nodes are online."));
         };
 
         const promises = onlineNodes.map(node => {
@@ -47,18 +54,19 @@ export default class NodeManager extends Map<string, Node> {
         });
 
         const results = await Promise.all(promises);
-        const sorted = results.sort((a, b) => (a.stats.players || 0) - (b.stats.players || 0));
+        const sorted = results.sort((a, b) => (a.stats.playingPlayers || 0) - (b.stats.playingPlayers || 0));
 
-        return sorted[0].node;
+        return ok(sorted[0].node);
     };
 
-    public async removeNode(name: string): Promise<Node | null> {
+    public removeNode(name: string): Result<Node, Error> {
         const node = this.get(name);
-        if (!node) return null;
+        if (!node) return err(new Error(`[HarmonyLink] [NodeManager] Node with name ${name} does not exist.`));
 
-        await node.disconnect();
+        node.disconnect();
         this.delete(name);
-        return node;
+
+        return ok(node);
     };
 
     public get allNodes(): Node[] {

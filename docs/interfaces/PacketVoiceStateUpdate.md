@@ -1,22 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PacketVoiceStateUpdate
+[HarmonyLink v2.0.0](../globals.md) / PacketVoiceStateUpdate
 
 # Interface: PacketVoiceStateUpdate
 
 ## Properties
-
-### d
-
-> **d**: [`SetStateUpdate`](SetStateUpdate.md)
-
-#### Defined in
-
-src/typings/librarys/index.ts:8
-
-***
 
 ### op
 
@@ -24,7 +14,17 @@ src/typings/librarys/index.ts:8
 
 #### Defined in
 
-src/typings/librarys/index.ts:7
+[typings/librarys/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L5)
+
+***
+
+### d
+
+> **d**: [`SetStateUpdate`](SetStateUpdate.md)
+
+#### Defined in
+
+[typings/librarys/index.ts:6](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L6)
 
 ***
 
@@ -34,4 +34,4 @@ src/typings/librarys/index.ts:7
 
 #### Defined in
 
-src/typings/librarys/index.ts:9
+[typings/librarys/index.ts:7](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L7)

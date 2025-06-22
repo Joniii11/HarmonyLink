@@ -1,12 +1,22 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PacketVoiceServerUpdate
+[HarmonyLink v2.0.0](../globals.md) / PacketVoiceServerUpdate
 
 # Interface: PacketVoiceServerUpdate
 
 ## Properties
+
+### op
+
+> **op**: `number`
+
+#### Defined in
+
+[typings/librarys/index.ts:11](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L11)
+
+***
 
 ### d
 
@@ -20,17 +30,7 @@
 
 #### Defined in
 
-src/typings/librarys/index.ts:14
-
-***
-
-### op
-
-> **op**: `number`
-
-#### Defined in
-
-src/typings/librarys/index.ts:13
+[typings/librarys/index.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L12)
 
 ***
 
@@ -40,4 +40,4 @@ src/typings/librarys/index.ts:13
 
 #### Defined in
 
-src/typings/librarys/index.ts:15
+[typings/librarys/index.ts:13](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L13)

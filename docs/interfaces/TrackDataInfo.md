@@ -1,36 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackDataInfo
+[HarmonyLink v2.0.0](../globals.md) / TrackDataInfo
 
 # Interface: TrackDataInfo
 
 ## Properties
-
-### artworkUrl
-
-> **artworkUrl**: `null` \| `string`
-
-The track artwork url
-
-#### Defined in
-
-src/typings/track/index.ts:67
-
-***
-
-### author
-
-> **author**: `string`
-
-The track author
-
-#### Defined in
-
-src/typings/track/index.ts:37
-
-***
 
 ### identifier
 
@@ -40,7 +16,7 @@ The track identifier
 
 #### Defined in
 
-src/typings/track/index.ts:27
+[typings/track/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L5)
 
 ***
 
@@ -52,31 +28,19 @@ Whether the track is seekable
 
 #### Defined in
 
-src/typings/track/index.ts:32
+[typings/track/index.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L10)
 
 ***
 
-### isStream
+### author
 
-> **isStream**: `boolean`
+> **author**: `string`
 
-Whether the track is a stream
-
-#### Defined in
-
-src/typings/track/index.ts:47
-
-***
-
-### isrc
-
-> **isrc**: `null` \| `string`
-
-The track [ISRC](https://en.wikipedia.org/wiki/International_Standard_Recording_Code)
+The track author
 
 #### Defined in
 
-src/typings/track/index.ts:72
+[typings/track/index.ts:15](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L15)
 
 ***
 
@@ -88,7 +52,19 @@ The track length in milliseconds
 
 #### Defined in
 
-src/typings/track/index.ts:42
+[typings/track/index.ts:20](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L20)
+
+***
+
+### isStream
+
+> **isStream**: `boolean`
+
+Whether the track is a stream
+
+#### Defined in
+
+[typings/track/index.ts:25](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L25)
 
 ***
 
@@ -100,19 +76,7 @@ The track position in milliseconds
 
 #### Defined in
 
-src/typings/track/index.ts:52
-
-***
-
-### sourceName
-
-> **sourceName**: `string`
-
-The track source name
-
-#### Defined in
-
-src/typings/track/index.ts:77
+[typings/track/index.ts:30](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L30)
 
 ***
 
@@ -124,7 +88,7 @@ The track title
 
 #### Defined in
 
-src/typings/track/index.ts:57
+[typings/track/index.ts:35](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L35)
 
 ***
 
@@ -136,4 +100,40 @@ The track URI
 
 #### Defined in
 
-src/typings/track/index.ts:62
+[typings/track/index.ts:40](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L40)
+
+***
+
+### artworkUrl
+
+> **artworkUrl**: `null` \| `string`
+
+The track artwork url
+
+#### Defined in
+
+[typings/track/index.ts:45](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L45)
+
+***
+
+### isrc
+
+> **isrc**: `null` \| `string`
+
+The track [ISRC](https://en.wikipedia.org/wiki/International_Standard_Recording_Code)
+
+#### Defined in
+
+[typings/track/index.ts:50](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L50)
+
+***
+
+### sourceName
+
+> **sourceName**: `string`
+
+The track source name
+
+#### Defined in
+
+[typings/track/index.ts:55](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L55)

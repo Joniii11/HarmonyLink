@@ -10,6 +10,7 @@ import { Node } from "./Node";
 import { ErrorResponses, LoadTrackResult, PlayerObjectFromAPI, RoutePlannerStatus, UpdatePlayerInfo } from "@t/node/rest";
 import { FrequenCInfo, HarmonyLinkRequesterOptions, NodeInfo, NodeStats, NodeType } from "@t/node";
 import { TrackData } from "@t/track";
+import { err, ok, Result } from "neverthrow";
 
 export default class Rest {
     public manager: HarmonyLink;
@@ -47,14 +48,19 @@ export default class Rest {
      * @returns {PlayerObjectFromAPI[] | ErrorResponses} The players on the node
      * 
      * @docs https://lavalink.dev/api/rest.html#get-players
-     */
-    public async getAllPlayers(): Promise<PlayerObjectFromAPI[]> {
+     */    
+    public async getAllPlayers(): Promise<Result<PlayerObjectFromAPI[], Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: `/sessions/${this.sessionId}/players`
         };
-        
-        return await this.node.driver.request<PlayerObjectFromAPI[] | null>(options) ?? [];
+
+        const result = await this.node.driver.request<PlayerObjectFromAPI[]>(options);
+
+        return result.match(
+            (players) => ok(players ?? []),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        );
     };
 
     /**
@@ -68,14 +74,19 @@ export default class Rest {
      * ```
      * 
      * @docs https://lavalink.dev/api/rest.html#get-player
-     */
-    public async getPlayer(guildId: string): Promise<PlayerObjectFromAPI | null> {
+     */    
+    public async getPlayer(guildId: string): Promise<Result<PlayerObjectFromAPI | null, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: `/sessions/${this.sessionId}/players/${guildId}`
         };
 
-        return await this.node.driver.request<PlayerObjectFromAPI | null>(options) ?? null;
+        const result = await this.node.driver.request<PlayerObjectFromAPI | null>(options);
+
+        return result.match(
+            (player) => ok(player ?? null),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        );
     };
 
     /**
@@ -90,7 +101,7 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#update-player
      */
-    public async updatePlayer(data: UpdatePlayerInfo): Promise<PlayerObjectFromAPI | undefined> {
+    public async updatePlayer(data: UpdatePlayerInfo): Promise<Result<PlayerObjectFromAPI | undefined, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "PATCH",
             path: `/sessions/${this.sessionId}/players/${data.guildId}`,
@@ -106,7 +117,7 @@ export default class Rest {
      * @param {string} guildId The guild id to destroy the player from
      * @returns {undefined} 204 - No Content
      */
-    public async destroyPlayer(guildId: string): Promise<undefined> {
+    public async destroyPlayer(guildId: string): Promise<Result<undefined, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "DELETE",
             path: `/sessions/${this.sessionId}/players/${guildId}`,
@@ -125,14 +136,15 @@ export default class Rest {
      * @returns {LoadTrackResult} The result of the track
      * 
      * @docs https://lavalink.dev/api/rest.html#track-loading
-     */
-    public async loadTrack(identifier: string, source?: string): Promise<LoadTrackResult> {
+     */    public async loadTrack(identifier: string, source?: string): Promise<Result<LoadTrackResult | undefined, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: `/loadtracks?identifier=${encodeURIComponent((this.startsWithMultiple(identifier, ["https://", "http://"]) ? '' : `${source ?? this.manager.options.defaultPlatform ?? 'ytsearch'}:`) + identifier)}`,
         };
 
-        return await this.node.driver.request<LoadTrackResult>(options) ?? { loadType: "empty", data: {} };
+        const result = await this.node.driver.request<LoadTrackResult>(options);
+        
+        return result.map((data) => data ?? { loadType: "empty", data: {} });
     };
 
     /**
@@ -142,14 +154,19 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#track-decoding
      */
-    public async decodeTrack(encodedBase64Track: string): Promise<TrackData | null>  {
+    public async decodeTrack(encodedBase64Track: string): Promise<Result<TrackData | null, Error>>  {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: "/decodetrack",
             params: { encodedTrack: encodedBase64Track }
         };
 
-        return await this.node.driver.request<TrackData | null>(options) ?? null;
+        const result = await this.node.driver.request<TrackData | null>(options);
+
+        return result.match(
+            (track) => ok(track ?? null),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        );
     };
 
     /**
@@ -159,14 +176,19 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#track-decoding
      */
-    public async decodeTracks(encodedBase64Tracks: string[]): Promise<TrackData[]> {
+    public async decodeTracks(encodedBase64Tracks: string[]): Promise<Result<TrackData[], Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "POST",
             path: "/decodetracks",
             data: encodedBase64Tracks
         };
 
-        return await this.node.driver.request<TrackData[]>(options) ?? [];
+        const result = await this.node.driver.request<TrackData[]>(options);
+
+        return result.match(
+            (tracks) => ok(tracks ?? []),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        );
     };
 
     // ? ----- Track API End ----- ?//
@@ -185,15 +207,15 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
-    public async unmarkFailedAddress(address: string): Promise<ErrorResponses | void> {
-        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return {
+    public async unmarkFailedAddress(address: string): Promise<Result<undefined, Error | ErrorResponses>> {
+        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return err({
             timestamp: Date.now(),
             status: 404,
             error: "Not found.",
             message: `The specified node is a ${this.node.driver.type === NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
             path: "/v4/routeplanner/free/address",
             trace: new Error().stack
-        } satisfies ErrorResponses;
+        } satisfies ErrorResponses);
 
         const options: HarmonyLinkRequesterOptions = {
             method: "POST",
@@ -201,7 +223,7 @@ export default class Rest {
             data: { address }
         }
 
-        await this.node.driver.request<undefined>(options)
+        return await this.node.driver.request<undefined>(options)
     };
 
     /**
@@ -215,22 +237,22 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
-    public async unmarkAllFailedAddresses(): Promise<ErrorResponses | void> {
-        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return {
+    public async unmarkAllFailedAddresses(): Promise<Result<undefined, Error | ErrorResponses>> {
+        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return err({
             timestamp: Date.now(),
             status: 404,
             error: "Not found.",
             message: `The specified node is a ${this.node.driver.type === NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
             path: "/v4/routeplanner/free/all",
             trace: new Error().stack
-        } satisfies ErrorResponses;
+        } satisfies ErrorResponses);
 
         const options: HarmonyLinkRequesterOptions = {
             method: "POST",
             path: "/routeplanner/free/all",
         };
 
-        await this.node.driver.request<undefined>(options);
+        return await this.node.driver.request<undefined>(options);
     };
 
     /**
@@ -244,22 +266,27 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#get-routeplanner-status
      */
-    public async getRoutePlannerStatus(): Promise<RoutePlannerStatus> {
-        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return {
+    public async getRoutePlannerStatus(): Promise<Result<RoutePlannerStatus, ErrorResponses | Error>> {
+        if ([NodeType.NodeLink, NodeType.FrequenC].includes(this.node.driver.type)) return err({
             timestamp: Date.now(),
             status: 404,
             error: "Not found.",
             message: `The specified node is a ${this.node.driver.type === NodeType.NodeLink ? "NodeLink. NodeLink's" : "FrequenC Node. FrequenC Nodes"} do not have the routeplanner feature.`,
             path: "/v4/routeplanner/status",
             trace: new Error().stack
-        } satisfies ErrorResponses;
+        } satisfies ErrorResponses);
 
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: "/routeplanner/status"
         };
 
-        return await this.node.driver.request<RoutePlannerStatus>(options) ?? {};
+        const result = await this.node.driver.request<RoutePlannerStatus>(options);
+
+        return result.match(
+            (status) => ok(status ?? {}),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        )
     };
 
     // ? ----- Route Planer End ----- ?//
@@ -272,7 +299,7 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-info
      */
-    public async getInfo(): Promise<NodeInfo | undefined> {
+    public async getInfo(): Promise<Result<NodeInfo, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: "/info"
@@ -280,29 +307,31 @@ export default class Rest {
 
         const result = await this.node.driver.request<FrequenCInfo | NodeInfo>(options);
 
+        if (result.isErr()) return err(result.error)
+
         if (this.node.driver.type === NodeType.FrequenC) {
-            return {
+            return ok({
                 version: {
-                    major: result?.version.major ?? 0,
-                    minor: result?.version.minor ?? 0,
-                    patch: result?.version.patch ?? 0,
+                    major: result.value?.version.major ?? 0,
+                    minor: result.value?.version.minor ?? 0,
+                    patch: result.value?.version.patch ?? 0,
                     semver: "0.0.0"
                 },
                 jvm: "GNU Libgcj 7.3.0",
-                lavaplayer: `${(result?.version.major ?? 0)}.${(result?.version.minor ?? 0)}.${(result?.version.patch ?? 0)}`,
-                sourceManagers: (result as FrequenCInfo).source_managers || [],
-                filters: (result as FrequenCInfo).filters || [],
+                lavaplayer: `${(result.value?.version.major ?? 0)}.${(result.value?.version.minor ?? 0)}.${(result.value?.version.patch ?? 0)}`,
+                sourceManagers: (result.value as FrequenCInfo).source_managers || [],
+                filters: (result.value as FrequenCInfo).filters || [],
                 plugins: [],
                 git: {
-                    commit: result?.git.commit ?? "Unknown",
-                    branch: result?.git.branch ?? "main",
+                    commit: result.value?.git.commit ?? "Unknown",
+                    branch: result.value?.git.branch ?? "main",
                     commitTime: 0
                 },
                 buildTime: 0
-            };
+            });
         };
 
-        return result as NodeInfo;
+        return ok(result.value as NodeInfo);
     };
 
     /**
@@ -311,7 +340,7 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-version
      */
-    public async getVersion(): Promise<string> {
+    public async getVersion(): Promise<Result<string, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: "/version",
@@ -320,7 +349,12 @@ export default class Rest {
             }
         };
 
-        return await this.node.driver.request<string>(options) ?? "Unknown";
+        const result = await this.node.driver.request<string>(options);
+
+        return result.match(
+            (version) => ok(version ?? "Unknown"),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        );
     };
 
     /**
@@ -329,13 +363,18 @@ export default class Rest {
      * 
      * @docs https://lavalink.dev/api/rest.html#get-lavalink-stats || 
      */
-    public async getStats(): Promise<NodeStats> {
+    public async getStats(): Promise<Result<NodeStats, Error>> {
         const options: HarmonyLinkRequesterOptions = {
             method: "GET",
             path: "/stats",
         };
 
-        return await this.node.driver.request<NodeStats>(options) ?? getDefaultNodeStats();
+        const result = await this.node.driver.request<NodeStats>(options);
+
+        return result.match(
+            (stats) => ok(stats ?? getDefaultNodeStats()),
+            (error) => err(error instanceof Error ? error : new Error(String(error)))
+        )
     };
 
     // ? ----- Node End ----- ?//

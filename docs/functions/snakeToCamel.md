@@ -1,25 +1,25 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / snakeToCamel
+[HarmonyLink v2.0.0](../globals.md) / snakeToCamel
 
 # Function: snakeToCamel()
 
-> **snakeToCamel**\<`T`\>(`obj`): `Record`\<`string`, `unknown`\> \| `T`
+> **snakeToCamel**\<`T`\>(`obj`): [`SnakeToCamel`](../type-aliases/SnakeToCamel.md)\<`T`\>
 
 ## Type Parameters
 
-• **T**
+• **T** *extends* `Record`\<`string`, `any`\>
 
 ## Parameters
 
-• **obj**: `Record`\<`string`, `any`\>
+• **obj**: `T`
 
 ## Returns
 
-`Record`\<`string`, `unknown`\> \| `T`
+[`SnakeToCamel`](../type-aliases/SnakeToCamel.md)\<`T`\>
 
 ## Defined in
 
-src/utils/index.ts:18
+[utils/index.ts:29](https://github.com/Joniii11/HarmonyLink/blob/master/src/utils/index.ts#L29)

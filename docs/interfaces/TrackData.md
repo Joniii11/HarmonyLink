@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackData
+[HarmonyLink v2.0.0](../globals.md) / TrackData
 
 # Interface: TrackData
 
@@ -16,7 +16,7 @@ The base64 encoded track data
 
 #### Defined in
 
-src/typings/track/index.ts:5
+[typings/track/index.ts:62](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L62)
 
 ***
 
@@ -28,7 +28,7 @@ The track info
 
 #### Defined in
 
-src/typings/track/index.ts:10
+[typings/track/index.ts:67](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L67)
 
 ***
 
@@ -40,7 +40,7 @@ Additional track info provided by plugins
 
 #### Defined in
 
-src/typings/track/index.ts:15
+[typings/track/index.ts:72](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L72)
 
 ***
 
@@ -52,4 +52,4 @@ Additional track data provided via the Update Player endpoint
 
 #### Defined in
 
-src/typings/track/index.ts:20
+[typings/track/index.ts:77](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/track/index.ts#L77)

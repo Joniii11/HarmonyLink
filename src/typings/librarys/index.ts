@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { VoiceServer, SetStateUpdate } from "@t/player/connection";
 
-export type Packet = AnyOtherPacket | PacketVoiceServerUpdate | PacketVoiceStateUpdate;
-
 export interface PacketVoiceStateUpdate {
     op: number;
     d: SetStateUpdate;
@@ -20,3 +18,5 @@ export interface AnyOtherPacket {
     d: any;
     t?: "";
 };
+
+export type Packet = AnyOtherPacket | PacketVoiceServerUpdate | PacketVoiceStateUpdate;

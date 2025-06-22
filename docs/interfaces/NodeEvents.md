@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeEvents
+[HarmonyLink v2.0.0](../globals.md) / NodeEvents
 
 # Interface: NodeEvents
 
@@ -28,7 +28,23 @@ void
 
 #### Defined in
 
-src/typings/node/index.ts:9
+[typings/node/index.ts:381](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L381)
+
+***
+
+### lavalinkWSOpen()
+
+> **lavalinkWSOpen**: () => `void`
+
+#### Returns
+
+`void`
+
+void
+
+#### Defined in
+
+[typings/node/index.ts:387](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L387)
 
 ***
 
@@ -54,7 +70,7 @@ void
 
 #### Defined in
 
-src/typings/node/index.ts:23
+[typings/node/index.ts:395](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L395)
 
 ***
 
@@ -76,20 +92,4 @@ void
 
 #### Defined in
 
-src/typings/node/index.ts:30
-
-***
-
-### lavalinkWSOpen()
-
-> **lavalinkWSOpen**: () => `void`
-
-#### Returns
-
-`void`
-
-void
-
-#### Defined in
-
-src/typings/node/index.ts:15
+[typings/node/index.ts:402](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L402)

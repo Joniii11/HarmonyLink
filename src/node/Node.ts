@@ -13,6 +13,7 @@ import { WebSocket } from "ws";
 import { Player } from "@/player/Player";
 import { Snowflake } from "@/typings";
 import { ErrorResponses, RoutePlannerStatus } from "@/typings/exporter";
+import { Result } from "neverthrow";
 
 export declare interface Node {
     on: <K extends keyof NodeEvents>(event: K, listener: NodeEvents[K]) => this;
@@ -76,8 +77,13 @@ export class Node extends EventEmitter {
      * This method is used to connect to the node.
      * @returns {Promise<WebSocket>} The websocket connection.
      */
-    public async connect(): Promise<WebSocket> {
+    public async connect(): Promise<Result<WebSocket, Error>> {
         const ws = await this.driver.connect();
+        if (ws.isErr()) {
+            this.manager.emit("debug", `[HarmonyLink] [Node ${this.options.name}] Failed to connect to the node. Error: ${ws.error.message}`);
+            throw ws.error;
+        }
+
 
         this.isConnected = true;
         this.options.currentAttempts = 0;
@@ -87,17 +93,14 @@ export class Node extends EventEmitter {
 
     /**
      * This method is used to disconnect from the node.
-     * @returns {Promise<void>} Resolves once the node is disconnected.
+     * @returns {void} Resolves once the node is disconnected.
      */
-    public async disconnect(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            if (!this.isConnected) return resolve();
-            this.isConnected = false;
+    public disconnect(): void {
+        if (!this.isConnected) return;
 
-            this.driver.wsClose(true);
-
-            resolve();
-        });
+        this.manager.emit("debug", `[HarmonyLink] [Node ${this.options.name}] Disconnecting from the node.`);
+        this.isConnected = false;
+        this.driver.wsClose(true);
     };
 
     /**
@@ -150,22 +153,22 @@ export class Node extends EventEmitter {
 
     /**
      * This method is used to unmark all failed addresses.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      * 
      * @see https://lavalink.dev/api/rest.html#unmark-all-failed-address
      */
-    public async unmarkAllFailingAddresses(): Promise<ErrorResponses | void> {
+    public async unmarkAllFailingAddresses(): Promise<Result<undefined, Error | ErrorResponses>> {
         return this.rest.unmarkAllFailedAddresses()
     };
 
     /**
      * This method is used to unmark a failed address.
      * @param {string} address The address to unmark.
-     * @returns {Promise<ErrorResponses | void>} 204 - No content.
+     * @returns {Promise<Result<undefined, Error | ErrorResponses>>} 204 - No content.
      * 
      * @see https://lavalink.dev/api/rest.html#unmark-a-failed-address
      */
-    public async unmarkFailingAddress(address: string): Promise<ErrorResponses | void> {
+    public async unmarkFailingAddress(address: string): Promise<Result<undefined, Error | ErrorResponses>> {
         return this.rest.unmarkFailedAddress(address)
     };
 }

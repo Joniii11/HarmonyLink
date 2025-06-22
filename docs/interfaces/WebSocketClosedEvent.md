@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / WebSocketClosedEvent
+[HarmonyLink v2.0.0](../globals.md) / WebSocketClosedEvent
 
 # Interface: WebSocketClosedEvent
 
@@ -14,23 +14,17 @@ Represents an event indicating that a WebSocket connection was closed.
 
 ## Properties
 
-### byRemote
+### op
 
-> **byRemote**: `boolean`
+> **op**: `"event"`
 
-#### Defined in
+#### Inherited from
 
-src/typings/node/playerEvents.ts:59
-
-***
-
-### code
-
-> **code**: `number`
+[`PlayerEvent`](PlayerEvent.md).[`op`](PlayerEvent.md#op)
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:58
+[typings/node/playerEvents.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L8)
 
 ***
 
@@ -44,31 +38,7 @@ src/typings/node/playerEvents.ts:58
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:16
-
-***
-
-### op
-
-> **op**: `"event"`
-
-#### Inherited from
-
-[`PlayerEvent`](PlayerEvent.md).[`op`](PlayerEvent.md#op)
-
-#### Defined in
-
-src/typings/node/playerEvents.ts:14
-
-***
-
-### reason
-
-> **reason**: `string`
-
-#### Defined in
-
-src/typings/node/playerEvents.ts:60
+[typings/node/playerEvents.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L10)
 
 ***
 
@@ -82,4 +52,34 @@ src/typings/node/playerEvents.ts:60
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:57
+[typings/node/playerEvents.ts:51](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L51)
+
+***
+
+### code
+
+> **code**: `number`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:52](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L52)
+
+***
+
+### byRemote
+
+> **byRemote**: `boolean`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:53](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L53)
+
+***
+
+### reason
+
+> **reason**: `string`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:54](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L54)

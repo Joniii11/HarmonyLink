@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerLoop
+[HarmonyLink v2.0.0](../globals.md) / PlayerLoop
 
 # Enumeration: PlayerLoop
 
@@ -14,7 +14,7 @@
 
 #### Defined in
 
-src/typings/player/index.ts:90
+[typings/player/index.ts:90](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L90)
 
 ***
 
@@ -24,7 +24,7 @@ src/typings/player/index.ts:90
 
 #### Defined in
 
-src/typings/player/index.ts:91
+[typings/player/index.ts:91](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L91)
 
 ***
 
@@ -34,4 +34,4 @@ src/typings/player/index.ts:91
 
 #### Defined in
 
-src/typings/player/index.ts:92
+[typings/player/index.ts:92](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L92)

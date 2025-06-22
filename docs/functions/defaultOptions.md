@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / defaultOptions
+[HarmonyLink v2.0.0](../globals.md) / defaultOptions
 
 # Function: defaultOptions()
 
@@ -18,4 +18,4 @@
 
 ## Defined in
 
-src/constants/node.ts:5
+[constants/node.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/constants/node.ts#L5)

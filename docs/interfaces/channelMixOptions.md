@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / channelMixOptions
+[HarmonyLink v2.0.0](../globals.md) / channelMixOptions
 
 # Interface: channelMixOptions
 
@@ -18,7 +18,7 @@ The left to left of the channelMix effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:111
+[typings/player/filters.ts:111](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L111)
 
 ***
 
@@ -30,7 +30,7 @@ The left to right of the channelMix effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:112
+[typings/player/filters.ts:112](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L112)
 
 ***
 
@@ -42,7 +42,7 @@ The right to left of the channelMix effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:113
+[typings/player/filters.ts:113](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L113)
 
 ***
 
@@ -54,4 +54,4 @@ The right to right of the channelMix effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:114
+[typings/player/filters.ts:114](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L114)

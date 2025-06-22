@@ -1,12 +1,60 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeInfo
+[HarmonyLink v2.0.0](../globals.md) / NodeInfo
 
 # Interface: NodeInfo
 
 ## Properties
+
+### version
+
+> **version**: `object`
+
+The version of this Lavalink server
+
+#### semver
+
+> **semver**: `string`
+
+The full version string of this Lavalink server
+
+#### major
+
+> **major**: `number`
+
+The major version of this Lavalink server
+
+#### minor
+
+> **minor**: `number`
+
+The minor version of this Lavalink server
+
+#### patch
+
+> **patch**: `number`
+
+The patch version of this Lavalink server
+
+#### preRelease?
+
+> `optional` **preRelease**: `string`
+
+The pre-release version according to semver as a `.` separated list of identifiers
+
+#### build?
+
+> `optional` **build**: `string`
+
+The build metadata according to semver as a `.` separated list of identifiers
+
+#### Defined in
+
+[typings/node/index.ts:104](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L104)
+
+***
 
 ### buildTime
 
@@ -16,19 +64,7 @@ The millisecond unix timestamp when this Lavalink jar was built
 
 #### Defined in
 
-src/typings/node/index.ts:169
-
-***
-
-### filters
-
-> **filters**: `string`[]
-
-The enabled filters for this server
-
-#### Defined in
-
-src/typings/node/index.ts:209
+[typings/node/index.ts:139](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L139)
 
 ***
 
@@ -58,7 +94,7 @@ The millisecond unix timestamp for when the commit was created
 
 #### Defined in
 
-src/typings/node/index.ts:174
+[typings/node/index.ts:144](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L144)
 
 ***
 
@@ -70,7 +106,7 @@ The JVM version this Lavalink server runs on
 
 #### Defined in
 
-src/typings/node/index.ts:194
+[typings/node/index.ts:164](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L164)
 
 ***
 
@@ -82,19 +118,7 @@ The Lavaplayer version being used by this server
 
 #### Defined in
 
-src/typings/node/index.ts:199
-
-***
-
-### plugins
-
-> **plugins**: `object`[]
-
-The enabled plugins for this server
-
-#### Defined in
-
-src/typings/node/index.ts:214
+[typings/node/index.ts:169](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L169)
 
 ***
 
@@ -106,52 +130,28 @@ The enabled source managers for this server
 
 #### Defined in
 
-src/typings/node/index.ts:204
+[typings/node/index.ts:174](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L174)
 
 ***
 
-### version
+### filters
 
-> **version**: `object`
+> **filters**: `string`[]
 
-The version of this Lavalink server
-
-#### build?
-
-> `optional` **build**: `string`
-
-The build metadata according to semver as a `.` separated list of identifiers
-
-#### major
-
-> **major**: `number`
-
-The major version of this Lavalink server
-
-#### minor
-
-> **minor**: `number`
-
-The minor version of this Lavalink server
-
-#### patch
-
-> **patch**: `number`
-
-The patch version of this Lavalink server
-
-#### preRelease?
-
-> `optional` **preRelease**: `string`
-
-The pre-release version according to semver as a `.` separated list of identifiers
-
-#### semver
-
-> **semver**: `string`
-
-The full version string of this Lavalink server
+The enabled filters for this server
 
 #### Defined in
 
-src/typings/node/index.ts:134
+[typings/node/index.ts:179](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L179)
+
+***
+
+### plugins
+
+> **plugins**: `object`[]
+
+The enabled plugins for this server
+
+#### Defined in
+
+[typings/node/index.ts:184](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L184)

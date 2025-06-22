@@ -1,28 +1,40 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / ConnectionOptions
+[HarmonyLink v2.0.0](../globals.md) / ConnectionOptions
 
 # Interface: ConnectionOptions
 
 ## Properties
 
-### selfDeaf
+### voice
 
-> **selfDeaf**: `boolean`
+> **voice**: `object`
 
-Whether to deafen myself
+Voice Options
 
-#### Default
+#### sessionId
 
-```ts
-false
-```
+> **sessionId**: `null` \| `string`
+
+The voice session id
+
+#### token
+
+> **token**: `null` \| `string`
+
+The voice server token
+
+#### endpoint
+
+> **endpoint**: `null` \| `string`
+
+The voice server endpoint
 
 #### Defined in
 
-src/typings/player/connection.ts:127
+[typings/player/connection.ts:98](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L98)
 
 ***
 
@@ -40,37 +52,25 @@ false
 
 #### Defined in
 
-src/typings/player/connection.ts:120
+[typings/player/connection.ts:120](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L120)
 
 ***
 
-### voice
+### selfDeaf
 
-> **voice**: `object`
+> **selfDeaf**: `boolean`
 
-Voice Options
+Whether to deafen myself
 
-#### endpoint
+#### Default
 
-> **endpoint**: `null` \| `string`
-
-The voice server endpoint
-
-#### sessionId
-
-> **sessionId**: `null` \| `string`
-
-The voice session id
-
-#### token
-
-> **token**: `null` \| `string`
-
-The voice server token
+```ts
+false
+```
 
 #### Defined in
 
-src/typings/player/connection.ts:98
+[typings/player/connection.ts:127](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L127)
 
 ***
 
@@ -82,4 +82,4 @@ The voice region
 
 #### Defined in
 
-src/typings/player/connection.ts:132
+[typings/player/connection.ts:132](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L132)

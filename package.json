@@ -1,11 +1,16 @@
 {
   "name": "harmonylink",
-  "version": "1.3.2",
-  "description": "HarmonyLink: Seamlessly connect to LavaLink nodes for high-quality audio streaming in your applications. HarmonyLink offers a reliable and easy-to-use interface, perfect for building music bots and audio applications with superior performance.",
-  "main": "./dist/index.js",
-  "scripts": {
+  "version": "2.0.0",
+  "description": "Seamlessly connect to Lavalink, NodeLink, and FrequenC nodes for high-quality audio streaming in your Discord bots. Supports Discord.js, Eris, Oceanic.js, and a powerful plugin system.",
+  "main": "./dist/index.js",  "scripts": {
     "build": "tspc && npm run build:esm",
     "build:esm": "gen-esm-wrapper dist/index.js dist/index.mjs",
+    "lint": "eslint src/**/*.ts",
+    "docs": "typedoc",
+    "docs:clean": "rimraf docs && npm run docs",
+    "docs:watch": "typedoc --watch",
+    "docs:serve": "typedoc --serve",
+    "lint:fix": "eslint src/**/*.ts --fix",
     "prepublishOnly": "npm run prepare && npm run build",
     "prepare": "ts-patch install -s"
   },
@@ -31,25 +36,6 @@
   "bugs": {
     "url": "https://github.com/Joniii11/HarmonyLink/issues"
   },
-  "eslintConfig": {
-    "extends": [
-      "@clytage/eslint-config/typescript",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "ignorePatterns": [
-      "dist/*"
-    ],
-    "rules": {
-      "@typescript-eslint/no-extra-parens": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-type-alias": "off",
-      "@typescript-eslint/no-empty-function": "off"
-    }
-  },
   "prettier": {
     "tabWidth": 4,
     "trailingComma": "none",
@@ -58,18 +44,20 @@
   },
   "homepage": "https://github.com/Joniii11/HarmonyLink#readme",
   "dependencies": {
-    "ws": "^8.18.1"
+    "neverthrow": "^8.2.0",
+    "ws": "^8.18.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.9"
-  },
-  "devDependencies": {
+  },  "devDependencies": {
     "@clytage/eslint-config": "^3.0.1",
     "@types/node": "^22.14.1",
     "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
-    "eslint": "^9.24.0",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-neverthrow": "^1.1.4",
     "eslint-plugin-prettier": "^5.1.3",
     "gen-esm-wrapper": "^1.1.3",
     "prettier": "^3.3.1",

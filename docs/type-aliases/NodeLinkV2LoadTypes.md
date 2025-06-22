@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeLinkV2LoadTypes
+[HarmonyLink v2.0.0](../globals.md) / NodeLinkV2LoadTypes
 
 # Type Alias: NodeLinkV2LoadTypes
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/node/rest.ts:6
+[typings/node/rest.ts:6](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L6)

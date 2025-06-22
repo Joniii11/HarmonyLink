@@ -1,14 +1,18 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / RequiredHarmonyLinkConfiguration
+[HarmonyLink v2.0.0](../globals.md) / RequiredHarmonyLinkConfiguration
 
 # Type Alias: RequiredHarmonyLinkConfiguration
 
-> **RequiredHarmonyLinkConfiguration**: `Omit`\<`Required`\<[`HarmonyLinkConfiguration`](../interfaces/HarmonyLinkConfiguration.md)\>, `"customAutoplay"` \| `"nodeResolver"` \| `"nodes"`\> & `object`
+> **RequiredHarmonyLinkConfiguration**: `Omit`\<`Required`\<[`HarmonyLinkConfiguration`](../interfaces/HarmonyLinkConfiguration.md)\>, `"customAutoplay"` \| `"nodeAdder"` \| `"nodeResolver"` \| `"nodes"`\> & `object`
 
 ## Type declaration
+
+### nodes?
+
+> `optional` **nodes**: [`NodeGroup`](../interfaces/NodeGroup.md)[]
 
 ### customAutoplay
 
@@ -18,10 +22,10 @@
 
 > **nodeResolver**: (`nodes`) => `Promise`\<[`Node`](../classes/Node.md) \| `void`\> \| `undefined`
 
-### nodes?
+### nodeAdder
 
-> `optional` **nodes**: [`NodeGroup`](../interfaces/NodeGroup.md)[]
+> **nodeAdder**: (`nodeManager`, `node`) => `Promise`\<[`Node`](../classes/Node.md) \| `void`\> \| `undefined`
 
 ## Defined in
 
-src/typings/HarmonyLink.ts:179
+[typings/HarmonyLink.ts:188](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/HarmonyLink.ts#L188)

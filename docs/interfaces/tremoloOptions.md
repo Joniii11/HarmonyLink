@@ -1,26 +1,14 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / tremoloOptions
+[HarmonyLink v2.0.0](../globals.md) / tremoloOptions
 
 # Interface: tremoloOptions
 
 The tremoloOptions interface that is used to define the tremolo options to apply to the currently playing track
 
 ## Properties
-
-### depth
-
-> **depth**: `number`
-
-The depth of the tremolo effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:52
-
-***
 
 ### frequency
 
@@ -30,4 +18,16 @@ The frequency of the tremolo effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:51
+[typings/player/filters.ts:51](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L51)
+
+***
+
+### depth
+
+> **depth**: `number`
+
+The depth of the tremolo effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:52](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L52)

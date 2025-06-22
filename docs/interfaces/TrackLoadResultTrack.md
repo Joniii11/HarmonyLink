@@ -1,22 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackLoadResultTrack
+[HarmonyLink v2.0.0](../globals.md) / TrackLoadResultTrack
 
 # Interface: TrackLoadResultTrack
 
 ## Properties
-
-### data
-
-> **data**: [`TrackData`](TrackData.md)
-
-#### Defined in
-
-src/typings/node/rest.ts:73
-
-***
 
 ### loadType
 
@@ -24,4 +14,14 @@ src/typings/node/rest.ts:73
 
 #### Defined in
 
-src/typings/node/rest.ts:72
+[typings/node/rest.ts:72](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L72)
+
+***
+
+### data
+
+> **data**: [`TrackData`](TrackData.md)
+
+#### Defined in
+
+[typings/node/rest.ts:73](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L73)

@@ -6,6 +6,7 @@ import { Node } from "@/node/Node";
 import { PlayerConnectionState, PlayerOptions } from "@/typings/player";
 import { ConnectionOptions, DiscordVoiceStates } from "@/typings/player/connection";
 import { UpdatePlayerInfo } from "@/typings/node/rest";
+import { Result, err, ok } from 'neverthrow';
 export default class PlayerManager extends Map<Snowflake, Player> {
     public readonly manager: HarmonyLink;
     
@@ -14,21 +15,24 @@ export default class PlayerManager extends Map<Snowflake, Player> {
         this.manager = manager;
     };
 
-    public async createPlayer(options: PlayerOptions): Promise<Player> {
-        if (this.has(options.guildId)) return this.get(options.guildId)!;
+    public async createPlayer(options: PlayerOptions): Promise<Result<Player, Error>> {
+        if (this.has(options.guildId)) return ok(this.get(options.guildId)!);
         
-        const node = options.node ?? await this.leastUsedNode()
+        const node = options.node ?? (await this.leastUsedNode()).unwrapOr(null)
+        if (!node) return err(new Error("[HarmonyLink] [PlayerManager] No nodes available to create a player."));
+
         let newPlayer = new Player(this.manager, node, options)
 
-        this.set(options.guildId, newPlayer);
+        this.set(options.guildId, newPlayer);        
+        
+        const newPlayerResult = await newPlayer.connect();
 
-        try {
-            newPlayer = await newPlayer.connect()
-        } catch (err) {
-            this.delete(options.guildId)
+        if (newPlayerResult.isErr()) {
+            this.delete(options.guildId);
+            return err(new Error(`[HarmonyLink] [PlayerManager] Failed to create player for guild ${options.guildId} on node ${node.options.name}. Error: ${newPlayerResult.error}`));
+        }
 
-            throw err
-        };
+        newPlayer = newPlayerResult.value;
 
         const onUpdate = async (state: DiscordVoiceStates): Promise<void> => {
             if (state !== DiscordVoiceStates.SESSION_READY) return;
@@ -43,20 +47,21 @@ export default class PlayerManager extends Map<Snowflake, Player> {
 
         this.manager.emit("debug", `[HarmonyLink] [PlayerManager] Created a new player for guild ${options.guildId} on node ${node.options.name}.`);
 
-        return newPlayer;
+        return ok(newPlayer);
     };
 
-    public async removePlayer(guildId: string): Promise<Player | null> {
+    public async removePlayer(guildId: string): Promise<Result<Player, Error>> {
         const player = this.get(guildId);
-        if (!player) return null;
+        if (!player) return err(new Error(`[HarmonyLink] [PlayerManager] No player found for guild ${guildId}.`));
 
         await player.destroy();
         this.delete(guildId);
-        return player;
+
+        return ok(player);
     };
 
-    public async leastUsedNode(): Promise<Node> {
-        return await this.manager.nodeManager.getLeastUsedNode() ?? this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)]
+    public async leastUsedNode(): Promise<Result<Node, Error>> {
+        return await this.manager.nodeManager.getLeastUsedNode() ?? ok(this.manager.nodeManager.allNodes[Math.floor(Math.random() * this.manager.nodeManager.allNodes.length)])
     };
 
     // eslint-disable-next-line class-methods-use-this

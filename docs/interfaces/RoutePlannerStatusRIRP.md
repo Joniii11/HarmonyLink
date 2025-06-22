@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / RoutePlannerStatusRIRP
+[HarmonyLink v2.0.0](../globals.md) / RoutePlannerStatusRIRP
 
 # Interface: RoutePlannerStatusRIRP
 
@@ -16,7 +16,7 @@ The name of the RoutePlanner implementation being used by this server
 
 #### Defined in
 
-src/typings/node/rest.ts:280
+[typings/node/rest.ts:280](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L280)
 
 ***
 
@@ -28,11 +28,11 @@ The status details of the RoutePlanner
 
 #### Type declaration
 
-##### currentAddress
+##### rotateIndex
 
-> **currentAddress**: `string`
+> **rotateIndex**: `string`
 
-The current address being used
+The number of rotations
 
 ##### ipIndex
 
@@ -40,12 +40,12 @@ The current address being used
 
 The current offset in the block
 
-##### rotateIndex
+##### currentAddress
 
-> **rotateIndex**: `string`
+> **currentAddress**: `string`
 
-The number of rotations
+The current address being used
 
 #### Defined in
 
-src/typings/node/rest.ts:285
+[typings/node/rest.ts:285](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L285)

@@ -1,22 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / VoiceConnectionState
+[HarmonyLink v2.0.0](../globals.md) / VoiceConnectionState
 
 # Enumeration: VoiceConnectionState
 
 ## Enumeration Members
-
-### CONNECTED
-
-> **CONNECTED**: `2`
-
-#### Defined in
-
-src/typings/player/index.ts:104
-
-***
 
 ### CONNECTING
 
@@ -24,27 +14,7 @@ src/typings/player/index.ts:104
 
 #### Defined in
 
-src/typings/player/index.ts:102
-
-***
-
-### DISCONNECTED
-
-> **DISCONNECTED**: `5`
-
-#### Defined in
-
-src/typings/player/index.ts:107
-
-***
-
-### DISCONNECTING
-
-> **DISCONNECTING**: `4`
-
-#### Defined in
-
-src/typings/player/index.ts:106
+[typings/player/index.ts:102](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L102)
 
 ***
 
@@ -54,7 +24,17 @@ src/typings/player/index.ts:106
 
 #### Defined in
 
-src/typings/player/index.ts:103
+[typings/player/index.ts:103](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L103)
+
+***
+
+### CONNECTED
+
+> **CONNECTED**: `2`
+
+#### Defined in
+
+[typings/player/index.ts:104](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L104)
 
 ***
 
@@ -64,4 +44,24 @@ src/typings/player/index.ts:103
 
 #### Defined in
 
-src/typings/player/index.ts:105
+[typings/player/index.ts:105](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L105)
+
+***
+
+### DISCONNECTING
+
+> **DISCONNECTING**: `4`
+
+#### Defined in
+
+[typings/player/index.ts:106](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L106)
+
+***
+
+### DISCONNECTED
+
+> **DISCONNECTED**: `5`
+
+#### Defined in
+
+[typings/player/index.ts:107](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L107)

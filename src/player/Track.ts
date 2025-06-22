@@ -3,6 +3,7 @@
 // Types
 import { HarmonyLink } from "@/HarmonyLink";
 import { TrackData, TrackDataInfo } from "@t/track";
+import { err, ok, Result } from "neverthrow";
 
 export class Track {
     public track: string;
@@ -33,14 +34,15 @@ export class Track {
      * @param {HarmonyLink} manager The HarmonyLink instance
      * @returns {Promise<Track | null>} The resolved track
      */
-    public async resolve(manager: HarmonyLink): Promise<Track> {
+    public async resolve(manager: HarmonyLink): Promise<Result<Track, Error>> {
         const query = [this.info.author, this.info.title].filter((x) => Boolean(x)).join(" - ");
 
         const result = await manager.resolve({ query, requester: this.info.requester });
+        if (result.isErr()) return err(result.error);
 
         if (this.info.author) {
             const author = [this.info.author, `${this.info.author} - Topic`];
-            const officialAudio = result.tracks.find(
+            const officialAudio = result.value.tracks.find(
                 (track) =>
                     author.some((name) => new RegExp(`^${this.escapeRegExp(name)}$`, "i").test(track.info.author)) ||
                     new RegExp(`^${this.escapeRegExp(this.info.title)}$`, "i").test(track.info.title)
@@ -48,12 +50,12 @@ export class Track {
 
             if (officialAudio) {
                 this.track = officialAudio.track;
-                return this;
+                return ok(this);
             };
         };
 
         if (this.info.length) {
-            const sameDuration = result.tracks.find(
+            const sameDuration = result.value.tracks.find(
                 (track) =>
                     track.info.length >= (this.info.length ? this.info.length : 0) - 2000 &&
                     track.info.length <= (this.info.length ? this.info.length : 0) + 2000
@@ -61,13 +63,13 @@ export class Track {
 
             if (sameDuration) {
                 this.track = sameDuration.track;
-                return this;
+                return ok(this);
             };
         };
         
-        this.info.identifier = result.tracks[0].info.identifier;
-        this.track = result.tracks[0].track;
-        return this;
+        this.info.identifier = result.value.tracks[0].info.identifier;
+        this.track = result.value.tracks[0].track;
+        return ok(this);
     };
 
     private escapeRegExp(str: string): string {

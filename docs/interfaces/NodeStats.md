@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeStats
+[HarmonyLink v2.0.0](../globals.md) / NodeStats
 
 # Interface: NodeStats
 
@@ -11,6 +11,42 @@
 - [`LavalinkNodeStatsPacket`](LavalinkNodeStatsPacket.md)
 
 ## Properties
+
+### players
+
+> **players**: `number`
+
+The amount of players connected to the node
+
+#### Defined in
+
+[typings/node/index.ts:15](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L15)
+
+***
+
+### playingPlayers
+
+> **playingPlayers**: `number`
+
+The amount of players that are playing music
+
+#### Defined in
+
+[typings/node/index.ts:20](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L20)
+
+***
+
+### uptime
+
+> **uptime**: `number`
+
+The uptime of the node
+
+#### Defined in
+
+[typings/node/index.ts:25](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L25)
+
+***
 
 ### cpu
 
@@ -24,55 +60,21 @@ The CPU usage of the node
 
 The amount of CPU cores
 
-#### lavalinkLoad
-
-> **lavalinkLoad**: `number`
-
-The load of the Lavalink
-
 #### systemLoad
 
 > **systemLoad**: `number`
 
 The system load of the CPU
 
-#### Defined in
+#### lavalinkLoad
 
-src/typings/node/index.ts:60
+> **lavalinkLoad**: `number`
 
-***
-
-### frameStats
-
-> **frameStats**: `object`
-
-The frame stats of the node
-
-#### deficit
-
-> **deficit**: `number`
-
-The amount of frames that have a deficit
-
-#### nulled
-
-> **nulled**: `number`
-
-The amount of nulled frames
-
-#### sent
-
-> **sent**: `number`
-
-The amount of frames sent
-
-#### Attention
-
-This is by default NOT included in LavaLink however in NodeLink it is
+The load of the Lavalink
 
 #### Defined in
 
-src/typings/node/index.ts:106
+[typings/node/index.ts:30](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L30)
 
 ***
 
@@ -81,18 +83,6 @@ src/typings/node/index.ts:106
 > **memory**: `object`
 
 The memory usage of the node
-
-#### allocated
-
-> **allocated**: `number`
-
-The amount of memory that is allocated
-
-#### free
-
-> **free**: `number`
-
-The amount of free memory
 
 #### reservable
 
@@ -106,42 +96,52 @@ The amount of memory that is reservable
 
 The amount of memory that is used
 
+#### free
+
+> **free**: `number`
+
+The amount of free memory
+
+#### allocated
+
+> **allocated**: `number`
+
+The amount of memory that is allocated
+
 #### Defined in
 
-src/typings/node/index.ts:80
+[typings/node/index.ts:50](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L50)
 
 ***
 
-### players
+### frameStats
 
-> **players**: `number`
+> **frameStats**: `object`
 
-The amount of players connected to the node
+The frame stats of the node
 
-#### Defined in
+#### sent
 
-src/typings/node/index.ts:45
+> **sent**: `number`
 
-***
+The amount of frames sent
 
-### playingPlayers
+#### deficit
 
-> **playingPlayers**: `number`
+> **deficit**: `number`
 
-The amount of players that are playing music
+The amount of frames that have a deficit
 
-#### Defined in
+#### nulled
 
-src/typings/node/index.ts:50
+> **nulled**: `number`
 
-***
+The amount of nulled frames
 
-### uptime
+#### Attention
 
-> **uptime**: `number`
-
-The uptime of the node
+This is by default NOT included in LavaLink however in NodeLink it is
 
 #### Defined in
 
-src/typings/node/index.ts:55
+[typings/node/index.ts:76](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L76)

@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TMonth
+[HarmonyLink v2.0.0](../globals.md) / TMonth
 
 # Type Alias: TMonth
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/index.ts:4
+[typings/index.ts:4](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L4)

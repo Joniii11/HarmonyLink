@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Packet
+[HarmonyLink v2.0.0](../globals.md) / Packet
 
 # Type Alias: Packet
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/librarys/index.ts:4
+[typings/librarys/index.ts:22](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L22)

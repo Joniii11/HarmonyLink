@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / rotationOptions
+[HarmonyLink v2.0.0](../globals.md) / rotationOptions
 
 # Interface: rotationOptions
 
@@ -18,4 +18,4 @@ The rotation hz of the rotation effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:74
+[typings/player/filters.ts:74](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L74)

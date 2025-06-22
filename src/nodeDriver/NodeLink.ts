@@ -8,6 +8,7 @@ import { HarmonyLink } from "@/HarmonyLink";
 import { Node } from "@/node/Node";
 import { NodeLinkV2LoadTypes, LavaLinkLoadTypes } from "@t/node/rest";
 import { TrackData } from "@t/track"
+import { Result, ok, err, fromPromise } from 'neverthrow';
 
 export default class NodeLink extends AbstractNodeDriver {
     public clientId = "";
@@ -33,51 +34,57 @@ export default class NodeLink extends AbstractNodeDriver {
         this.httpUrl = `${(node.options.secure) ? "https" : "http"}://${node.options.host}:${node.options.port}`;
     };
 
-    public async connect(): Promise<WebSocket> {
-        return new Promise<WebSocket>((resolve, reject) => {
-            if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
-            if (!this.manager?.isReady || !this.manager.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
+    public async connect(): Promise<Result<WebSocket, Error>> {
+        return await fromPromise(
+            new Promise<WebSocket>((resolve, reject) => {
+                if (!this.isRegistered) return reject(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
+                if (!this.manager?.isReady || !this.manager.library.userID) return reject(new Error("User ID is not set. Please set it before connecting. Is this really a valid library?"));
 
-            const headers: Record<string, string> = {
-                Authorization: this.node!.options.password,
-                "User-Id": this.manager.library.userID,
-                "Client-Name": this.clientId,
-            };
+                const headers: Record<string, string> = {
+                    Authorization: this.node!.options.password,
+                    "User-Id": this.manager.library.userID,
+                    "Client-Name": this.clientId,
+                };
 
-            const ws = new WebSocket(`${this.wsUrl}/v4/websocket`, { headers });
+                const ws = new WebSocket(`${this.wsUrl}/v4/websocket`, { headers });
 
-            this.wsClient = ws;
-            this.wsClient.on("open", this.openHandler.bind(this));
-            this.wsClient.on("message", this.eventHandler.bind(this));
-            this.wsClient.on("error", this.errorHandler.bind(this));
-            this.wsClient.on("close", this.closeHandler.bind(this));
+                this.wsClient = ws;
+                this.wsClient.on("open", this.openHandler.bind(this));
+                this.wsClient.on("message", this.eventHandler.bind(this));
+                this.wsClient.on("error", this.errorHandler.bind(this));
+                this.wsClient.on("close", this.closeHandler.bind(this));
 
-            return resolve(ws);
-        });
+                return resolve(ws);
+            }),
+            (error) => error instanceof Error ? error : new Error(String(error))
+        );
     };
 
-    public async request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<T | undefined> {
-        if (!this.isRegistered) throw new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()");
-        if (options.path.includes("/sessions") && this.sessionId === null) throw new Error(`[HarmonyLink] [Node ${this.node?.options.name}] Session ID is not set. Please wait for LavaLinkV4 to be connected.`);
+    public async request<T = unknown>(options: HarmonyLinkRequesterOptions): Promise<Result<T | undefined, Error>> {
+        if (!this.isRegistered) return err(new Error("Node is not registered. Please register it by using <AbstractNodeDriver>.init()"));
+        if (options.path.includes("/sessions") && this.sessionId === null) return err(new Error(`[HarmonyLink] [Node ${this.node?.options.name}] Session ID is not set. Please wait for LavaLinkV4 to be connected.`));
 
         if (options.path.startsWith("/version")) {
             const url = `${this.httpUrl}${options.path}`;
 
-            const response = await globalThis.fetch(url, {
-                method: "GET",
-                headers: this.defaultHeaders
-            });
+            const result = await fromPromise(
+                globalThis.fetch(url, {
+                    method: "GET",
+                    headers: this.defaultHeaders
+                }),
+                (error) => error instanceof Error ? error : new Error(String(error))
+            );
 
-            return response.headers.get("content-type") === "application/json" ? await response.json() as T : await response.text() as T
+            return result.asyncMap(async (response) => response.headers.get("content-type") === "application/json" ? await response.json() as T : await response.text() as T);
         } else if (options.path.startsWith("/routeplanner")) {
-            return {
+            return ok({
                 timestamp: Date.now(),
                 status: 404,
                 error: "Not found.",
                 message: "The specified node is a NodeLink. NodeLink's do not have the routeplanner feature.",
                 path: `/v4${options.path}`,
                 trace: new Error().stack
-            } as unknown as T;
+            } as unknown as T);
         };
 
         const url = new URL(`${this.httpUrl}/v4${options.path}`);
@@ -96,81 +103,98 @@ export default class NodeLink extends AbstractNodeDriver {
 
             if (options.data) {
                 (options.data as string[]).map((track) => {
-                    const trackData = this.decoder(track);
-                    if (trackData) data.push(trackData);
-                    else failedTracks.push(track);
+                    const trackResult = this.decoder(track);
+                    trackResult.match(
+                        (trackData) => data.push(trackData),
+                        () => failedTracks.push(track)
+                    );
                 }) 
             } else {
-                const trackData = this.decoder((options.params as Record<string, string>).encodedTrack);
-
-                if (trackData) data.push(trackData);
-                else failedTracks.push((options.params as Record<string, string>).encodedTrack);
+                const trackResult = this.decoder((options.params as Record<string, string>).encodedTrack);
+                trackResult.match(
+                    (trackData) => data.push(trackData),
+                    () => failedTracks.push((options.params as Record<string, string>).encodedTrack)
+                );
             };
 
             if (failedTracks.length > 0) {
-                const res = await globalThis.fetch(new URL(`${this.httpUrl}/v4/decodetracks`), {
-                    method: "POST",
-                    headers,
-                    body: JSON.stringify(failedTracks)
-                });
+                const result = await fromPromise(
+                    globalThis.fetch(new URL(`${this.httpUrl}/v4/decodetracks`), {
+                        method: "POST",
+                        headers,
+                        body: JSON.stringify(failedTracks)
+                    }),
+                    (error) => error instanceof Error ? error : new Error(String(error))
+                );
 
-                data.push(...(await res.json() as TrackData[]))
+                const jsonResult = await result.asyncMap(async (response) => await response.json() as TrackData[]);
+                
+                return jsonResult.map((additionalData) => {
+                    data.push(...additionalData);
+                    return data as T;
+                }).mapErr((error) => error);
             };
 
-            return data as T;
+            return ok(data as T);
         };
 
-        const res = await globalThis.fetch(url, {
-            ...options,
-            method: options.method,
-            headers
-        }).catch((err) => ({ status: 500, statusText: err }));
+        const result = await fromPromise(
+            globalThis.fetch(url, {
+                ...options,
+                method: options.method,
+                headers
+            }),
+            (error) => error instanceof Error ? error : new Error(String(error))
+        );
 
-        switch (res.status) {
-            case 204: {
-                this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 204 No Content. payload=${options.body ? String(options.body) : "{}"}`);
-                return undefined
-            };
+        return result.asyncMap(async (res) => {
+            switch (res.status) {
+                case 204: {
+                    this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 204 No Content. payload=${options.body ? String(options.body) : "{}"}`);
+                    return undefined;
+                };
 
-            case 200: {
-                if (!(res instanceof Response)) {
+                case 200: {
+                    const data = res.headers.get("content-type") === "application/json" ? await res.json() : await res.text();
+
+                    this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 200 OK. payload=${options.body ? String(options.body) : "{}"}`);
+
+                    if ("loadType" in (data as Record<string, unknown>)) {
+                        (data as Record<string, unknown>).loadType = NodeLink.convertNodelinkResponseToLavalink((data as Record<string, unknown>).loadType as NodeLinkV2LoadTypes);
+                    };
+
+                    return data as T;
+                };
+
+                default: {
                     this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned ${res.status} ${res.statusText}. payload=${options.body ? String(options.body) : "{}"}`);
-                    return undefined; 
+                    return undefined;
                 };
-
-                const data = res.headers.get("content-type") === "application/json" ? await res.json() : await res.text();
-
-                this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned 200 OK. payload=${options.body ? String(options.body) : "{}"}`);
-
-                if ("loadType" in (data as Record<string, unknown>)) {
-                    (data as Record<string, unknown>).loadType = NodeLink.convertNodelinkResponseToLavalink((data as Record<string, unknown>).loadType as NodeLinkV2LoadTypes);
-                };
-
-                return data as T;
             };
-
-            default: {
-                this.manager?.emit("debug", `[HarmonyLink] [Node Driver ${this.node?.options.name}] ${options.method} request to ${options.path} returned ${res.status} ${res.statusText}. payload=${options.body ? String(options.body) : "{}"}`);
-                return undefined;
-            };
-        };
+        });
     }
 
-    public async updateSessions(): Promise<void> {
-        return new Promise<void>((resolve) => {
-            this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] NodeLink's do not support resuming, so set resume to true is useless.`);
-            
-            resolve();
-        })
+    public async updateSessions(_sessionId: string, _mode: boolean, _timeout: number): Promise<Result<void, Error>> {
+        return await fromPromise(
+            new Promise<void>((resolve) => {
+                this.manager?.emit("debug", `[HarmonyLink] [Node ${this.node?.options.name}] NodeLink's do not support resuming, so set resume to true is useless.`);
+                
+                resolve();
+            }),
+            (error) => error instanceof Error ? error : new Error(String(error))
+        );
     };
 
     public wsClose(withoutEmit: boolean = false): void {
-        if (withoutEmit) {
-            this.wsClient?.close(1000, "Self Closed");
-            this.node ? this.manager?.emit("nodeDisconnect", this.node, 1006) : null;
-        };
+        if (this.wsClient) {
+            this.wsClient.close(1000, "Connection closed");
+            
+            if (!withoutEmit && this.node) {
+                this.manager?.emit("nodeDisconnect", this.node, 1000);
+            }
+        }
 
-        this.wsClient?.removeAllListeners()
+        this.wsClient?.removeAllListeners();
         this.wsClient = undefined;
     };
 

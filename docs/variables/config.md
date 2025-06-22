@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / config
+[HarmonyLink v2.0.0](../globals.md) / config
 
 # Variable: config
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/constants/index.ts:5
+[constants/index.ts:5](https://github.com/Joniii11/HarmonyLink/blob/master/src/constants/index.ts#L5)

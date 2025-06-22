@@ -1,5 +1,6 @@
 import { TrackData } from "@t/track";
 import { NodeType } from "@t/node";
+import { Result, err, fromThrowable, ok } from 'neverthrow';
 
 export default class Decoder {
     protected buffer: Buffer;
@@ -14,18 +15,17 @@ export default class Decoder {
         this.track = track;
     };
 
-    public get getTrack(): TrackData | null {        
+    public get getTrack(): Result<TrackData, Error> {        
         switch (this.type) {
             case NodeType.FrequenC: return this.FrequenCDecoder;
-
             case NodeType.LavaLinkV4:
             case NodeType.NodeLink: return this.NodeLinkDecoder;
-            default: return null;
+            default: return err(new Error(`Unsupported node type: ${this.type}`));
         }
     };
 
-    private get NodeLinkDecoder(): TrackData | null {
-        try {
+    private get NodeLinkDecoder(): Result<TrackData, Error> {
+        return fromThrowable(() => {
             const isVersioned = (((this.readInt() & 0xc0000000) >> 30) & 1) !== 0;
             const version = isVersioned ? Number(this.readByte()) : 1;
 
@@ -48,10 +48,8 @@ export default class Decoder {
                         },
                         pluginInfo: {},
                         userData: {}
-                    }
-                };
-
-                case 2: {
+                    };
+                }                case 2: {
                     return {
                         encoded: this.track,
                         info: {
@@ -69,8 +67,8 @@ export default class Decoder {
                         },
                         pluginInfo: {},
                         userData: {}
-                    }
-                };
+                    };
+                }
 
                 case 3: {
                     return {
@@ -90,44 +88,39 @@ export default class Decoder {
                         },
                         pluginInfo: {},
                         userData: {}
-                    }
-                };
+                    };
+                }
 
                 default: {
-                    return null;
+                    throw new Error(`Unsupported track version: ${version}`);
                 }
-            };
-        } catch {
-            return null;
-        };
-    };
+            }
+        }, (error) => error instanceof Error ? error : new Error(String(error)))();
+    };    
+    
+    private get FrequenCDecoder(): Result<TrackData, Error> {
+        
+        // eslint-disable-next-line no-unused-expressions, no-negated-condition
+        (((this.readInt() & 0xc0000000) >> 30) & 1) !== 0 ? this.readByte() : 1;
 
-    private get FrequenCDecoder(): TrackData | null {
-        try {
-			// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-negated-condition
-			(((this.readInt() & 0xc0000000) >> 30) & 1) !== 0 ? this.readByte() : 1;
-
-			return {
-				encoded: this.track,
-				info: {
-					title: this.readUTF(),
-					author: this.readUTF(),
-					length: Number(this.readLongFrequenC()),
-					identifier: this.readUTF(),
-					isSeekable: true,
-					isStream: this.readByte() === 1,
-					uri: this.readUTF(),
-					artworkUrl: this.readByte() === 1 ? this.readUTF() : null,
-					isrc: this.readByte() === 1 ? this.readUTF() : null,
-					sourceName: this.readUTF().toLowerCase(),
-					position: 0,
-				},
-				pluginInfo: {},
-                userData: {}
-			};
-		} catch {
-			return null;
-		}
+        return ok({
+            encoded: this.track,
+            info: {
+                title: this.readUTF(),
+                author: this.readUTF(),
+                length: Number(this.readLongFrequenC()),
+                identifier: this.readUTF(),
+                isSeekable: true,
+                isStream: this.readByte() === 1,
+                uri: this.readUTF(),
+                artworkUrl: this.readByte() === 1 ? this.readUTF() : null,
+                isrc: this.readByte() === 1 ? this.readUTF() : null,
+                sourceName: this.readUTF().toLowerCase(),
+                position: 0,
+            },
+            pluginInfo: {},
+            userData: {}
+        } as TrackData);
     };
 
     private changeBytes(bytes: number): number {

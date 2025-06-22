@@ -1,22 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NodeType
+[HarmonyLink v2.0.0](../globals.md) / NodeType
 
 # Enumeration: NodeType
 
 ## Enumeration Members
-
-### FrequenC
-
-> **FrequenC**: `"frequenc"`
-
-#### Defined in
-
-src/typings/node/index.ts:127
-
-***
 
 ### LavaLinkV4
 
@@ -24,7 +14,7 @@ src/typings/node/index.ts:127
 
 #### Defined in
 
-src/typings/node/index.ts:125
+[typings/node/index.ts:95](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L95)
 
 ***
 
@@ -34,4 +24,14 @@ src/typings/node/index.ts:125
 
 #### Defined in
 
-src/typings/node/index.ts:126
+[typings/node/index.ts:96](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L96)
+
+***
+
+### FrequenC
+
+> **FrequenC**: `"frequenc"`
+
+#### Defined in
+
+[typings/node/index.ts:97](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L97)

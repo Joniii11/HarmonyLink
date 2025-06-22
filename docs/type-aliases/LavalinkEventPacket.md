@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / LavalinkEventPacket
+[HarmonyLink v2.0.0](../globals.md) / LavalinkEventPacket
 
 # Type Alias: LavalinkEventPacket
 
@@ -12,14 +12,14 @@ Dispatched when player or voice events occur
 
 ## Type declaration
 
-### guildId
-
-> **guildId**: `string`
-
 ### op
 
 > **op**: `"event"`
 
+### guildId
+
+> **guildId**: `string`
+
 ## Defined in
 
-src/typings/node/index.ts:400
+[typings/node/index.ts:371](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/index.ts#L371)

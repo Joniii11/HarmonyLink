@@ -2,6 +2,7 @@ import { DiscordVoiceStates, ConnectionOptions, SetStateUpdate, VoiceServer } fr
 import { Player } from "./Player";
 import { getDefaultConnectionOptions } from "@/constants/player";
 import { PlayerOptions, VoiceConnectionState } from "@/typings/player";
+import { err, ok, Result } from "neverthrow";
 
 export class ConnectionHandler {
     public readonly player: Player;
@@ -16,17 +17,17 @@ export class ConnectionHandler {
      * Updates the voice server of the player.
      * @param {VoiceServer} data The incoming data from the voice server from discord.
      */
-    public async setServersUpdate(data: VoiceServer): Promise<void> {
+    public async setServersUpdate(data: VoiceServer): Promise<Result<void, Error>> {
         if (!data.endpoint) {
             this.player.emit('connectionUpdate', DiscordVoiceStates.SESSION_ENDPOINT_MISSING);
-            return;
+            return err(new Error("[HarmonyLink] [Player] [Connection] Voice server endpoint is missing."));
         };
 
         this.options.voice.endpoint = data.endpoint!;
         this.options.voice.token = data.token;
         this.options.voiceRegion = data.endpoint.split(".").shift()?.replace(/[0-9]/g, "") ?? null;
 
-        await this.player.node.rest.updatePlayer({
+        const playerResult = await this.player.node.rest.updatePlayer({
             guildId: this.player.guildId,
             playerOptions: {
                 voice: {
@@ -36,6 +37,11 @@ export class ConnectionHandler {
                 },
             },
         });
+
+        if (playerResult.isErr()) {
+            this.player.emit("connectionUpdate", DiscordVoiceStates.SESSION_FAILED_UPDATE);
+            return err(playerResult.error);
+        };
 
         setTimeout(async () => {
             await this.player.node.rest.updatePlayer({
@@ -48,6 +54,8 @@ export class ConnectionHandler {
 
         this.player.emit("connectionUpdate", DiscordVoiceStates.SESSION_READY)
         this.player.manager.emit("debug", `[HarmonyLink] [Player] [Connection] Updated voice server for player ${this.player.guildId} in the region ${this.options.voiceRegion}.`);
+
+        return ok();
     };
 
     /**
@@ -55,18 +63,19 @@ export class ConnectionHandler {
      * @param {SetStateUpdate} data The incoming data from the voice server from discord.
      */
     public setStateUpdate(data: SetStateUpdate): void {
-        const { session_id, channel_id, self_deaf, self_mute } = data;
+        // eslint-disable-next-line camelcase
+        const { session_id: sessionId, channel_id: channelId, self_deaf: selfDeaf, self_mute: selfMute } = data;
 
-        if (this.player.voiceChannelId && channel_id && this.player.voiceChannelId !== channel_id) {
-            this.player.voiceChannelId = channel_id;
+        if (this.player.voiceChannelId && channelId && this.player.voiceChannelId !== channelId) {
+            this.player.voiceChannelId = channelId;
         };
 
-        if (!session_id) {
+        if (!sessionId) {
             this.player.voiceState = VoiceConnectionState.DISCONNECTED
         };
 
-        this.options.selfDeaf = self_deaf;
-        this.options.selfMute = self_mute;
-        this.options.voice.sessionId = session_id || null;
+        this.options.selfDeaf = selfDeaf;
+        this.options.selfMute = selfMute;
+        this.options.voice.sessionId = sessionId || null;
     };
 }

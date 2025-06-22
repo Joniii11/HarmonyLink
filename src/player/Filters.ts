@@ -1,5 +1,7 @@
 import { Band, karaokeOptions, tremoloOptions, vibratoOptions, rotationOptions, distortionOptions, channelMixOptions, lowPassOptions, timescaleOptions, FiltersOptions } from "@t/player/filters";
 import { Player } from "./Player";
+import { FilterBuilder } from "./FilterBuilder";
+import { err, ok, Result } from "neverthrow";
 
 /**
  * The Filters class that is used to apply filters to the currently playing track
@@ -17,6 +19,9 @@ export class Filters {
     public lowPass: lowPassOptions | undefined;
     public timescale: timescaleOptions | undefined;
 
+    private _builder: FilterBuilder<FiltersOptions>;
+
+
     public constructor(player: Player, options?: Partial<FiltersOptions>) {
         this.player = player;
         this.volume = 1.0;
@@ -29,7 +34,132 @@ export class Filters {
         this.distortion = options?.distortion;
         this.channelMix = options?.channelMix;
         this.lowPass = options?.lowPass;
+
+        this._builder = this._createBuilder();
     };
+
+    /**
+     * Create a new FilterBuilder instance with current filter state
+     * @private
+     */
+    private _createBuilder(): FilterBuilder<FiltersOptions> {
+        const builder = new FilterBuilder<FiltersOptions>()
+            .volume(this.volume)
+            .equalizer(this.equalizer);
+        
+        if (this.karaoke) builder.karaoke(this.karaoke);
+        if (this.timescale) builder.timescale(this.timescale);
+        if (this.tremolo) builder.tremolo(this.tremolo);
+        if (this.vibrato) builder.vibrato(this.vibrato);
+        if (this.rotation) builder.rotation(this.rotation);
+        if (this.distortion) builder.distortion(this.distortion);
+        if (this.channelMix) builder.channelMix(this.channelMix);
+        if (this.lowPass) builder.lowPass(this.lowPass);
+
+        return builder;
+    }
+
+    /**
+     * Get a new FilterBuilder instance for advanced filter configuration
+     * @returns {FilterBuilder<FiltersOptions>} A new FilterBuilder instance
+     */
+    public builder(): FilterBuilder<FiltersOptions> {
+        return this._createBuilder();
+    }
+
+    private async _internalBuildFilters(builderFn: (builder: FilterBuilder<FiltersOptions>) => Result<FilterBuilder<FiltersOptions>, Error>): Promise<Result<Filters, Error>> {
+        // eslint-disable-next-line neverthrow/must-use-result
+        const builderResult = builderFn(this.builder());
+
+        if (builderResult.isErr()) {
+            return err(new Error(`Failed to build filters: ${builderResult.error.message}`));
+        }
+
+        const configuredBuilder = builderResult.value;
+
+        // Validate the configuration
+        if (!configuredBuilder.validate()) {
+            return err(new Error('Invalid filter configuration'));
+        }
+
+        // eslint-disable-next-line neverthrow/must-use-result
+        const filtersResult = configuredBuilder.build();
+
+        if (filtersResult.isErr()) {
+            return err(new Error(`Failed to build filters: ${filtersResult.error.message}`));
+        }
+
+        const filters = filtersResult.value;
+
+        // Apply the built filters
+        this.volume = filters.volume ?? this.volume;
+        this.equalizer = filters.equalizer ?? this.equalizer;
+        this.karaoke = filters.karaoke;
+        this.timescale = filters.timescale;
+        this.tremolo = filters.tremolo;
+        this.vibrato = filters.vibrato;
+        this.rotation = filters.rotation;
+        this.distortion = filters.distortion;
+        this.channelMix = filters.channelMix;
+        this.lowPass = filters.lowPass;
+
+        // Update the internal builder
+        this._builder = this._createBuilder();
+
+        await this.updateFilters();
+        return ok(this);
+    }
+
+    /**
+     * Apply filters using a FilterBuilder configuration function
+     * @param builderFn - Function that configures the FilterBuilder
+     * @returns {Promise<Filters>} The updated filter instance
+     */
+    public async buildFilters(builderFn: (builder: FilterBuilder<FiltersOptions>) => FilterBuilder<FiltersOptions>): Promise<Result<Filters, Error>> {
+        const builder = this.builder();
+        const configuredBuilder = builderFn(builder);
+        
+        // Validate the configuration
+        if (!configuredBuilder.validate()) {
+            return err(new Error('Invalid filter configuration'));
+        }
+
+        // eslint-disable-next-line neverthrow/must-use-result
+        const filtersResult = configuredBuilder.build();
+
+        if (filtersResult.isErr()) {
+            return err(new Error(`Failed to build filters: ${filtersResult.error.message}`));
+        }
+
+        const filters = filtersResult.value;
+
+        // Apply the built filters
+        this.volume = filters.volume ?? this.volume;
+        this.equalizer = filters.equalizer ?? this.equalizer;
+        this.karaoke = filters.karaoke;
+        this.timescale = filters.timescale;
+        this.tremolo = filters.tremolo;
+        this.vibrato = filters.vibrato;
+        this.rotation = filters.rotation;
+        this.distortion = filters.distortion;
+        this.channelMix = filters.channelMix;
+        this.lowPass = filters.lowPass;
+
+        // Update the internal builder
+        this._builder = this._createBuilder();
+
+        await this.updateFilters();
+        return ok(this);
+    }
+
+    /**
+     * Apply a preset filter configuration
+     * @param presetName - Name of the preset to apply
+     * @returns {Promise<Filters>} The updated filter instance
+     */
+    public applyPreset(presetName: string): Promise<Result<Filters, Error>> {
+        return this._internalBuildFilters(builder => builder.preset(presetName));
+    }
 
     /**
      * Set equalizer bands for the currently playing track
@@ -165,18 +295,19 @@ export class Filters {
      * Updates all the filters applied to the currently playing track
      * @returns {Promise<Filters>} the updated filters applied to the currently playing track
      */
-    public async updateFilters(): Promise<Filters> {
+    public async updateFilters(): Promise<Result<Filters, Error>> {
         const { equalizer, karaoke, timescale, tremolo, vibrato, rotation, distortion, channelMix, lowPass, volume } = this;
 
-        await this.player.node.rest.updatePlayer({
+        return (await this.player.node.rest.updatePlayer({
             guildId: this.player.guildId,
             playerOptions: {
                 filters: {
                     volume, equalizer, karaoke, timescale, tremolo, vibrato, rotation, distortion, channelMix, lowPass,
                 }
             }
-        });
-
-        return this;
+        })).match(
+            () => ok(this),
+            (error) => err(new Error(`[HarmonyLink] [Player] [Filters] Failed to update filters: ${error.message}`))
+        );
     };
 };

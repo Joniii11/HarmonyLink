@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TrackExceptionEvent
+[HarmonyLink v2.0.0](../globals.md) / TrackExceptionEvent
 
 # Interface: TrackExceptionEvent
 
@@ -14,13 +14,17 @@ Represents an event indicating an exception occurred with a track.
 
 ## Properties
 
-### exception
+### op
 
-> **exception**: `any`
+> **op**: `"event"`
+
+#### Inherited from
+
+[`PlayerEvent`](PlayerEvent.md).[`op`](PlayerEvent.md#op)
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:50
+[typings/node/playerEvents.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L8)
 
 ***
 
@@ -34,21 +38,7 @@ src/typings/node/playerEvents.ts:50
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:16
-
-***
-
-### op
-
-> **op**: `"event"`
-
-#### Inherited from
-
-[`PlayerEvent`](PlayerEvent.md).[`op`](PlayerEvent.md#op)
-
-#### Defined in
-
-src/typings/node/playerEvents.ts:14
+[typings/node/playerEvents.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L10)
 
 ***
 
@@ -62,4 +52,14 @@ src/typings/node/playerEvents.ts:14
 
 #### Defined in
 
-src/typings/node/playerEvents.ts:49
+[typings/node/playerEvents.ts:43](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L43)
+
+***
+
+### exception
+
+> **exception**: `any`
+
+#### Defined in
+
+[typings/node/playerEvents.ts:44](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L44)

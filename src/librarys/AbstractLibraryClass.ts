@@ -3,6 +3,8 @@ import { HarmonyLink } from "@/HarmonyLink";
 import { NodeGroup } from "@t/node";
 import { Packet, AnyOtherPacket } from "@t/librarys";
 
+import { err, ok, Result } from "neverthrow";
+
 /**
  * Abstract class for library classes
  * @abstract
@@ -10,11 +12,11 @@ import { Packet, AnyOtherPacket } from "@t/librarys";
  * @note This class is not meant to be instantiated, but to be extended by other classes.
  * @note We currenty only support OceanicJs and Discord.js, however if you want to add support for other libraries, you can extend this class and implement the methods.
  */
-export default abstract class AbstractLibraryClass {
-    protected readonly client: any;
+export default abstract class AbstractLibraryClass<TClient = any> {
+    protected readonly client: TClient;
     protected manager: HarmonyLink | null = null;
 
-    public constructor(client: any) {
+    public constructor(client: TClient) {
         this.client = client;
     }
 
@@ -69,16 +71,20 @@ export default abstract class AbstractLibraryClass {
         return this
     };
 
-    protected async ready(nodes: NodeGroup[]): Promise<void> {
-        if (!this.manager) throw new Error("The Manager is not initialized yet!");
+    protected async ready(nodes: NodeGroup[]): Promise<Result<boolean, Error>> {
+        if (!this.manager) return err(new Error("The Manager is not initialized yet!"));
 
         this.manager.botID = this.userID;
         this.manager.isReady = true;
         this.manager.emit("debug", "[HarmonyLink] Finished initializing the library! | Connecting to the specified nodes...");
 
         for (const node of nodes) {
-            await this.manager.nodeManager.addNode(node);
+            const result = await this.manager.nodeManager.addNode(node);
+
+            if (result.isErr()) return err(new Error(`[HarmonyLink] [Library] Failed to add node: ${node.name}. Error: ${result.error.message}`));
         };
+
+        return ok(true);
     };
     
     /**

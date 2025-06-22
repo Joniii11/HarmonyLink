@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Response
+[HarmonyLink v2.0.0](../globals.md) / Response
 
 # Class: Response
 
@@ -24,9 +24,19 @@
 
 #### Defined in
 
-src/player/Response.ts:16
+[player/Response.ts:16](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Response.ts#L16)
 
 ## Properties
+
+### tracks
+
+> **tracks**: [`Track`](Track.md)[]
+
+#### Defined in
+
+[player/Response.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Response.ts#L12)
+
+***
 
 ### loadType
 
@@ -34,7 +44,7 @@ src/player/Response.ts:16
 
 #### Defined in
 
-src/player/Response.ts:13
+[player/Response.ts:13](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Response.ts#L13)
 
 ***
 
@@ -44,14 +54,4 @@ src/player/Response.ts:13
 
 #### Defined in
 
-src/player/Response.ts:14
-
-***
-
-### tracks
-
-> **tracks**: [`Track`](Track.md)[]
-
-#### Defined in
-
-src/player/Response.ts:12
+[player/Response.ts:14](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Response.ts#L14)

@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / NoPlaylistInfo
+[HarmonyLink v2.0.0](../globals.md) / NoPlaylistInfo
 
 # Interface: NoPlaylistInfo
 
@@ -16,4 +16,4 @@ The type of the playlist. This is used to identify the type of the playlist
 
 #### Defined in
 
-src/typings/player/response.ts:27
+[typings/player/response.ts:27](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/response.ts#L27)

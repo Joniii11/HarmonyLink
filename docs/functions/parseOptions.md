@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / parseOptions
+[HarmonyLink v2.0.0](../globals.md) / parseOptions
 
 # Function: parseOptions()
 
@@ -20,4 +20,4 @@
 
 ## Defined in
 
-src/utils/index.ts:6
+[utils/index.ts:6](https://github.com/Joniii11/HarmonyLink/blob/master/src/utils/index.ts#L6)

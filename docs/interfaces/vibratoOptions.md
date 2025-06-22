@@ -1,26 +1,14 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / vibratoOptions
+[HarmonyLink v2.0.0](../globals.md) / vibratoOptions
 
 # Interface: vibratoOptions
 
 The vibratoOptions interface that is used to define the vibrato options to apply to the currently playing track
 
 ## Properties
-
-### depth
-
-> **depth**: `number`
-
-The depth of the vibrato effect to apply
-
-#### Defined in
-
-src/typings/player/filters.ts:64
-
-***
 
 ### frequency
 
@@ -30,4 +18,16 @@ The frequency of the vibrato effect to apply
 
 #### Defined in
 
-src/typings/player/filters.ts:63
+[typings/player/filters.ts:63](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L63)
+
+***
+
+### depth
+
+> **depth**: `number`
+
+The depth of the vibrato effect to apply
+
+#### Defined in
+
+[typings/player/filters.ts:64](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/filters.ts#L64)

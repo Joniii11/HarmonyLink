@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const neverthrow_1 = require("neverthrow");
 /**
  * Abstract class for library classes
  * @abstract
@@ -65,14 +66,17 @@ class AbstractLibraryClass {
     ;
     async ready(nodes) {
         if (!this.manager)
-            throw new Error("The Manager is not initialized yet!");
+            return (0, neverthrow_1.err)(new Error("The Manager is not initialized yet!"));
         this.manager.botID = this.userID;
         this.manager.isReady = true;
         this.manager.emit("debug", "[HarmonyLink] Finished initializing the library! | Connecting to the specified nodes...");
         for (const node of nodes) {
-            await this.manager.nodeManager.addNode(node);
+            const result = await this.manager.nodeManager.addNode(node);
+            if (result.isErr())
+                return (0, neverthrow_1.err)(new Error(`[HarmonyLink] [Library] Failed to add node: ${node.name}. Error: ${result.error.message}`));
         }
         ;
+        return (0, neverthrow_1.ok)(true);
     }
     ;
 }

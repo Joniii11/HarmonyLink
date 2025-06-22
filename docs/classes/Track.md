@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Track
+[HarmonyLink v2.0.0](../globals.md) / Track
 
 # Class: Track
 
@@ -26,9 +26,19 @@ Constructor
 
 #### Defined in
 
-src/player/Track.ts:18
+[player/Track.ts:19](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L19)
 
 ## Properties
+
+### track
+
+> **track**: `string`
+
+#### Defined in
+
+[player/Track.ts:9](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L9)
+
+***
 
 ### info
 
@@ -42,7 +52,7 @@ src/player/Track.ts:18
 
 #### Defined in
 
-src/player/Track.ts:9
+[player/Track.ts:10](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L10)
 
 ***
 
@@ -52,17 +62,7 @@ src/player/Track.ts:9
 
 #### Defined in
 
-src/player/Track.ts:10
-
-***
-
-### track
-
-> **track**: `string`
-
-#### Defined in
-
-src/player/Track.ts:8
+[player/Track.ts:11](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L11)
 
 ***
 
@@ -72,13 +72,13 @@ src/player/Track.ts:8
 
 #### Defined in
 
-src/player/Track.ts:11
+[player/Track.ts:12](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L12)
 
 ## Methods
 
 ### resolve()
 
-> **resolve**(`manager`): `Promise`\<[`Track`](Track.md)\>
+> **resolve**(`manager`): `Promise`\<`Result`\<[`Track`](Track.md), `Error`\>\>
 
 This function will resolve the track and return the track as resolved
 
@@ -90,10 +90,10 @@ The HarmonyLink instance
 
 #### Returns
 
-`Promise`\<[`Track`](Track.md)\>
+`Promise`\<`Result`\<[`Track`](Track.md), `Error`\>\>
 
 The resolved track
 
 #### Defined in
 
-src/player/Track.ts:36
+[player/Track.ts:37](https://github.com/Joniii11/HarmonyLink/blob/master/src/player/Track.ts#L37)

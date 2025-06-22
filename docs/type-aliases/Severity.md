@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / Severity
+[HarmonyLink v2.0.0](../globals.md) / Severity
 
 # Type Alias: Severity
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/node/rest.ts:8
+[typings/node/rest.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L8)

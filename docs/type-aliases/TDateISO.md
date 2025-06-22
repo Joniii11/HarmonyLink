@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TDateISO
+[HarmonyLink v2.0.0](../globals.md) / TDateISO
 
 # Type Alias: TDateISO
 
@@ -16,4 +16,4 @@ it would result in a warning from TypeScript:
 
 ## Defined in
 
-src/typings/index.ts:28
+[typings/index.ts:28](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L28)

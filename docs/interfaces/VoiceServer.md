@@ -1,22 +1,22 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / VoiceServer
+[HarmonyLink v2.0.0](../globals.md) / VoiceServer
 
 # Interface: VoiceServer
 
 ## Properties
 
-### endpoint?
+### token
 
-> `optional` **endpoint**: `string`
+> **token**: `string`
 
-The voice server host
+Voice connection token
 
 #### Defined in
 
-src/typings/player/connection.ts:18
+[typings/player/connection.ts:8](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L8)
 
 ***
 
@@ -28,16 +28,16 @@ The guild this voice server update is for in the session
 
 #### Defined in
 
-src/typings/player/connection.ts:13
+[typings/player/connection.ts:13](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L13)
 
 ***
 
-### token
+### endpoint?
 
-> **token**: `string`
+> `optional` **endpoint**: `string`
 
-Voice connection token
+The voice server host
 
 #### Defined in
 
-src/typings/player/connection.ts:8
+[typings/player/connection.ts:18](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/connection.ts#L18)

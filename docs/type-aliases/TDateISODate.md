@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / TDateISODate
+[HarmonyLink v2.0.0](../globals.md) / TDateISODate
 
 # Type Alias: TDateISODate
 
@@ -12,4 +12,4 @@ Represent a string like `2021-01-08`
 
 ## Defined in
 
-src/typings/index.ts:14
+[typings/index.ts:14](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/index.ts#L14)

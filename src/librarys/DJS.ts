@@ -2,14 +2,15 @@ import AbstractLibraryClass from "./AbstractLibraryClass";
 
 import { NodeGroup } from "@t/node";
 import { AnyOtherPacket } from "@t/librarys";
+import { DiscordJSLikeClient } from "@/typings/librarys/clients";
 
-export class DJSLibrary extends AbstractLibraryClass {
+export class DJSLibrary extends AbstractLibraryClass<DiscordJSLikeClient> {
     public get userID(): string {
         return this.client.user.id;
     };
 
     public shardID(guildId: string): number {
-        return this.client.guilds.cache.get(guildId)?.shardId
+        return this.client.guilds.cache.get(guildId)?.shardId ?? 0
     };
 
     public sendPacket(shardId: number, payload: AnyOtherPacket, important: boolean = false): void {
@@ -17,7 +18,7 @@ export class DJSLibrary extends AbstractLibraryClass {
     };
 
     public listen(nodes: NodeGroup[]): void {
-        this.client.once("ready", async () => this.ready(nodes))
+        this.client.once("ready", async () => await this.ready(nodes))
 
         // Getting the raw data from the gateway
         this.client.on("raw", this.raw.bind(this));

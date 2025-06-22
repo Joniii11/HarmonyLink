@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerConnectionState
+[HarmonyLink v2.0.0](../globals.md) / PlayerConnectionState
 
 # Enumeration: PlayerConnectionState
 
@@ -14,17 +14,7 @@
 
 #### Defined in
 
-src/typings/player/index.ts:96
-
-***
-
-### DESTROYED
-
-> **DESTROYED**: `2`
-
-#### Defined in
-
-src/typings/player/index.ts:98
+[typings/player/index.ts:96](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L96)
 
 ***
 
@@ -34,4 +24,14 @@ src/typings/player/index.ts:98
 
 #### Defined in
 
-src/typings/player/index.ts:97
+[typings/player/index.ts:97](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L97)
+
+***
+
+### DESTROYED
+
+> **DESTROYED**: `2`
+
+#### Defined in
+
+[typings/player/index.ts:98](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/index.ts#L98)

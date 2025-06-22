@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlayerEventType
+[HarmonyLink v2.0.0](../globals.md) / PlayerEventType
 
 # Type Alias: PlayerEventType
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/node/playerEvents.ts:1
+[typings/node/playerEvents.ts:1](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/playerEvents.ts#L1)

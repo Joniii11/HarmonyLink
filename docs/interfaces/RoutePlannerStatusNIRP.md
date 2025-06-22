@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / RoutePlannerStatusNIRP
+[HarmonyLink v2.0.0](../globals.md) / RoutePlannerStatusNIRP
 
 # Interface: RoutePlannerStatusNIRP
 
@@ -16,7 +16,7 @@ The name of the RoutePlanner implementation being used by this server
 
 #### Defined in
 
-src/typings/node/rest.ts:307
+[typings/node/rest.ts:307](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L307)
 
 ***
 
@@ -36,4 +36,4 @@ The current offset in the ip block
 
 #### Defined in
 
-src/typings/node/rest.ts:312
+[typings/node/rest.ts:312](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/node/rest.ts#L312)

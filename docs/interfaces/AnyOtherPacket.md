@@ -1,22 +1,12 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / AnyOtherPacket
+[HarmonyLink v2.0.0](../globals.md) / AnyOtherPacket
 
 # Interface: AnyOtherPacket
 
 ## Properties
-
-### d
-
-> **d**: `any`
-
-#### Defined in
-
-src/typings/librarys/index.ts:20
-
-***
 
 ### op
 
@@ -24,7 +14,17 @@ src/typings/librarys/index.ts:20
 
 #### Defined in
 
-src/typings/librarys/index.ts:19
+[typings/librarys/index.ts:17](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L17)
+
+***
+
+### d
+
+> **d**: `any`
+
+#### Defined in
+
+[typings/librarys/index.ts:18](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L18)
 
 ***
 
@@ -34,4 +34,4 @@ src/typings/librarys/index.ts:19
 
 #### Defined in
 
-src/typings/librarys/index.ts:21
+[typings/librarys/index.ts:19](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/librarys/index.ts#L19)

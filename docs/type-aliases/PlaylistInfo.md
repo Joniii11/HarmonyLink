@@ -1,8 +1,8 @@
-[**harmonylink**](../README.md) • **Docs**
+[**HarmonyLink v2.0.0**](../README.md) • **Docs**
 
 ***
 
-[harmonylink](../globals.md) / PlaylistInfo
+[HarmonyLink v2.0.0](../globals.md) / PlaylistInfo
 
 # Type Alias: PlaylistInfo
 
@@ -10,4 +10,4 @@
 
 ## Defined in
 
-src/typings/player/response.ts:30
+[typings/player/response.ts:30](https://github.com/Joniii11/HarmonyLink/blob/master/src/typings/player/response.ts#L30)

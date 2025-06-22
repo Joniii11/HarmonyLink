@@ -1,25 +1,3 @@
-export interface TrackData {
-    /**
-     * The base64 encoded track data
-     */
-    encoded: string;
-
-    /**
-     * The track info
-     */
-    info: TrackDataInfo;
-
-    /**
-     * Additional track info provided by plugins
-     */
-    pluginInfo: Record<string, unknown>;
-
-    /**
-     * Additional track data provided via the Update Player endpoint
-     */
-    userData: Record<string, unknown>
-};
-
 export interface TrackDataInfo {
     /**
      * The track identifier
@@ -76,3 +54,25 @@ export interface TrackDataInfo {
      */
     sourceName: string;
 }
+
+export interface TrackData {
+    /**
+     * The base64 encoded track data
+     */
+    encoded: string;
+
+    /**
+     * The track info
+     */
+    info: TrackDataInfo;
+
+    /**
+     * Additional track info provided by plugins
+     */
+    pluginInfo: Record<string, unknown>;
+
+    /**
+     * Additional track data provided via the Update Player endpoint
+     */
+    userData: Record<string, unknown>
+};
