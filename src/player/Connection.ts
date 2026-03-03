@@ -34,7 +34,7 @@ export class ConnectionHandler {
                     endpoint: this.options.voice.endpoint,
                     token: this.options.voice.token,
                     sessionId: this.options.voice.sessionId!,
-                    channelId: this.player.voiceChannelId,
+                    channelId: this.options.voice.channelId!,
                 },
             },
         });
