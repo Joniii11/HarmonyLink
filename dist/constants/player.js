@@ -8,6 +8,7 @@ function getDefaultConnectionOptions(options) {
             sessionId: null,
             token: null,
             endpoint: null,
+            channelId: null,
         },
         selfDeaf: options.deaf ?? false,
         selfMute: options.mute ?? false,

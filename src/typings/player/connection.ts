@@ -16,6 +16,11 @@ export interface VoiceServer {
      * The voice server host
      */
     endpoint?: string;
+
+    /**
+     * The channel id of the voice channel the bot is in
+     */
+    channelId?: string;
 };
 
 /**
@@ -110,6 +115,11 @@ export interface ConnectionOptions {
          * The voice server endpoint
          */
         endpoint: string | null;
+
+        /**
+         * The channel id of the voice channel the bot is in
+         */
+        channelId: string | null;
     };
 
     /**

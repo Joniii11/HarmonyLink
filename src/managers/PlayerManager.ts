@@ -73,6 +73,7 @@ export default class PlayerManager extends Map<Snowflake, Player> {
                     endpoint: options.voice.endpoint!,
                     token: options.voice.token!,
                     sessionId: options.voice.sessionId!,
+                    channelId: options.voice.channelId!,
                 }
             }
         };

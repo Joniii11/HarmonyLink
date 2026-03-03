@@ -59,6 +59,7 @@ class PlayerManager extends Map {
                     endpoint: options.voice.endpoint,
                     token: options.voice.token,
                     sessionId: options.voice.sessionId,
+                    channelId: options.voice.channelId,
                 }
             }
         };

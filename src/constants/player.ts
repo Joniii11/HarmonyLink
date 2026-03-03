@@ -8,6 +8,7 @@ export function getDefaultConnectionOptions(options: PlayerOptions): ConnectionO
             sessionId: null,
             token: null,
             endpoint: null,
+            channelId: null,
         },
         selfDeaf: options.deaf ?? false,
         selfMute: options.mute ?? false,
